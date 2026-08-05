@@ -1,0 +1,467 @@
+# Etapa 1 — Casos de Abuso e Modelagem de Ameaças com STRIDE
+
+**Sistema:** SaborExpress — plataforma de delivery de comida
+**Grupo:** 16 — Engenharia de Software Seguro
+**Última atualização:** <!-- atualize a data ao editar --> 05/08/2026
+
+> **Como usar este documento:** cada seção tem um responsável marcado em comentário HTML.
+> Blocos marcados com `<!-- TODO -->` ainda precisam ser preenchidos. A divisão completa das
+> tarefas está em [backlog.md](backlog.md).
+
+---
+
+## Sumário
+
+1. [Identificação do sistema](#1-identificação-do-sistema)
+2. [Descrição do sistema](#2-descrição-do-sistema)
+3. [Usuários, ativos e pontos de interação](#3-usuários-ativos-e-pontos-de-interação)
+4. [Visão geral da arquitetura e do fluxo de dados](#4-visão-geral-da-arquitetura-e-do-fluxo-de-dados)
+5. [Modelagem de ameaças com STRIDE](#5-modelagem-de-ameaças-com-stride)
+6. [Casos de abuso](#6-casos-de-abuso)
+7. [Considerações finais da Etapa 1](#7-considerações-finais-da-etapa-1)
+
+---
+
+## 1. Identificação do sistema
+
+<!-- RESPONSÁVEL: Felipe -->
+
+| Item | Valor |
+|---|---|
+| Nome do sistema | **SaborExpress** |
+| Tipo | Aplicativo/plataforma de delivery de comida |
+| Grupo | 16 |
+| Repositório | https://github.com/&lt;ORG-OU-USUARIO&gt;/&lt;REPO&gt; <!-- TODO: URL real --> |
+
+**Integrantes:** Felipe Nestor Dresch, Deivid Alfonso Beise, Gabriel Rodrigues da Rocha,
+Luis Fillipe Dias Alves, Murillo Dias Nunes e Fernando Nicola Correa.
+
+**Justificativa da escolha:** ver [README.md, seção 1](../README.md#justificativa-da-escolha-do-sistema).
+Em resumo, o sistema reúne quatro perfis de usuário com interesses conflitantes, movimentação
+financeira real, dados pessoais protegidos pela LGPD e forte requisito de disponibilidade em
+horários de pico — condições que permitem identificar ameaças concretas em todas as seis
+categorias do STRIDE.
+
+---
+
+## 2. Descrição do sistema
+
+<!-- RESPONSÁVEL: Felipe -->
+
+### 2.1 Qual problema o sistema resolve
+
+O **SaborExpress** é uma plataforma que conecta três partes que, sozinhas, teriam dificuldade de
+se encontrar: pessoas que querem receber comida em casa, restaurantes que querem vender além do
+salão e entregadores que querem trabalhar por demanda. A plataforma resolve, ao mesmo tempo:
+
+- **descoberta** — o cliente encontra restaurantes disponíveis próximos ao seu endereço;
+- **transação** — o pedido é registrado, pago e confirmado de forma rastreável;
+- **logística** — um entregador é alocado ao pedido e sua posição é acompanhada em tempo real;
+- **confiança** — avaliações, histórico e suporte reduzem o risco de cada parte ser lesada.
+
+O SaborExpress atua como **intermediário financeiro**: ele recebe o pagamento do cliente, retém
+uma comissão e repassa o restante ao restaurante e ao entregador em ciclos periódicos. Essa
+característica é central para a análise de segurança, porque coloca dinheiro de terceiros sob
+custódia da plataforma.
+
+### 2.2 Quem utiliza o sistema
+
+| Perfil | Descrição | Interface principal |
+|---|---|---|
+| **Cliente** | Pessoa física que busca restaurantes, monta o carrinho, paga e acompanha a entrega. | Aplicativo móvel (Android/iOS) e site |
+| **Restaurante (lojista)** | Estabelecimento que cadastra o cardápio, aceita ou recusa pedidos e informa o preparo. | Painel web e app do parceiro (tablet na cozinha) |
+| **Entregador** | Trabalhador autônomo que aceita corridas, retira o pedido e o entrega. | Aplicativo móvel com GPS ativo |
+| **Administrador da plataforma** | Equipe interna que homologa restaurantes, gerencia cupons, media disputas e emite reembolsos. | Backoffice web restrito |
+| **Atendimento (suporte)** | Subconjunto do administrador com permissões reduzidas para atender chamados. | Backoffice web restrito |
+
+Há ainda **agentes externos** que não são usuários, mas participam dos fluxos: gateway de
+pagamento, provedor de mapas e rotas, serviço de notificações (push/SMS/e-mail) e serviço
+antifraude.
+
+### 2.3 Principais funcionalidades
+
+**Cliente**
+1. Cadastro e autenticação (e-mail/senha ou login social), com verificação de telefone.
+2. Cadastro de endereços de entrega e de meios de pagamento (cartão tokenizado, Pix, carteira).
+3. Busca de restaurantes por localização, categoria e disponibilidade.
+4. Montagem do carrinho, aplicação de cupons e finalização do pedido.
+5. Pagamento no app ou na entrega.
+6. Acompanhamento do pedido em tempo real, com posição do entregador no mapa.
+7. Chat com o entregador e com o suporte.
+8. Avaliação do restaurante e do entregador.
+9. Abertura de chamado para pedido não entregue, incorreto ou de má qualidade, com pedido de
+   reembolso.
+
+**Restaurante**
+10. Cadastro do estabelecimento com envio de documentos (CNPJ, alvará, contrato social).
+11. Gestão do cardápio, preços, promoções e horário de funcionamento.
+12. Recebimento, aceite e recusa de pedidos; atualização do status de preparo.
+13. Consulta de repasses financeiros e emissão de relatórios de vendas.
+
+**Entregador**
+14. Cadastro com envio de documentos (CNH, comprovante de veículo, selfie de verificação).
+15. Ficar disponível, receber ofertas de corrida e aceitá-las.
+16. Compartilhamento contínuo de localização durante a corrida.
+17. Confirmação de coleta e de entrega (com código de confirmação do cliente).
+18. Consulta de ganhos, gorjetas e saques.
+
+**Administrador**
+19. Homologação e suspensão de restaurantes e entregadores.
+20. Criação e gestão de cupons e campanhas promocionais.
+21. Mediação de disputas, estorno e reembolso de pedidos.
+22. Consulta a logs e relatórios operacionais e financeiros.
+
+### 2.4 Informações armazenadas ou transmitidas
+
+- **Dados cadastrais e pessoais:** nome completo, CPF/CNPJ, e-mail, telefone, data de nascimento.
+- **Endereços de entrega**, incluindo complemento e ponto de referência — informação que
+  identifica onde a pessoa mora.
+- **Credenciais:** hash de senha, tokens de sessão, tokens de recuperação de senha, segredos de
+  MFA e chaves de API dos parceiros.
+- **Dados de pagamento:** token do cartão, bandeira e últimos 4 dígitos, chaves Pix, dados
+  bancários de restaurantes e entregadores para repasse.
+- **Documentos:** CNH e selfie do entregador, alvará e contrato social do restaurante.
+- **Geolocalização em tempo real** do entregador e localização aproximada do cliente.
+- **Histórico de pedidos e de consumo**, que revela hábitos, rotina e — indiretamente —
+  restrições alimentares, religiosas ou de saúde.
+- **Mensagens** trocadas entre cliente, entregador e suporte.
+- **Avaliações e comentários.**
+- **Registros financeiros:** transações, comissões, repasses, estornos e cupons.
+- **Logs de auditoria** de operações sensíveis.
+
+### 2.5 Recursos que precisam ser protegidos
+
+Em ordem de criticidade percebida pelo grupo:
+
+1. **Fluxo financeiro** (pagamentos, repasses, cupons e reembolsos) — perda direta de dinheiro.
+2. **Dados pessoais dos clientes**, com destaque para endereço + telefone + rotina, cuja
+   exposição habilita danos físicos, não apenas digitais.
+3. **Credenciais e sessões** de todos os perfis — porta de entrada para os demais ativos.
+4. **Integridade dos pedidos** (itens, preço, endereço e status).
+5. **Disponibilidade do serviço** nos horários de pico.
+6. **Documentos de identificação** de entregadores e restaurantes.
+7. **Reputação** construída pelas avaliações.
+
+---
+
+## 3. Usuários, ativos e pontos de interação
+
+<!-- RESPONSÁVEL: Deivid -->
+<!-- TODO(Deivid): completar as três tabelas abaixo. As linhas existentes são exemplos de
+     formato e conteúdo esperado — mantenha, revise e expanda. Meta: >= 12 ativos classificados
+     e >= 8 pontos de interação. -->
+
+### 3.1 Perfis de acesso e o que cada um pode fazer
+
+| Perfil | Autenticação | Permissões principais | Não pode |
+|---|---|---|---|
+| Visitante | Nenhuma | Buscar restaurantes, ver cardápios | Pedir, ver dados de terceiros |
+| Cliente | E-mail/senha + verificação de telefone | Pedir, pagar, avaliar, abrir chamado | Ver pedidos de outros clientes |
+| Restaurante | E-mail/senha (conta do estabelecimento) | Gerir cardápio e pedidos próprios | Ver dados completos do cliente |
+| Entregador | E-mail/senha + verificação de documentos | Aceitar corridas, ver endereço do pedido ativo | Ver histórico do cliente |
+| Suporte | SSO corporativo | Consultar pedidos, abrir estorno até limite | Alterar comissões, criar cupons |
+| Administrador | SSO corporativo + MFA | Todas as operações do backoffice | — |
+
+<!-- TODO(Deivid): revisar se essa matriz de permissões cobre o que a seção 2.3 descreve. -->
+
+### 3.2 Ativos
+
+Classificação: **Crítico** (prejuízo grave, difícil recuperação) · **Alto** · **Médio** · **Baixo**.
+
+| ID | Ativo | Tipo | Onde reside | Criticidade | Por que é um ativo |
+|---|---|---|---|---|---|
+| A01 | Credenciais de acesso (hash de senha, tokens de sessão) | Dado | Banco de dados, dispositivo do usuário | Crítico | Dá acesso a todos os demais ativos daquele usuário |
+| A02 | Dados de pagamento (token de cartão, chave Pix, conta bancária) | Dado | Gateway externo + banco de dados | Crítico | Permite fraude financeira direta |
+| A03 | Endereço residencial e telefone do cliente | Dado pessoal | Banco de dados, app do entregador | Crítico | Exposição habilita perseguição e violência física |
+| A04 | Geolocalização em tempo real do entregador | Dado pessoal | Serviço de rastreamento | Alto | Permite rastrear a rotina de uma pessoa |
+| A05 | Registros financeiros (pedidos, comissões, repasses) | Dado | Banco de dados | Crítico | Alteração causa prejuízo direto à plataforma e aos parceiros |
+| A06 | Cupons e campanhas promocionais | Dado/Regra | Banco de dados | Alto | Abuso gera prejuízo financeiro em escala |
+| A07 | Documentos de entregadores e restaurantes (CNH, alvará) | Dado sensível | Storage de arquivos | Alto | Vazamento habilita fraude de identidade |
+| A08 | Logs de auditoria | Dado | Serviço de logs | Alto | Sem eles não é possível provar o que aconteceu |
+| A09 | API de pedidos (backend) | Componente | Servidores da plataforma | Crítico | Ponto central de todas as operações |
+| A10 | Banco de dados principal | Componente | Infraestrutura da plataforma | Crítico | Concentra praticamente todos os dados |
+<!-- TODO(Deivid): acrescentar pelo menos A11..A14 — sugestões: avaliações/reputação,
+     mensagens do chat, painel administrativo, chaves de API dos serviços externos,
+     aplicativo móvel (código/cliente), serviço de notificações. -->
+
+### 3.3 Pontos de interação (superfície de ataque)
+
+| ID | Ponto de interação | Quem acessa | Dados que trafegam |
+|---|---|---|---|
+| P01 | App móvel do cliente → API | Cliente | Credenciais, endereço, pedido, pagamento |
+| P02 | App do entregador → API | Entregador | Localização, status da entrega, código de confirmação |
+| P03 | Painel do restaurante → API | Restaurante | Cardápio, preços, status do pedido |
+| P04 | Backoffice → API administrativa | Admin/Suporte | Reembolsos, cupons, dados de usuários |
+| P05 | API → Gateway de pagamento | Backend | Token de cartão, valor, identificador da transação |
+<!-- TODO(Deivid): acrescentar P06..P09 — sugestões: API → provedor de mapas,
+     API → serviço de notificações (push/SMS/e-mail), webhook de retorno do gateway,
+     chat cliente↔entregador, upload de documentos. -->
+
+---
+
+## 4. Visão geral da arquitetura e do fluxo de dados
+
+<!-- RESPONSÁVEL: Deivid -->
+<!-- TODO(Deivid): produzir os diagramas descritos abaixo, salvar o .drawio em
+     diagramas/fonte/ e o .png em imagens/, e então substituir estes blocos pelas imagens. -->
+
+### 4.1 Diagrama de contexto
+
+> **Pendente.** Elementos que o diagrama deve conter: os quatro perfis de usuário, o aplicativo
+> móvel, o painel web, a API do backend, o banco de dados, o storage de arquivos e os quatro
+> serviços externos (gateway de pagamento, mapas, notificações, antifraude).
+
+```
+![Diagrama de contexto](../imagens/diagrama-contexto.png)
+```
+
+### 4.2 Diagrama de fluxo de dados (DFD) — fluxo de pedido
+
+> **Pendente.** Deve mostrar o caminho completo de um pedido e, principalmente, as **fronteiras
+> de confiança** (linhas tracejadas) — é nelas que as ameaças STRIDE aparecem.
+
+Fronteiras de confiança a representar:
+
+| Fronteira | Separa |
+|---|---|
+| F1 | Dispositivo do usuário ↔ API da plataforma (a rede é hostil e o app é controlado pelo usuário) |
+| F2 | API ↔ Banco de dados |
+| F3 | Plataforma ↔ Gateway de pagamento (dado sai do nosso controle) |
+| F4 | Plataforma ↔ Provedores externos (mapas, notificações) |
+| F5 | Rede pública ↔ Backoffice administrativo |
+
+### 4.3 Fluxo textual do pedido (referência para o diagrama)
+
+Enquanto os diagramas não ficam prontos, esta descrição textual serve de base — o enunciado
+permite a forma textual.
+
+1. O cliente autentica-se no app; a API emite um token de sessão.
+2. O app envia a localização; a API retorna os restaurantes disponíveis na área.
+3. O cliente monta o carrinho e aplica um cupom; a API **recalcula o total no servidor**.
+4. O cliente confirma o pagamento; a API cria a transação no gateway e aguarda o webhook de
+   confirmação.
+5. Confirmado o pagamento, o pedido é enviado ao painel do restaurante, que aceita e inicia o
+   preparo.
+6. A API oferece a corrida a entregadores próximos; um deles aceita.
+7. O entregador retira o pedido e passa a transmitir sua localização periodicamente; o cliente
+   acompanha no mapa.
+8. Na entrega, o cliente informa um código de confirmação e o entregador o registra no app.
+9. O pedido é encerrado; o cliente avalia; a plataforma agenda o repasse ao restaurante e ao
+   entregador.
+
+---
+
+## 5. Modelagem de ameaças com STRIDE
+
+Cada ameaça recebe um identificador estável `T##`. **Não renumere ameaças já publicadas** — os
+casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
+
+### 5.1 Spoofing — falsificação de identidade
+
+<!-- RESPONSÁVEL: Gabriel -->
+<!-- TODO(Gabriel): meta de 4 a 6 ameaças. As linhas abaixo são exemplos de formato e
+     profundidade esperados — revise-as e acrescente as demais. -->
+
+| ID | Componente ou ativo | Ameaça identificada | Possível impacto |
+|---|---|---|---|
+| T01 | Conta do cliente (A01) | Um atacante usa credenciais vazadas de outros sites (*credential stuffing*) para entrar em contas de clientes, já que o sistema não exige segundo fator nem limita tentativas de login | Acesso a endereço e histórico do cliente e realização de pedidos fraudulentos com o cartão salvo |
+| T02 | Conta do entregador (A07) | Uma pessoa aluga ou compra a conta de um entregador já homologado e passa a fazer entregas sem ter passado por qualquer verificação de identidade | Pessoa não verificada obtém o endereço residencial de clientes; a plataforma não sabe quem realmente está na porta |
+| T03 | Aplicativo do entregador (P02) | O entregador usa um aplicativo de GPS falso (*mock location*) para simular estar próximo ao restaurante e receber corridas às quais não teria acesso | Alocação injusta de corridas, atrasos e cobrança de taxas de deslocamento indevidas |
+<!-- TODO(Gabriel): sugestões de ameaças ainda não cobertas — phishing de token de recuperação
+     de senha; cadastro de restaurante falso; falsificação do webhook do gateway de pagamento
+     (endpoint sem validação de assinatura); uso de conta de suporte compartilhada. -->
+
+### 5.2 Tampering — alteração indevida de dados
+
+<!-- RESPONSÁVEL: Gabriel -->
+<!-- TODO(Gabriel): meta de 4 a 6 ameaças. -->
+
+| ID | Componente ou ativo | Ameaça identificada | Possível impacto |
+|---|---|---|---|
+| T07 | Pedido / carrinho (A09) | O cliente intercepta a requisição do app e altera o preço ou a quantidade dos itens, e o servidor confia no valor enviado pelo cliente em vez de recalculá-lo | Prejuízo financeiro à plataforma e ao restaurante a cada pedido manipulado |
+| T08 | Cupons (A06) | O cliente descobre o padrão dos códigos de cupom e aplica repetidamente cupons de primeira compra criando contas descartáveis | Prejuízo financeiro em escala e distorção das campanhas |
+<!-- TODO(Gabriel): sugestões — alteração do endereço de repasse bancário do restaurante;
+     manipulação do status da entrega para marcar como entregue sem entregar; alteração de
+     avaliações; adulteração de preços do cardápio por um funcionário do restaurante. -->
+
+### 5.3 Repudiation — possibilidade de negar uma ação realizada
+
+<!-- RESPONSÁVEL: Gabriel -->
+<!-- TODO(Gabriel): meta de 3 a 5 ameaças. -->
+
+| ID | Componente ou ativo | Ameaça identificada | Possível impacto |
+|---|---|---|---|
+| T13 | Confirmação de entrega (A08) | O entregador marca o pedido como entregue sem entregá-lo e, como não há evidência (foto, código, geolocalização registrada), a plataforma não consegue provar o contrário | Reembolso indevido, prejuízo à plataforma e impossibilidade de responsabilizar o entregador |
+<!-- TODO(Gabriel): sugestões — cliente nega ter recebido o pedido para obter reembolso
+     (fraude de "item não recebido"); administrador emite estorno e não há log que o identifique;
+     restaurante nega ter recebido o pedido; ausência de trilha de auditoria em alterações de
+     preço. -->
+
+### 5.4 Information Disclosure — exposição indevida de informações
+
+<!-- RESPONSÁVEL: Luis Fillipe -->
+<!-- TODO(Luis): meta de 4 a 6 ameaças. -->
+
+| ID | Componente ou ativo | Ameaça identificada | Possível impacto |
+|---|---|---|---|
+| T18 | API de pedidos (A09) | A API retorna o pedido pelo identificador sem verificar se ele pertence ao usuário autenticado (IDOR), permitindo enumerar pedidos e ler endereço e telefone de qualquer cliente | Vazamento em massa de dados pessoais, violação da LGPD e risco físico aos clientes |
+| T19 | App do entregador (A03) | O endereço completo do cliente permanece visível no app do entregador depois de concluída a entrega, sem limitação de tempo | Entregador consegue montar uma base de endereços de clientes; risco de assédio e perseguição |
+<!-- TODO(Luis): sugestões — vazamento do banco de dados por backup exposto; chave de API do
+     provedor de mapas embutida no aplicativo móvel; logs gravando dados de cartão ou tokens;
+     enumeração de usuários pela mensagem de erro do login ("e-mail não cadastrado"). -->
+
+### 5.5 Denial of Service — indisponibilidade ou degradação do serviço
+
+<!-- RESPONSÁVEL: Luis Fillipe -->
+<!-- TODO(Luis): meta de 3 a 5 ameaças. -->
+
+| ID | Componente ou ativo | Ameaça identificada | Possível impacto |
+|---|---|---|---|
+| T24 | API de pedidos (A09) | Um concorrente contrata um ataque volumétrico contra a API no horário de pico do jantar, quando a plataforma já opera perto do limite de capacidade | Interrupção das vendas no período de maior faturamento, prejuízo aos restaurantes e dano à reputação |
+<!-- TODO(Luis): sugestões — pedidos falsos em massa contra um restaurante específico para
+     esgotar sua capacidade de produção; entregadores aceitando e cancelando corridas em massa;
+     abuso do envio de SMS de verificação (custo por mensagem); upload de arquivos enormes no
+     cadastro de documentos. -->
+
+### 5.6 Elevation of Privilege — obtenção indevida de permissões
+
+<!-- RESPONSÁVEL: Luis Fillipe -->
+<!-- TODO(Luis): meta de 3 a 5 ameaças. -->
+
+| ID | Componente ou ativo | Ameaça identificada | Possível impacto |
+|---|---|---|---|
+| T29 | API administrativa (P04) | Um atendente do suporte consegue chamar diretamente endpoints administrativos não expostos na sua interface, porque a autorização é verificada apenas no frontend | Emissão de estornos acima do limite, alteração de comissões e acesso a dados de todos os usuários |
+<!-- TODO(Luis): sugestões — cliente altera o campo "perfil" no cadastro e vira restaurante;
+     token JWT sem validação de assinatura permitindo forjar o papel; funcionário de restaurante
+     acessa pedidos de outras lojas da mesma rede; escalonamento por dependência vulnerável no
+     backend. -->
+
+### 5.7 Consolidação
+
+<!-- RESPONSÁVEL: Luis Fillipe -->
+<!-- TODO(Luis): após as tabelas acima estarem completas, preencher esta contagem. -->
+
+| Categoria | Nº de ameaças | Intervalo de IDs |
+|---|---|---|
+| Spoofing | — | T01–T06 |
+| Tampering | — | T07–T12 |
+| Repudiation | — | T13–T17 |
+| Information Disclosure | — | T18–T23 |
+| Denial of Service | — | T24–T28 |
+| Elevation of Privilege | — | T29–T33 |
+| **Total** | **—** | |
+
+> **Aplicabilidade:** todas as seis categorias do STRIDE são aplicáveis ao SaborExpress. Caso o
+> grupo conclua que alguma ameaça específica não se aplica, a justificativa deve ser registrada
+> aqui, e não simplesmente omitida.
+
+---
+
+## 6. Casos de abuso
+
+<!-- RESPONSÁVEL: Murillo -->
+<!-- TODO(Murillo): meta de 6 a 8 casos de abuso, cobrindo os quatro perfis de usuário
+     (cliente, restaurante, entregador e insider/administrador) e todas as categorias STRIDE.
+     CA01 abaixo está completo e serve de modelo. -->
+
+Cada caso de abuso descreve como uma pessoa mal-intencionada — externa **ou** um usuário legítimo —
+poderia usar o SaborExpress para causar dano.
+
+### CA01 — Cadastro de entregador com identidade falsa
+
+**Ator malicioso:** pessoa sem vínculo real com a plataforma, ou entregador banido tentando
+retornar.
+
+**Objetivo do abuso:** obter acesso sistemático a endereços residenciais de clientes, para
+revenda dos dados ou para preparar crimes patrimoniais.
+
+**Condições necessárias:**
+- O cadastro de entregador aceita documentos sem validação automática contra base oficial.
+- A conferência é apenas visual e feita por amostragem.
+- Não há prova de vida (selfie comparada ao documento) no momento do cadastro nem periodicamente.
+
+**Sequência de ações:**
+1. O atacante obtém uma CNH de terceiro (comprada em vazamento ou fotografada).
+2. Cria uma conta de entregador enviando essa CNH e uma selfie que não é conferida com o
+   documento.
+3. A plataforma aprova o cadastro e o atacante fica disponível para corridas.
+4. A cada corrida aceita, ele recebe nome, telefone e endereço completo do cliente.
+5. Ele registra esses dados e monta uma base própria, ou cancela a corrida logo após ver o
+   endereço.
+
+**Impacto esperado:** exposição de dados pessoais de dezenas a centenas de clientes por semana;
+risco físico real (a informação combina endereço, horário em que a pessoa está em casa e poder
+aquisitivo); responsabilização da plataforma sob a LGPD; dano grave à reputação.
+
+**Ameaças STRIDE relacionadas:** T02 (Spoofing), T19 (Information Disclosure) e Elevation of
+Privilege — o atacante obtém, sem direito, as permissões de um perfil verificado.
+
+---
+
+### CA02 — <!-- TODO(Murillo): título -->
+
+**Ator malicioso:**
+**Objetivo do abuso:**
+**Condições necessárias:**
+**Sequência de ações:**
+1.
+2.
+3.
+**Impacto esperado:**
+**Ameaças STRIDE relacionadas:**
+
+<!-- TODO(Murillo): duplicar o bloco acima para CA03..CA08.
+     Sugestões de temas, um por perfil e por categoria STRIDE ainda não coberta:
+     - Cliente que manipula o valor do pedido antes do pagamento (T07 — Tampering).
+     - Cliente que abusa da política de reembolso alegando não recebimento (T13 — Repudiation).
+     - Restaurante que fraude o próprio faturamento ou cria pedidos fantasma (Tampering).
+     - Entregador que marca entrega sem entregar (T13 — Repudiation).
+     - Atacante externo que enumera pedidos via IDOR (T18 — Information Disclosure).
+     - Concorrente que derruba a plataforma no horário de pico (T24 — DoS).
+     - Atendente do suporte que emite estornos para contas próprias (T29 — Elevation of Privilege).
+     - Fábrica de contas falsas para abuso de cupom de primeira compra (T08 — Tampering). -->
+
+### 6.1 Rastreabilidade entre casos de abuso e ameaças
+
+<!-- RESPONSÁVEL: Murillo -->
+<!-- TODO(Murillo): preencher conforme os CAs forem escritos. Esta tabela é o que demonstra ao
+     professor a "relação entre os casos de abuso e as ameaças" (critério de avaliação). -->
+
+| Caso de abuso | Ameaças relacionadas | Categorias STRIDE |
+|---|---|---|
+| CA01 | T02, T19 | Spoofing, Information Disclosure, Elevation of Privilege |
+| CA02 | — | — |
+
+---
+
+## 7. Considerações finais da Etapa 1
+
+<!-- RESPONSÁVEL: Luis Fillipe (com revisão de Felipe) -->
+<!-- TODO(Luis): escrever após as seções 5 e 6 estarem completas. O texto deve responder
+     explicitamente aos quatro pontos abaixo, cada um com 1 ou 2 parágrafos. -->
+
+### 7.1 Ameaças consideradas mais preocupantes
+
+<!-- TODO: quais e por quê. -->
+
+### 7.2 Ativos mais importantes do sistema
+
+<!-- TODO: retomar a seção 3.2 e justificar a ordem de criticidade. -->
+
+### 7.3 Tipos de abuso de maior impacto
+
+<!-- TODO: quais casos de abuso causariam mais dano e por quê. -->
+
+### 7.4 Principais dificuldades encontradas pelo grupo
+
+<!-- TODO: dificuldades reais da análise. Exemplos do que costuma aparecer: separar ameaça de
+     vulnerabilidade; decidir se um comportamento de usuário legítimo conta como abuso; evitar
+     ameaças genéricas que valeriam para qualquer sistema; delimitar o escopo do sistema. -->
+
+### 7.5 Possíveis medidas de proteção (opcional nesta etapa)
+
+<!-- TODO: indicações iniciais; o detalhamento é feito na Etapa 2. -->
+
+---
+
+**Continua em:** [Etapa 2 — Análise, Priorização e Tratamento de Riscos](analise-de-riscos.md)
