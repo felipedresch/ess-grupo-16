@@ -2,10 +2,7 @@
 
 Trabalho final da disciplina de **Engenharia de Software Seguro** — Grupo 16.
 
-Este repositório reúne toda a análise de segurança de um sistema de **delivery de comida**,
-construída ao longo das etapas da disciplina. O software **não será implementado**: o objetivo
-é compreender o funcionamento do sistema e analisar seus problemas de segurança antes da
-implementação.
+Este repositório reúne toda a análise de segurança de um sistema de **delivery de comida**, construída ao longo das etapas da disciplina. O software **não será implementado**: o objetivo é compreender o funcionamento do sistema e analisar seus problemas de segurança antes da implementação.
 
 ---
 
@@ -17,14 +14,14 @@ implementação.
 | **Domínio** | Plataforma de delivery de comida (marketplace de restaurantes + entrega) |
 | **Disciplina** | Engenharia de Software Seguro |
 | **Grupo** | 16 |
-| **Repositório** | https://github.com/<ORG-OU-USUARIO>/<REPO> <!-- TODO: preencher com a URL real --> |
+| **Repositório** | https://github.com/felipedresch/ess-grupo-16 |
 | **Prazo final de entrega** | 14/08/2026, 23:59 |
 
 ### Integrantes
 
 | Integrante | Usuário GitHub | Responsabilidade principal |
 |---|---|---|
-| Felipe Nestor Dresch | `<TODO>` | Organização do repositório, descrição do sistema, revisão e fechamento |
+| Felipe Nestor Dresch | `felipedresch` | Organização do repositório, descrição do sistema, revisão e fechamento |
 | Deivid Alfonso Beise | `deividbeise-blip` | Usuários, ativos e diagramas |
 | Gabriel Rodrigues da Rocha | `onhoudini` | STRIDE — Spoofing, Tampering, Repudiation |
 | Luis Fillipe Dias Alves | `luisfillipealuno-design` | STRIDE — Information Disclosure, DoS, Elevation of Privilege |
@@ -36,22 +33,15 @@ implementação.
 
 ### Justificativa da escolha do sistema
 
-Um aplicativo de delivery foi escolhido porque concentra, em um único produto, quase todos os
-elementos que tornam a análise de segurança interessante:
+Um aplicativo de delivery foi escolhido porque concentra, em um único produto, quase todos os elementos que tornam a análise de segurança interessante:
 
-- **Múltiplos perfis de usuário com interesses conflitantes** — cliente, restaurante,
-  entregador e administrador. Cada perfil pode abusar do sistema em prejuízo dos outros.
-- **Transações financeiras reais** — pagamentos, repasses a restaurantes, cupons, gorjetas e
-  reembolsos, o que cria incentivo econômico direto para fraude.
-- **Dados pessoais sensíveis** — endereço residencial, telefone, geolocalização em tempo real e
-  histórico de consumo, protegidos pela LGPD.
-- **Superfície de ataque ampla** — aplicativos móveis, painel web, APIs públicas e integração
-  com serviços externos (gateway de pagamento, mapas, notificações).
-- **Requisito forte de disponibilidade** — a indisponibilidade nos horários de pico (almoço e
-  jantar) causa prejuízo imediato e mensurável.
+- **Múltiplos perfis de usuário com interesses conflitantes** — cliente, restaurante entregador e administrador. Cada perfil pode abusar do sistema em prejuízo dos outros.
+- **Transações financeiras reais** — pagamentos, repasses a restaurantes, cupons, gorjetas e reembolsos, o que cria incentivo econômico direto para fraude.
+- **Dados pessoais sensíveis** — endereço residencial, telefone, geolocalização em tempo real e histórico de consumo, protegidos pela LGPD.
+- **Superfície de ataque ampla** — aplicativos móveis, painel web, APIs públicas e integração com serviços externos (gateway de pagamento, mapas, notificações).
+- **Requisito forte de disponibilidade** — a indisponibilidade nos horários de pico (almoço e jantar) causa prejuízo imediato e mensurável.
 
-Essa combinação permite identificar ameaças concretas em **todas** as seis categorias do STRIDE,
-sem forçar cenários artificiais.
+Essa combinação permite identificar ameaças concretas em **todas** as seis categorias do STRIDE, sem forçar cenários artificiais.
 
 ---
 
@@ -67,12 +57,7 @@ sem forçar cenários artificiais.
 
 Legenda de status: 🔴 não iniciado · 🟡 em andamento · 🟢 concluído/ativo
 
-> **Nota sobre a organização em dois arquivos:** o enunciado da Etapa 2 exige que o conteúdo da
-> Etapa 1 **não seja substituído nem apagado**. Mantemos as etapas em arquivos separados e
-> claramente identificados (permitido pelo item 1 do enunciado: *"README.md ou outro arquivo
-> claramente identificado"*), o que garante a preservação da Etapa 1 e reduz conflitos de
-> versionamento entre os seis integrantes. A Etapa 2 referencia explicitamente os identificadores
-> de ameaça (`T##`) e de caso de abuso (`CA##`) definidos na Etapa 1.
+> **Nota sobre a organização em dois arquivos:** o enunciado da Etapa 2 exige que o conteúdo da Etapa 1 **não seja substituído nem apagado**. Mantemos as etapas em arquivos separados e claramente identificados (permitido pelo item 1 do enunciado: *"README.md ou outro arquivo claramente identificado"*), o que garante a preservação da Etapa 1 e reduz conflitos de versionamento entre os seis integrantes. A Etapa 2 referencia explicitamente os identificadores de ameaça (`T##`) e de caso de abuso (`CA##`) definidos na Etapa 1.
 
 ---
 
@@ -113,8 +98,7 @@ git push -u origin etapa1/nome-da-secao
 # abra um Pull Request no GitHub
 ```
 
-⚠️ **A avaliação é individual e baseada nos seus próprios commits.** Confira que seu e-mail do
-Git corresponde ao da sua conta do GitHub, senão seus commits não serão atribuídos a você:
+⚠️ **A avaliação é individual e baseada nos seus próprios commits.** Confira que seu e-mail do Git corresponde ao da sua conta do GitHub, senão seus commits não serão atribuídos a você:
 
 ```bash
 git config user.email

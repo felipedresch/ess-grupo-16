@@ -31,7 +31,7 @@
 | Nome do sistema | **SaborExpress** |
 | Tipo | Aplicativo/plataforma de delivery de comida |
 | Grupo | 16 |
-| Repositório | https://github.com/&lt;ORG-OU-USUARIO&gt;/&lt;REPO&gt; <!-- TODO: URL real --> |
+| Repositório | https://github.com/felipedresch/ess-grupo-16 |
 
 **Integrantes:** Felipe Nestor Dresch, Deivid Alfonso Beise, Gabriel Rodrigues da Rocha,
 Luis Fillipe Dias Alves, Murillo Dias Nunes e Fernando Nicola Correa.
