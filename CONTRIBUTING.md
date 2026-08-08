@@ -116,6 +116,8 @@ commit
 - **Identificadores estáveis.** Ameaças são `T01`, `T02`, …; casos de abuso `CA01`, `CA02`, …;
   riscos `R01`, `R02`, …; requisitos de segurança `RS01`, …; testes `TS01`, …; achados do ZAP
   `A01`, …. Uma vez publicado, **não renumere** — outras etapas apontam para esses IDs.
+  Lacunas na numeração são aceitáveis e preferíveis a renumerar: se uma categoria não usou todos
+  os números reservados para ela, deixe o buraco e registre que ele é intencional.
 - **Rastreabilidade.** Cada etapa se apoia na anterior: todo caso de abuso cita as ameaças STRIDE
   relacionadas, todo risco cita a ameaça `T##` de origem, todo requisito cita o risco `R##`, e
   toda prática de código cita o requisito `RS##`. Essa cadeia é critério de avaliação em todas as

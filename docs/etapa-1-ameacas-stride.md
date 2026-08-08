@@ -258,7 +258,7 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 | T03 | Aplicativo do entregador (P02) | O entregador usa um aplicativo de GPS falso (*mock location*) para simular estar próximo ao restaurante e receber corridas às quais não teria acesso | Alocação injusta de corridas, atrasos e cobrança de taxas de deslocamento indevidas |
 | T04 | Conta do cliente / fluxo de recuperação de senha (A01) | Um atacante envia um e-mail de phishing imitando o SaborExpress, levando o cliente a digitar suas credenciais em uma página falsa de "recuperação de senha" | Conta do cliente comprometida, acesso a endereço, histórico e meio de pagamento salvo |
 | T05 | Cadastro de restaurante (P03) | Um atacante cadastra um estabelecimento fictício, usando documentos falsos ou de terceiros, para operar como se fosse um restaurante real na plataforma | Pedidos pagos e nunca preparados, calote em clientes, uso da marca do SaborExpress para golpes |
-| T06 | Webhook do gateway de pagamento (P05) | O endpoint que recebe a confirmação de pagamento do gateway não valida a assinatura da requisição, permitindo que um atacante envie uma notificação falsa de "pagamento aprovado" | Liberação de pedidos sem pagamento real, prejuízo financeiro direto à plataforma |
+| T06 | Webhook do gateway de pagamento (P08) | O endpoint que recebe a confirmação de pagamento do gateway não valida a assinatura da requisição, permitindo que um atacante envie uma notificação falsa de "pagamento aprovado" | Liberação de pedidos sem pagamento real, prejuízo financeiro direto à plataforma |
 
 ### 5.2 Tampering — alteração indevida de dados
 
@@ -327,13 +327,19 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 
 | Categoria | Nº de ameaças | Intervalo de IDs |
 |---|---|---|
-| Spoofing | — | T01–T06 |
-| Tampering | — | T07–T12 |
-| Repudiation | — | T13–T17 |
-| Information Disclosure | — | T18–T23 |
-| Denial of Service | — | T24–T28 |
-| Elevation of Privilege | — | T29–T33 |
+| Spoofing | — | T01 a T06 |
+| Tampering | — | T07 a T12 |
+| Repudiation | — | T13 a T16 |
+| Information Disclosure | — | T18 a T23 |
+| Denial of Service | — | T24 a T28 |
+| Elevation of Privilege | — | T29 a T32 |
 | **Total** | **—** | |
+
+> **Sobre os identificadores T17 e T33:** eles não existem. Os intervalos de IDs foram reservados
+> por categoria antes da análise, e nem toda categoria usou todos os números reservados. Como os
+> identificadores são citados pelos casos de abuso e por todas as etapas seguintes, o grupo optou
+> por **não renumerar** as ameaças para fechar essas lacunas — renumerar quebraria as referências
+> já publicadas e criaria risco de incoerência entre os documentos. As lacunas são intencionais.
 
 > **Aplicabilidade:** todas as seis categorias do STRIDE são aplicáveis ao SaborExpress. Caso o
 > grupo conclua que alguma ameaça específica não se aplica, a justificativa deve ser registrada

@@ -95,7 +95,7 @@ Arquivo: [`docs/etapa-1-ameacas-stride.md`](etapa-1-ameacas-stride.md)
 | E1.12 | STRIDE — Information Disclosure (4 a 6 ameaças) | 5.4 | Luis Fillipe | 08/08 | 🟢 T18–T23 |
 | E1.13 | STRIDE — Denial of Service (3 a 5 ameaças) | 5.5 | Luis Fillipe | 08/08 | 🟢 T24–T28 |
 | E1.14 | STRIDE — Elevation of Privilege (3 a 5 ameaças) | 5.6 | Luis Fillipe | 08/08 | 🟢 T29–T32 |
-| E1.15 | Tabela de consolidação das ameaças. **Atenção:** corrigir os intervalos de ID, que hoje estão errados (Repudiation vai até T16, não T17; Elevation vai até T32, não T33) | 5.7 | Luis Fillipe | 09/08 | 🔴 |
+| E1.15 | Tabela de consolidação das ameaças: preencher a contagem por categoria e o total (os intervalos de ID já estão corretos) | 5.7 | Luis Fillipe | 09/08 | 🔴 |
 | E1.16 | Casos de abuso CA02 a CA08 | 6 | Murillo | 09/08 | 🔴 desbloqueado |
 | E1.17 | Rastreabilidade caso de abuso ↔ ameaça | 6.1 | Murillo | 09/08 | ⚫ depende de E1.16 |
 | E1.18 | Diagrama de casos de abuso (opcional) | 6 | Murillo | 09/08 | 🔴 |
