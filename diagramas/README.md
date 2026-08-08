@@ -26,6 +26,7 @@ Nos documentos, referencie a imagem com caminho relativo a partir de `docs/`:
 | `etapa-1/` | `diagrama-fluxo-dados` | Caminho do pedido, com as fronteiras de confiança F1–F5 | Deivid | 🟡 ajustes pendentes |
 | `etapa-1/` | `casos-de-abuso` | Casos de abuso e sua relação com os atores (opcional) | Murillo | 🔴 |
 | `etapa-3/` | `arquitetura-segura` | Arquitetura com autenticação, autorização, logs e posição dos controles | Deivid | 🔴 |
+| `etapa-7/` | `pipeline-devsecops` | Os oito momentos do pipeline, condições de continuidade e de bloqueio | Felipe | 🟢 |
 
 ## Como fazer
 
@@ -33,8 +34,15 @@ Nos documentos, referencie a imagem com caminho relativo a partir de `docs/`:
 o `.drawio` na pasta da etapa e exporte em *File → Export as → PNG* com zoom 200%, na mesma pasta.
 Commite **os dois arquivos**.
 
-**Opção 2 — Mermaid.** Escreva o diagrama direto no Markdown, em bloco ` ```mermaid `. O GitHub
-renderiza nativamente e o próprio Markdown já é o fonte, o que dispensa arquivo separado.
+**Opção 2 — Mermaid (usada na Etapa 7).** Escreva o diagrama em um arquivo `.mmd`, que é o
+arquivo-fonte, e gere a imagem com o mermaid-cli:
+
+```bash
+npx -y @mermaid-js/mermaid-cli -i diagrama.mmd -o diagrama.png -w 1600 -b white
+```
+
+O mesmo código pode ir dentro de um bloco ` ```mermaid ` no documento, que o GitHub renderiza
+nativamente. Vale colocar o bloco dentro de um `<details>` para não duplicar a imagem na tela.
 
 ## Legibilidade
 

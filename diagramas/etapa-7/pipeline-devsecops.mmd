@@ -1,0 +1,42 @@
+%% Pipeline DevSecOps do SaborExpress - Grupo 16, Etapa 7
+%% Arquivo-fonte editavel. Para regerar a imagem:
+%%   npx -y @mermaid-js/mermaid-cli -i pipeline-devsecops.mmd -o pipeline-devsecops.png -w 1600 -b white
+flowchart LR
+    subgraph COL1["Projeto e construção"]
+        direction TB
+        P["<b>1. Planejamento</b><br/>Modelagem STRIDE e análise de riscos<br/><i>Etapas 1 e 2, ameaças T## e riscos R##</i>"]
+        R["<b>2. Requisitos e projeto</b><br/>Requisitos de segurança e<br/>decisões de arquitetura<br/><i>Etapa 3, requisitos RS## e CWE/OWASP</i>"]
+        I["<b>3. Implementação</b><br/>Práticas de código seguro,<br/>testes escritos antes<br/><i>Etapa 4, testes TS##</i>"]
+        T["<b>4. Testes automatizados</b><br/>Suíte de segurança roda<br/>a cada alteração"]
+        P -->|Riscos prioritários<br/>classificados| R
+        R -->|Todo risco crítico ou alto<br/>tem requisito associado| I
+        I -->|Revisão de código feita<br/>por outra pessoa| T
+    end
+
+    subgraph COL2["Verificação, entrega e operação"]
+        direction TB
+        S["<b>5. Análise de código e dependências</b><br/>SAST, dependências vulneráveis<br/>e busca de segredos"]
+        D["<b>6. Teste dinâmico</b><br/>Varredura com OWASP ZAP<br/>em homologação<br/><i>Etapa 5, relatório e evidências</i>"]
+        E["<b>7. Implantação</b><br/>Configuração revisada,<br/>segredos vindos do cofre"]
+        M["<b>8. Monitoramento e resposta</b><br/>Logs, regras de detecção<br/>e tratamento de alertas<br/><i>Etapa 6, regras de detecção</i>"]
+        S -->|Nenhuma vulnerabilidade crítica<br/>em aberto, nenhum segredo| D
+        D -->|Achados de severidade alta<br/>tratados ou justificados| E
+        E -->|Aprovação registrada e<br/>possibilidade de reverter| M
+    end
+
+    C(["<b>O ciclo recomeça</b><br/>O que a operação detecta vira ameaça nova.<br/>A análise reinicia no passo 1 com<br/>informação que antes não existia."])
+
+    B["<b>Condições que interrompem a entrega</b><br/>1. Teste de segurança reprovado<br/>2. Vulnerabilidade crítica não analisada<br/>3. Segredo encontrado no repositório<br/>4. Falha no controle de acesso"]
+
+    T ==>|Todos os testes de<br/>segurança aprovados| S
+    M -.-> C
+    B -.-> T
+    B -.-> S
+    B -.-> D
+
+    classDef fase fill:#e8f0fe,stroke:#3c5a99,stroke-width:1px,color:#111
+    classDef bloqueio fill:#fdecea,stroke:#b3261e,stroke-width:2px,color:#111
+    class P,R,I,T,S,D,E,M fase
+    class B bloqueio
+    style COL1 fill:#fafbfd,stroke:#c3cbd9
+    style COL2 fill:#fafbfd,stroke:#c3cbd9

@@ -194,8 +194,8 @@ Arquivo: [`roteiros/etapa-7-devsecops-e-video-final.md`](../roteiros/etapa-7-dev
 
 | # | Tarefa | Seção | Responsável | Prazo | Status |
 |---|---|---|---|---|---|
-| E7.1 | Explicação de DevSecOps e revisão da tabela do pipeline | A.1 e A.2 | Felipe | 13/08 | 🔴 |
-| E7.2 | Justificar as condições que interrompem o pipeline | A.3 | Felipe | 13/08 | 🔴 |
+| E7.1 | Explicação de DevSecOps e revisão da tabela do pipeline | A.1 e A.2 | Felipe | 13/08 | 🟢 |
+| E7.2 | Justificar as condições que interrompem o pipeline | A.3 | Felipe | 13/08 | 🟢 |
 | E7.3 | Fechar a divisão de falas do vídeo com o grupo | B.1 | Todos | 12/08 | 🔴 |
 | E7.4 | Escrever o roteiro detalhado do vídeo | B.2 | Felipe | 14/08 | ⚫ depende das Etapas 3–6 |
 | E7.5 | Gravar o vídeo (5 a 8 min, todos participam) | B | Todos | 14/08 | ⚫ depende de E7.4 |
