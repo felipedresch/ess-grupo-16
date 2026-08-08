@@ -181,8 +181,8 @@ Arquivo: [`roteiros/etapa-6-deteccao-de-intrusoes.md`](../roteiros/etapa-6-detec
 
 | # | Tarefa | Seção | Responsável | Prazo | Status |
 |---|---|---|---|---|---|
-| E6.1 | Conceito de detecção e diferença entre prevenir e detectar | 1 e 2 | Felipe | 13/08 | 🔴 |
-| E6.2 | Eventos a registrar (revisar e completar a tabela) | 3 | Felipe | 13/08 | ⚫ depende de E1.15 |
+| E6.1 | Conceito de detecção e diferença entre prevenir e detectar | 1 e 2 | Felipe | 13/08 | 🟢 |
+| E6.2 | Eventos a registrar e o que não deve ir para o log | 3 e 3.1 | Felipe | 13/08 | 🟢 |
 | E6.3 | Três regras de detecção | 4 | Felipe | 13/08 | ⚫ depende de E2.8 |
 | E6.4 | Fluxo de resposta ao alerta e limitações | 5 e 6 | Felipe | 13/08 | ⚫ |
 
