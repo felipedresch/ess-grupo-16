@@ -275,9 +275,10 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 |---|---|---|---|
 | T07 | Pedido / carrinho (A09) | O cliente intercepta a requisição do app e altera o preço ou a quantidade dos itens, e o servidor confia no valor enviado pelo cliente em vez de recalculá-lo | Prejuízo financeiro à plataforma e ao restaurante a cada pedido manipulado |
 | T08 | Cupons (A06) | O cliente descobre o padrão dos códigos de cupom e aplica repetidamente cupons de primeira compra criando contas descartáveis | Prejuízo financeiro em escala e distorção das campanhas |
-<!-- TODO(Gabriel): sugestões — alteração do endereço de repasse bancário do restaurante;
-     manipulação do status da entrega para marcar como entregue sem entregar; alteração de
-     avaliações; adulteração de preços do cardápio por um funcionário do restaurante. -->
+| T09 | Dados bancários de repasse do restaurante (A02) | Um funcionário mal-intencionado (interno) ou um atacante com acesso ao cadastro altera a conta bancária cadastrada para receber os repasses do restaurante | O dinheiro do repasse vai para uma conta diferente da do restaurante legítimo; prejuízo financeiro difícil de reverter |
+| T10 | Cardápio do restaurante (A09) | Um funcionário do restaurante com acesso ao painel altera o preço de um item depois que ele já foi anunciado, criando divergência entre o valor mostrado ao cliente e o cobrado | Cobrança indevida, disputas e prejuízo à confiança na plataforma |
+| T11 | Avaliações e comentários | Um cliente ou concorrente usa uma falha na API para editar ou apagar avaliações negativas de um restaurante depois de publicadas | Distorção da reputação real dos restaurantes, prejudicando a decisão de outros clientes |
+| T12 | Endereço de entrega do pedido (A09) | Depois que o pagamento já foi confirmado, alguém com acesso à API altera o endereço de entrega do pedido para um endereço diferente do informado pelo cliente | Pedido entregue no lugar errado; possibilidade de uso para golpe ("troca de endereço" para redirecionar mercadoria) |
 
 ### 5.3 Repudiation — possibilidade de negar uma ação realizada
 
