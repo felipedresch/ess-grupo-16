@@ -265,6 +265,9 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 <!-- TODO(Gabriel): sugestões de ameaças ainda não cobertas — phishing de token de recuperação
      de senha; cadastro de restaurante falso; falsificação do webhook do gateway de pagamento
      (endpoint sem validação de assinatura); uso de conta de suporte compartilhada. -->
+| T04 | Conta do cliente / fluxo de recuperação de senha (A01) | Um atacante envia um e-mail de phishing imitando o SaborExpress, levando o cliente a digitar suas credenciais em uma página falsa de "recuperação de senha" | Conta do cliente comprometida, acesso a endereço, histórico e meio de pagamento salvo |
+| T05 | Cadastro de restaurante (P03) | Um atacante cadastra um estabelecimento fictício, usando documentos falsos ou de terceiros, para operar como se fosse um restaurante real na plataforma | Pedidos pagos e nunca preparados, calote em clientes, uso da marca do SaborExpress para golpes |
+| T06 | Webhook do gateway de pagamento (P05) | O endpoint que recebe a confirmação de pagamento do gateway não valida a assinatura da requisição, permitindo que um atacante envie uma notificação falsa de "pagamento aprovado" | Liberação de pedidos sem pagamento real, prejuízo financeiro direto à plataforma |
 
 ### 5.2 Tampering — alteração indevida de dados
 
