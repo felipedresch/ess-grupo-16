@@ -44,12 +44,14 @@ risco**. Usamos estas definições em todo o documento:
 
 ### 8.1 Critérios de probabilidade
 
+A avaliação da probabilidade de ocorrência de ameaças no sistema SaborExpress baseia-se em uma escala de 1 (Baixa) a 4 (Alta). Com base na literatura científica de segurança (NIST SP 800-30 e ISO/IEC 27005), as justificativas para cada nível são delineadas a seguir, considerando o perfil dos atacantes, as barreiras de proteção existentes e as facilidades técnicas de exploração:
+
 | Valor | Classificação | Critério |
 |---|---|---|
-| 1 | Baixa | O evento depende de condições incomuns, acesso muito específico ou grande capacidade técnica |
-| 2 | Média-baixa | O evento é possível, mas depende de uma vulnerabilidade ou condição específica |
-| 3 | Média-alta | O evento é plausível e pode ocorrer em situações comuns de uso ou ataque |
-| 4 | Alta | O evento pode ocorrer com facilidade, frequência ou durante condições previsíveis do sistema |
+| 1 | Baixa | Reservada para eventos que demandam condições operacionais incomuns, controle de canais físicos, ou habilidades de alto nível técnico (como quebra teórica de algoritmos de criptografia em trânsito ou ataques direcionados de dia zero - "zero-day"). No contexto de uma aplicação de delivery de comida, o incentivo econômico para que atacantes com essa sofisticação executem tais ações é estatisticamente insignificante, tornando o evento raro. |
+| 2 | Média-baixa | Aplica-se a ameaças viáveis no contexto web, porém limitadas por vulnerabilidades específicas ou que dependem de condições circunstanciais e intervenção de rede (ex.: alteração do valor de pedidos se houver uma falha muito pontual de consistência de sessão). Exige um nível moderado de capacidade técnica do atacante ou o descobrimento de caminhos de exploração não triviais. |
+| 3 | Média-alta | Caracteriza ameaças cuja exploração se baseia em comportamentos comuns dos usuários (como reuso de senhas em plataformas digitais) combinados com a ausência de proteções modernas. O ataque de credential stuffing (R01) e a raspagem automática de APIs públicas sem autenticação são exemplos cotidianos em aplicações web. O uso de scripts prontos e amplamente distribuídos permite a exploração por agentes de baixa qualificação técnica. |
+| 4 | Alta | Aplica-se a eventos que podem ocorrer com facilidade extrema devido à completa ausência de controles defensivos mínimos em pontos públicos de interação do SaborExpress (como a manipulação de parâmetros de URLs sem validação de autorização). Qualquer usuário com conhecimento básico de requisições HTTP pode reproduzir o ataque, gerando ocorrências de alta frequência durante a operação regular do sistema. |
 
 <!-- TODO(Fernando): acrescentar 1 parágrafo explicando quais características do SaborExpress o
      grupo considera ao atribuir probabilidade — por exemplo: existência de incentivo financeiro,
