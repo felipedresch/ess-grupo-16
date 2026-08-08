@@ -2,7 +2,7 @@
 
 **Sistema:** SaborExpress — plataforma de delivery de comida
 **Grupo:** 16 — Engenharia de Software Seguro
-**Última atualização:** <!-- atualize a data ao editar --> 05/08/2026
+**Última atualização:** <!-- atualize a data ao editar --> 07/08/2026
 
 > **Como usar este documento:** cada seção tem um responsável marcado em comentário HTML.
 > Blocos marcados com `<!-- TODO -->` ainda precisam ser preenchidos. A divisão completa das
@@ -156,13 +156,11 @@ Em ordem de criticidade percebida pelo grupo:
 | Perfil | Autenticação | Permissões principais | Não pode |
 |---|---|---|---|
 | Visitante | Nenhuma | Buscar restaurantes, ver cardápios | Pedir, ver dados de terceiros |
-| Cliente | E-mail/senha + verificação de telefone | Pedir, pagar, avaliar, abrir chamado | Ver pedidos de outros clientes |
-| Restaurante | E-mail/senha (conta do estabelecimento) | Gerir cardápio e pedidos próprios | Ver dados completos do cliente |
-| Entregador | E-mail/senha + verificação de documentos | Aceitar corridas, ver endereço do pedido ativo | Ver histórico do cliente |
-| Suporte | SSO corporativo | Consultar pedidos, abrir estorno até limite | Alterar comissões, criar cupons |
-| Administrador | SSO corporativo + MFA | Todas as operações do backoffice | — |
-
-<!-- TODO(Deivid): revisar se essa matriz de permissões cobre o que a seção 2.3 descreve. -->
+| Cliente | E-mail/senha + verificação de telefone | Cadastrar endereços e meios de pagamento, buscar restaurantes, montar carrinho, aplicar cupons, pagar, acompanhar entrega em tempo real, conversar via chat com entregador/suporte, avaliar, abrir chamado | Ver pedidos ou dados de outros clientes, alterar valor do pedido após confirmação |
+| Restaurante | E-mail/senha (conta do estabelecimento) | Gerir cardápio e preços, aceitar/recusar pedidos, atualizar status de preparo, consultar repasses financeiros e relatórios de vendas próprios | Ver dados completos do cliente (além do necessário para a entrega), alterar comissões, ver pedidos de outros restaurantes |
+| Entregador | E-mail/senha + verificação de documentos | Ficar disponível, aceitar corridas, compartilhar localização durante a corrida, ver endereço do pedido ativo, confirmar coleta/entrega, consultar ganhos/gorjetas/saques | Ver histórico de pedidos anteriores do cliente, ver endereço fora de uma corrida ativa |
+| Suporte | SSO corporativo | Consultar pedidos, abrir estorno até um limite pré-definido | Alterar comissões, criar cupons, homologar ou suspender restaurantes/entregadores |
+| Administrador | SSO corporativo + MFA | Todas as operações do backoffice: homologação, cupons, mediação de disputas, estorno, consulta a logs e relatórios | Operar sem gerar log de auditoria (toda ação sensível deve ficar registrada) |
 
 ### 3.2 Ativos
 
@@ -180,9 +178,10 @@ Classificação: **Crítico** (prejuízo grave, difícil recuperação) · **Alt
 | A08 | Logs de auditoria | Dado | Serviço de logs | Alto | Sem eles não é possível provar o que aconteceu |
 | A09 | API de pedidos (backend) | Componente | Servidores da plataforma | Crítico | Ponto central de todas as operações |
 | A10 | Banco de dados principal | Componente | Infraestrutura da plataforma | Crítico | Concentra praticamente todos os dados |
-<!-- TODO(Deivid): acrescentar pelo menos A11..A14 — sugestões: avaliações/reputação,
-     mensagens do chat, painel administrativo, chaves de API dos serviços externos,
-     aplicativo móvel (código/cliente), serviço de notificações. -->
+| A11 | Mensagens do chat (cliente ↔ entregador ↔ suporte) | Dado pessoal | Servidor de mensagens / banco de dados | Médio | Pode conter combinações sensíveis (ex: instruções de entrega, reclamações) e, se vazado, expõe a comunicação privada entre as partes |
+| A12 | Painel administrativo (backoffice) | Componente | Servidores da plataforma | Crítico | Concentra acesso a estornos, cupons, dados de todos os usuários e homologação de contas — comprometê-lo compromete o sistema inteiro |
+| A13 | Chaves de API dos serviços externos (gateway, mapas, notificações, antifraude) | Segredo | Variáveis de ambiente / cofre de segredos do backend | Crítico | Vazamento permite que um atacante se passe pela plataforma perante os serviços externos, gerando fraude financeira ou abuso de cota |
+| A14 | Avaliações e reputação (nota do restaurante e do entregador) | Dado | Banco de dados | Médio | Manipulação em massa (avaliações falsas) distorce a confiança do sistema e pode prejudicar ou favorecer indevidamente um restaurante/entregador |
 
 ### 3.3 Pontos de interação (superfície de ataque)
 
@@ -193,32 +192,28 @@ Classificação: **Crítico** (prejuízo grave, difícil recuperação) · **Alt
 | P03 | Painel do restaurante → API | Restaurante | Cardápio, preços, status do pedido |
 | P04 | Backoffice → API administrativa | Admin/Suporte | Reembolsos, cupons, dados de usuários |
 | P05 | API → Gateway de pagamento | Backend | Token de cartão, valor, identificador da transação |
-<!-- TODO(Deivid): acrescentar P06..P09 — sugestões: API → provedor de mapas,
-     API → serviço de notificações (push/SMS/e-mail), webhook de retorno do gateway,
-     chat cliente↔entregador, upload de documentos. -->
+| P06 | API → Provedor de mapas | Backend | Coordenadas de origem/destino, endereço, rota calculada |
+| P07 | API → Serviço de notificações (push/SMS/e-mail) | Backend | Telefone, e-mail, código de verificação, status do pedido |
+| P08 | Webhook do gateway de pagamento → API | Gateway de pagamento (externo) | Identificador da transação, status do pagamento, valor confirmado |
+| P09 | Chat cliente ↔ entregador | Cliente, Entregador | Mensagens de texto, possível compartilhamento de localização |
 
 ---
 
 ## 4. Visão geral da arquitetura e do fluxo de dados
 
-<!-- RESPONSÁVEL: Deivid -->
-<!-- TODO(Deivid): produzir os diagramas descritos abaixo, salvar o .drawio em
-     diagramas/fonte/ e o .png em imagens/, e então substituir estes blocos pelas imagens. -->
+
 
 ### 4.1 Diagrama de contexto
 
-> **Pendente.** Elementos que o diagrama deve conter: os quatro perfis de usuário, o aplicativo
-> móvel, o painel web, a API do backend, o banco de dados, o storage de arquivos e os quatro
-> serviços externos (gateway de pagamento, mapas, notificações, antifraude).
 
-```
+
+
 ![Diagrama de contexto](../imagens/diagrama-contexto.png)
-```
+
 
 ### 4.2 Diagrama de fluxo de dados (DFD) — fluxo de pedido
 
-> **Pendente.** Deve mostrar o caminho completo de um pedido e, principalmente, as **fronteiras
-> de confiança** (linhas tracejadas) — é nelas que as ameaças STRIDE aparecem.
+![Diagrama de fluxo de dados](../imagens/diagrama-fluxo-dados.png)
 
 Fronteiras de confiança a representar:
 

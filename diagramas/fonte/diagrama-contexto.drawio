@@ -1,0 +1,51 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Contexto" id="contexto1">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="750" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Usuários -->
+        <mxCell id="cliente" value="Cliente" style="ellipse;whiteSpace=wrap;html=1;fillColor=#cde4ff;" vertex="1" parent="1"><mxGeometry x="80" y="40" width="120" height="60" as="geometry"/></mxCell>
+        <mxCell id="restaurante" value="Restaurante" style="ellipse;whiteSpace=wrap;html=1;fillColor=#cde4ff;" vertex="1" parent="1"><mxGeometry x="240" y="40" width="120" height="60" as="geometry"/></mxCell>
+        <mxCell id="entregador" value="Entregador" style="ellipse;whiteSpace=wrap;html=1;fillColor=#cde4ff;" vertex="1" parent="1"><mxGeometry x="400" y="40" width="120" height="60" as="geometry"/></mxCell>
+        <mxCell id="admin" value="Administrador / Suporte" style="ellipse;whiteSpace=wrap;html=1;fillColor=#cde4ff;" vertex="1" parent="1"><mxGeometry x="560" y="40" width="140" height="60" as="geometry"/></mxCell>
+
+        <!-- Interfaces -->
+        <mxCell id="appmovel" value="App Móvel (Cliente / Entregador)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1"><mxGeometry x="180" y="160" width="180" height="60" as="geometry"/></mxCell>
+        <mxCell id="painelweb" value="Painel Web (Restaurante)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1"><mxGeometry x="40" y="160" width="120" height="60" as="geometry"/></mxCell>
+        <mxCell id="backoffice" value="Backoffice (Admin / Suporte)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1"><mxGeometry x="580" y="160" width="150" height="60" as="geometry"/></mxCell>
+
+        <!-- Plataforma -->
+        <mxCell id="api" value="API Backend" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1"><mxGeometry x="280" y="300" width="160" height="60" as="geometry"/></mxCell>
+        <mxCell id="bd" value="Banco de Dados" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1"><mxGeometry x="200" y="440" width="120" height="70" as="geometry"/></mxCell>
+        <mxCell id="storage" value="Storage de Arquivos/Documentos" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1"><mxGeometry x="40" y="440" width="140" height="70" as="geometry"/></mxCell>
+
+        <!-- Externos -->
+        <mxCell id="gateway" value="Gateway de Pagamento" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;" vertex="1" parent="1"><mxGeometry x="560" y="440" width="140" height="60" as="geometry"/></mxCell>
+        <mxCell id="mapas" value="Provedor de Mapas/Rotas" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;" vertex="1" parent="1"><mxGeometry x="720" y="440" width="140" height="60" as="geometry"/></mxCell>
+        <mxCell id="notif" value="Serviço de Notificações" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;" vertex="1" parent="1"><mxGeometry x="880" y="440" width="140" height="60" as="geometry"/></mxCell>
+        <mxCell id="antifraude" value="Serviço Antifraude" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;" vertex="1" parent="1"><mxGeometry x="880" y="530" width="140" height="60" as="geometry"/></mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="cliente" target="appmovel"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="entregador" target="appmovel"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="restaurante" target="painelweb"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="admin" target="backoffice"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="e5" value="P01/P02" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="appmovel" target="api"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="P03" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="painelweb" target="api"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="P04" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="backoffice" target="api"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="api" target="bd"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="api" target="storage"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" value="P05" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="api" target="gateway"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" value="P06" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="api" target="mapas"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e12" value="P07" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="api" target="notif"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="api" target="antifraude"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e14" value="P08 (webhook)" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;" edge="1" parent="1" source="gateway" target="api"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
