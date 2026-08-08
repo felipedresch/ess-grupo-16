@@ -60,12 +60,14 @@ A avaliação da probabilidade de ocorrência de ameaças no sistema SaborExpres
 
 ### 8.2 Critérios de impacto
 
+A mensuração do impacto utiliza uma escala de 1 (Baixo) a 4 (Muito alto). Esta gradação reflete os danos potenciais sob a ótica da privacidade de dados (LGPD), perdas financeiras operacionais, integridade transacional e desgaste de reputação mercadológica da plataforma SaborExpress:
+
 | Valor | Classificação | Critério |
 |---|---|---|
-| 1 | Baixo | Causa pequeno transtorno e pode ser corrigido rapidamente |
-| 2 | Moderado | Causa interrupção ou inconsistência limitada, com possibilidade de recuperação |
-| 3 | Alto | Causa prejuízo relevante aos usuários, ao negócio, à administração ou à privacidade |
-| 4 | Muito alto | Pode afetar muitos usuários, comprometer operações críticas ou causar prejuízo grave |
+| 1 | Baixo | Eventos que resultam em pequenos transtornos operacionais à equipe interna ou inconsistências de exibição de dados não críticos para os usuários. A remediação é imediata por meio de procedimentos padrão de rotina, sem qualquer reflexo financeiro, regulatório ou de publicidade negativa. |
+| 2 | Moderado | Ocorrências que provocam interrupções localizadas e de curta duração em funcionalidades secundárias da plataforma. Embora causem insatisfação momentânea a um grupo reduzido de usuários, os dados sensíveis permanecem íntegros, e a capacidade de restauração e conciliação do serviço ocorre em poucas horas, sem multas legais associadas. |
+| 3 | Alto | Eventos que comprometem a integridade financeira das transações (adulteração de preços - R02) ou violam dados de privacidade localizados. Provoca prejuízos diretos ao faturamento da empresa ou aos lucros de restaurantes parceiros, além de reclamações de segurança que podem gerar notificações administrativas leves e demandar esforços de correção de média complexidade de engenharia. |
+| 4 | Muito alto | Desastres de segurança cibernética que causam danos de ampla escala, como a exfiltração em massa de dados cadastrais e de geolocalização de clientes (R03). Sob os termos da Lei Geral de Proteção de Dados (LGPD), este tipo de incidente resulta em sanções severas (multas pesadas, publicização da infração), além de ações judiciais coletivas, quebra irremediável da reputação do SaborExpress frente ao mercado e grande risco à segurança física dos usuários devido à exposição de endereços residenciais. |
 
 <!-- TODO(Fernando): acrescentar 1 parágrafo indicando quais dimensões de impacto o grupo pesa:
      prejuízo aos usuários, exposição de dados, perdas financeiras, interrupção do serviço,
