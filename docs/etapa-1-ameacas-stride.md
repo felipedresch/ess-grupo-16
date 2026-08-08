@@ -318,6 +318,10 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 | ID | Componente ou ativo | Ameaça identificada | Possível impacto |
 |---|---|---|---|
 | T24 | API de pedidos (A09) | Um concorrente contrata um ataque volumétrico contra a API no horário de pico do jantar, quando a plataforma já opera perto do limite de capacidade | Interrupção das vendas no período de maior faturamento, prejuízo aos restaurantes e dano à reputação |
+| **T25** | Registros financeiros **(A05)** | Um atacante cria pedidos falsos em grande quantidade direcionados a um restaurante específico, gerando operações e registros financeiros desnecessários e ocupando sua capacidade de produção. | Sobrecarga operacional do restaurante, desperdício de alimentos, atrasos e prejuízo financeiro. |
+| **T26** | API de pedidos **(A09)** | Um atacante ou grupo de entregadores aceita e cancela repetidamente grandes quantidades de corridas, consumindo recursos do sistema de distribuição e prejudicando a disponibilidade das entregas. | Atrasos ou indisponibilidade de entregadores, aumento do tempo de entrega e prejuízos para clientes e restaurantes. |
+| **T27** | Credenciais de acesso **(A01)** | Um atacante abusa do mecanismo de envio de SMS de verificação, solicitando repetidamente códigos para números de telefone e consumindo a capacidade do serviço de autenticação. | Degradação do serviço de autenticação, aumento dos custos operacionais e dificuldade para usuários legítimos acessarem suas contas. |
+| **T28** | Documentos de entregadores e restaurantes **(A07)** | Um atacante envia arquivos excessivamente grandes no cadastro de documentos, consumindo armazenamento, banda ou recursos de processamento associados ao armazenamento dos documentos. | Esgotamento de recursos, degradação do cadastro e possível indisponibilidade da aplicação. |
 <!-- TODO(Luis): sugestões — pedidos falsos em massa contra um restaurante específico para
      esgotar sua capacidade de produção; entregadores aceitando e cancelando corridas em massa;
      abuso do envio de SMS de verificação (custo por mensagem); upload de arquivos enormes no
