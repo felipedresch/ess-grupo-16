@@ -288,10 +288,9 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 | ID | Componente ou ativo | Ameaça identificada | Possível impacto |
 |---|---|---|---|
 | T13 | Confirmação de entrega (A08) | O entregador marca o pedido como entregue sem entregá-lo e, como não há evidência (foto, código, geolocalização registrada), a plataforma não consegue provar o contrário | Reembolso indevido, prejuízo à plataforma e impossibilidade de responsabilizar o entregador |
-<!-- TODO(Gabriel): sugestões — cliente nega ter recebido o pedido para obter reembolso
-     (fraude de "item não recebido"); administrador emite estorno e não há log que o identifique;
-     restaurante nega ter recebido o pedido; ausência de trilha de auditoria em alterações de
-     preço. -->
+| T14 | Confirmação de recebimento do pedido (A08) | O cliente recebe o pedido normalmente, mas alega no suporte que "nunca chegou", pedindo reembolso — e como não há evidência de entrega (assinatura, foto, geolocalização no momento da entrega), a plataforma não consegue provar o contrário | Reembolso indevido repetido, prejuízo financeiro à plataforma e ao restaurante |
+| T15 | Estornos emitidos pelo backoffice (A08) | Um atendente do suporte emite um estorno para um pedido sem que o sistema registre, de forma auditável, qual atendente tomou aquela decisão e por quê | Estornos fraudulentos não podem ser rastreados até o responsável, dificultando investigação interna |
+| T16 | Aceite de pedido pelo restaurante (A09) | O restaurante recebe e aceita um pedido, mas depois nega tê-lo recebido para justificar o atraso ou não preparo, e não há log íntegro do momento do aceite | Cliente prejudicado sem responsável identificado; disputa entre plataforma e restaurante sem forma objetiva de resolução |
 
 ### 5.4 Information Disclosure — exposição indevida de informações
 
