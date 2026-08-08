@@ -37,7 +37,7 @@ git checkout main
 git pull                                  # sempre antes de começar algo novo
 git checkout -b etapa1/stride-spoofing    # crie sua branch
 # ... edite os arquivos ...
-git add docs/modelagem-de-ameacas.md
+git add docs/etapa-1-ameacas-stride.md
 git commit -m "Adiciona ameacas de falsificacao de identidade"
 git push -u origin etapa1/stride-spoofing
 ```
@@ -50,8 +50,13 @@ Depois abra um **Pull Request** no GitHub, peça revisão de outro integrante e 
 |---|---|
 | `etapa1/<assunto>` | `etapa1/casos-de-abuso` |
 | `etapa2/<assunto>` | `etapa2/registro-de-riscos` |
+| `etapa3/<assunto>` | `etapa3/requisitos-de-seguranca` |
+| `etapa4/<assunto>` | `etapa4/controle-de-autorizacao` |
+| `etapa5/<assunto>` | `etapa5/verificacao-zap` |
+| `etapa6/<assunto>` | `etapa6/regras-de-deteccao` |
+| `etapa7/<assunto>` | `etapa7/pipeline-devsecops` |
 | `docs/<assunto>` | `docs/corrige-tabela-de-ativos` |
-| `diagramas/<assunto>` | `diagramas/fluxo-de-dados` |
+| `diagramas/<assunto>` | `diagramas/arquitetura-segura` |
 
 ### Regra de ouro para evitar conflitos
 
@@ -108,14 +113,16 @@ commit
 
 - **Português**, com acentuação correta, nos documentos. Nas *mensagens de commit* a acentuação
   é opcional (evita problemas de codificação em alguns terminais).
-- **Identificadores estáveis.** Ameaças são `T01`, `T02`, …; casos de abuso são `CA01`, `CA02`, …;
-  riscos são `R01`, `R02`, …. Uma vez publicado, **não renumere** — outras seções apontam para
-  esses IDs.
-- **Rastreabilidade.** Todo caso de abuso deve citar as ameaças STRIDE relacionadas, e todo risco
-  da Etapa 2 deve citar a ameaça `T##` de origem.
+- **Identificadores estáveis.** Ameaças são `T01`, `T02`, …; casos de abuso `CA01`, `CA02`, …;
+  riscos `R01`, `R02`, …; requisitos de segurança `RS01`, …; testes `TS01`, …; achados do ZAP
+  `A01`, …. Uma vez publicado, **não renumere** — outras etapas apontam para esses IDs.
+- **Rastreabilidade.** Cada etapa se apoia na anterior: todo caso de abuso cita as ameaças STRIDE
+  relacionadas, todo risco cita a ameaça `T##` de origem, todo requisito cita o risco `R##`, e
+  toda prática de código cita o requisito `RS##`. Essa cadeia é critério de avaliação em todas as
+  etapas.
 - **Sem links externos como única fonte.** Diagramas feitos no draw.io, Excalidraw, Figma etc.
-  devem ser exportados em `.png` para `imagens/` **e** ter o arquivo editável salvo em
-  `diagramas/fonte/`.
+  devem ter **imagem e arquivo-fonte lado a lado** na pasta da etapa (ex.:
+  `diagramas/etapa-1/`). Ver [diagramas/README.md](diagramas/README.md).
 - **Tabelas Markdown** para as listagens de ameaças, riscos e controles — o enunciado sugere esse
   formato e ele é o mais legível na avaliação.
 

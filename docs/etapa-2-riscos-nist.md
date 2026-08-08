@@ -2,7 +2,7 @@
 
 **Sistema:** SaborExpress — plataforma de delivery de comida
 **Grupo:** 16 — Engenharia de Software Seguro
-**Continuidade de:** [Etapa 1 — Casos de Abuso e Modelagem de Ameaças](modelagem-de-ameacas.md)
+**Continuidade de:** [Etapa 1 — Casos de Abuso e Modelagem de Ameaças](etapa-1-ameacas-stride.md)
 **Última atualização:** <!-- atualize a data ao editar --> 05/08/2026
 
 > Esta etapa **não substitui** a Etapa 1: ela transforma as ameaças `T##` e os casos de abuso
@@ -90,7 +90,7 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 
 ## 9. Registro de riscos
 
-<!-- RESPONSÁVEIS: Fernando (consolidação e tabela mestre) · Gabriel (riscos de S/T/R) ·
+<!-- RESPONSÁVEIS: Fernando (consolidação e tabela mestre); Gabriel (riscos de S/T/R);
      Luis Fillipe (riscos de I/D/E) -->
 <!-- TODO: cada ameaça relevante da Etapa 1 deve originar pelo menos um risco. Quando uma ameaça
      puder causar consequências diferentes, criar mais de um risco para ela.
@@ -223,7 +223,7 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 
 ## 14. Plano de tratamento
 
-<!-- RESPONSÁVEIS: Deivid (consolidação, responsáveis e evidências) · Gabriel e Luis Fillipe
+<!-- RESPONSÁVEIS: Deivid (consolidação, responsáveis e evidências); Gabriel e Luis Fillipe
      (controles dos riscos que cada um registrou) -->
 <!-- TODO: os controles devem ser ESPECÍFICOS E OBSERVÁVEIS. O enunciado rejeita explicitamente
      propostas genéricas como "aumentar a segurança", "usar criptografia", "melhorar a
@@ -307,4 +307,4 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 
 ---
 
-**Volta para:** [Etapa 1 — Casos de Abuso e Modelagem de Ameaças](modelagem-de-ameacas.md)
+**Volta para:** [Etapa 1 — Casos de Abuso e Modelagem de Ameaças](etapa-1-ameacas-stride.md)

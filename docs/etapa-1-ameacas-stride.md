@@ -164,7 +164,7 @@ Em ordem de criticidade percebida pelo grupo:
 
 ### 3.2 Ativos
 
-Classificação: **Crítico** (prejuízo grave, difícil recuperação) · **Alto** · **Médio** · **Baixo**.
+Classificação: **Crítico** (prejuízo grave, difícil recuperação), **Alto**, **Médio** ou **Baixo**.
 
 | ID | Ativo | Tipo | Onde reside | Criticidade | Por que é um ativo |
 |---|---|---|---|---|---|
@@ -208,12 +208,12 @@ Classificação: **Crítico** (prejuízo grave, difícil recuperação) · **Alt
 
 
 
-![Diagrama de contexto](../imagens/diagrama-contexto.png)
+![Diagrama de contexto](../diagramas/etapa-1/diagrama-contexto.png)
 
 
 ### 4.2 Diagrama de fluxo de dados (DFD) — fluxo de pedido
 
-![Diagrama de fluxo de dados](../imagens/diagrama-fluxo-dados.png)
+![Diagrama de fluxo de dados](../diagramas/etapa-1/diagrama-fluxo-dados.png)
 
 Fronteiras de confiança a representar:
 
@@ -459,4 +459,4 @@ Privilege — o atacante obtém, sem direito, as permissões de um perfil verifi
 
 ---
 
-**Continua em:** [Etapa 2 — Análise, Priorização e Tratamento de Riscos](analise-de-riscos.md)
+**Continua em:** [Etapa 2 — Análise, Priorização e Tratamento de Riscos](etapa-2-riscos-nist.md)
