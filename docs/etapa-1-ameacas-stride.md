@@ -2,7 +2,7 @@
 
 **Sistema:** SaborExpress — plataforma de delivery de comida
 **Grupo:** 16 — Engenharia de Software Seguro
-**Última atualização:** <!-- atualize a data ao editar --> 07/08/2026
+**Última atualização:** <!-- atualize a data ao editar --> 08/08/2026
 
 > **Como usar este documento:** cada seção tem um responsável marcado em comentário HTML.
 > Blocos marcados com `<!-- TODO -->` ainda precisam ser preenchidos. A divisão completa das
@@ -215,7 +215,7 @@ Classificação: **Crítico** (prejuízo grave, difícil recuperação), **Alto*
 
 ![Diagrama de fluxo de dados](../diagramas/etapa-1/diagrama-fluxo-dados.png)
 
-Fronteiras de confiança a representar:
+Fronteiras de confiança representadas:
 
 | Fronteira | Separa |
 |---|---|
@@ -227,8 +227,7 @@ Fronteiras de confiança a representar:
 
 ### 4.3 Fluxo textual do pedido (referência para o diagrama)
 
-Enquanto os diagramas não ficam prontos, esta descrição textual serve de base — o enunciado
-permite a forma textual.
+Descrição textual complementar aos diagramas acima:
 
 1. O cliente autentica-se no app; a API emite um token de sessão.
 2. O app envia a localização; a API retorna os restaurantes disponíveis na área.
