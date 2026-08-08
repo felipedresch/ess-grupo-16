@@ -147,9 +147,6 @@ Em ordem de criticidade percebida pelo grupo:
 ## 3. Usuários, ativos e pontos de interação
 
 <!-- RESPONSÁVEL: Deivid -->
-<!-- TODO(Deivid): completar as três tabelas abaixo. As linhas existentes são exemplos de
-     formato e conteúdo esperado — mantenha, revise e expanda. Meta: >= 12 ativos classificados
-     e >= 8 pontos de interação. -->
 
 ### 3.1 Perfis de acesso e o que cada um pode fazer
 
@@ -253,8 +250,6 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 ### 5.1 Spoofing — falsificação de identidade
 
 <!-- RESPONSÁVEL: Gabriel -->
-<!-- TODO(Gabriel): meta de 4 a 6 ameaças. As linhas abaixo são exemplos de formato e
-     profundidade esperados — revise-as e acrescente as demais. -->
 
 | ID | Componente ou ativo | Ameaça identificada | Possível impacto |
 |---|---|---|---|
@@ -268,7 +263,6 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 ### 5.2 Tampering — alteração indevida de dados
 
 <!-- RESPONSÁVEL: Gabriel -->
-<!-- TODO(Gabriel): meta de 4 a 6 ameaças. -->
 
 | ID | Componente ou ativo | Ameaça identificada | Possível impacto |
 |---|---|---|---|
@@ -282,7 +276,6 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 ### 5.3 Repudiation — possibilidade de negar uma ação realizada
 
 <!-- RESPONSÁVEL: Gabriel -->
-<!-- TODO(Gabriel): meta de 3 a 5 ameaças. -->
 
 | ID | Componente ou ativo | Ameaça identificada | Possível impacto |
 |---|---|---|---|
@@ -294,7 +287,6 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 ### 5.4 Information Disclosure — exposição indevida de informações
 
 <!-- RESPONSÁVEL: Luis Fillipe -->
-<!-- TODO(Luis): meta de 4 a 6 ameaças. -->
 
 | ID | Componente ou ativo | Ameaça identificada | Possível impacto |
 |---|---|---|---|
@@ -305,14 +297,9 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 | T22 | Logs de auditoria (A08) | Logs da aplicação registram dados sensíveis de pagamento ou tokens de autenticação, permitindo que pessoas com acesso aos logs obtenham informações que não deveriam estar disponíveis nesse ambiente. | Exposição de dados financeiros ou credenciais, possibilidade de fraude e comprometimento de contas. |
 | T23 | Credenciais de acesso (A01) | As mensagens de erro do login informam explicitamente quando um e-mail não está cadastrado, permitindo que um atacante enumere quais endereços possuem contas na plataforma. | Exposição da existência de contas de usuários, facilitando ataques direcionados, phishing e tentativas de comprometimento de credenciais. |
 
-<!-- TODO(Luis): sugestões — vazamento do banco de dados por backup exposto; chave de API do
-     provedor de mapas embutida no aplicativo móvel; logs gravando dados de cartão ou tokens;
-     enumeração de usuários pela mensagem de erro do login ("e-mail não cadastrado"). -->
-
 ### 5.5 Denial of Service — indisponibilidade ou degradação do serviço
 
 <!-- RESPONSÁVEL: Luis Fillipe -->
-<!-- TODO(Luis): meta de 3 a 5 ameaças. -->
 
 | ID | Componente ou ativo | Ameaça identificada | Possível impacto |
 |---|---|---|---|
@@ -321,15 +308,10 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 | T26 | API de pedidos (A09) | Um atacante ou grupo de entregadores aceita e cancela repetidamente grandes quantidades de corridas, consumindo recursos do sistema de distribuição e prejudicando a disponibilidade das entregas. | Atrasos ou indisponibilidade de entregadores, aumento do tempo de entrega e prejuízos para clientes e restaurantes. |
 | T27 | Credenciais de acesso (A01) | Um atacante abusa do mecanismo de envio de SMS de verificação, solicitando repetidamente códigos para números de telefone e consumindo a capacidade do serviço de autenticação. | Degradação do serviço de autenticação, aumento dos custos operacionais e dificuldade para usuários legítimos acessarem suas contas. |
 | T28 | Documentos de entregadores e restaurantes (A07) | Um atacante envia arquivos excessivamente grandes no cadastro de documentos, consumindo armazenamento, banda ou recursos de processamento associados ao armazenamento dos documentos. | Esgotamento de recursos, degradação do cadastro e possível indisponibilidade da aplicação. |
-<!-- TODO(Luis): sugestões — pedidos falsos em massa contra um restaurante específico para
-     esgotar sua capacidade de produção; entregadores aceitando e cancelando corridas em massa;
-     abuso do envio de SMS de verificação (custo por mensagem); upload de arquivos enormes no
-     cadastro de documentos. -->
 
 ### 5.6 Elevation of Privilege — obtenção indevida de permissões
 
 <!-- RESPONSÁVEL: Luis Fillipe -->
-<!-- TODO(Luis): meta de 3 a 5 ameaças. -->
 
 | ID | Componente ou ativo | Ameaça identificada | Possível impacto |
 |---|---|---|---|
@@ -337,10 +319,6 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 | T30 | Credenciais de acesso (A01) | Um cliente altera o campo perfil durante o cadastro ou atualização da conta e obtém privilégios destinados ao perfil de restaurante. | Acesso indevido a funcionalidades de restaurante, alteração de cardápios e preços e possível fraude. |
 | T31 | Credenciais de acesso (A01) | A aplicação aceita tokens JWT sem validar corretamente sua assinatura, permitindo que um atacante modifique as informações do token e forje um papel com privilégios superiores. | Obtenção de privilégios administrativos ou de restaurante, acesso a funcionalidades restritas e comprometimento de dados. |
 | T32 | API de pedidos (A09) | Um funcionário de um restaurante consegue consultar ou modificar pedidos pertencentes a outra loja da mesma rede devido à ausência de validação do vínculo entre usuário, restaurante e recurso. | Acesso indevido a pedidos e dados de outros restaurantes, alteração de operações e possibilidade de fraude. |
-<!-- TODO(Luis): sugestões — cliente altera o campo "perfil" no cadastro e vira restaurante;
-     token JWT sem validação de assinatura permitindo forjar o papel; funcionário de restaurante
-     acessa pedidos de outras lojas da mesma rede; escalonamento por dependência vulnerável no
-     backend. -->
 
 ### 5.7 Consolidação
 

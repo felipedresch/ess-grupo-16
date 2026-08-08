@@ -30,7 +30,7 @@ trabalho. Não é preciso commit separado só para isso.
 | Data | Marco |
 |---|---|
 | 07/08 (sex) | ✅ Repositório reestruturado para as 7 etapas; ✅ PR do Deivid mesclado; **Murillo já pode instalar ZAP + Juice Shop** |
-| 08/08 (sáb) | STRIDE completo (Gabriel, Luis); critérios de risco (Fernando) |
+| 08/08 (sáb) | ✅ STRIDE completo, 31 ameaças (Gabriel, Luis); ✅ ajustes dos diagramas (Deivid); critérios de risco (Fernando) |
 | 09/08 (dom) | Casos de abuso e rastreabilidade (Murillo) → **Etapa 1 fechada** |
 | 10/08 (seg) | Registro de riscos, justificativas, priorização e NIST |
 | 11/08 (ter) | Plano de tratamento, ordem, residual e conclusões → **Etapa 2 fechada** |
@@ -70,7 +70,7 @@ longo de todo o trabalho.
 |---|---|---|---|---|
 | P1 | Criar estrutura do repositório e documentos-base | Felipe | 05/08 | 🟢 |
 | P2 | Reestruturar o repositório para as 7 etapas do enunciado atualizado | Felipe | 07/08 | 🟢 |
-| P3 | Cada integrante confere `git config user.email` e faz um commit de teste | Todos | 08/08 | 🔴 |
+| P3 | Cada integrante confere `git config user.email` e faz um commit de teste | Todos | 08/08 | 🟡 faltam Murillo e Fernando |
 | P4 | Ler o enunciado atualizado e este backlog | Todos | 08/08 | 🔴 |
 
 ---
@@ -88,15 +88,15 @@ Arquivo: [`docs/etapa-1-ameacas-stride.md`](etapa-1-ameacas-stride.md)
 | E1.5 | Pontos de interação (P01–P09) | 3.3 | Deivid | 07/08 | 🟢 |
 | E1.6 | Diagrama de contexto | 4.1 | Deivid | 07/08 | 🟢 |
 | E1.7 | Diagrama de fluxo de dados | 4.2 | Deivid | 07/08 | 🟢 |
-| E1.8 | **Ajustes do PR #1:** corrigir fronteira F5, padronizar as zonas de confiança, reexportar as imagens maiores e atualizar os textos de 4.2 e 4.3 | 4 | Deivid | 09/08 | 🔴 |
-| E1.9 | STRIDE — Spoofing (4 a 6 ameaças) | 5.1 | Gabriel | 08/08 | 🔴 |
-| E1.10 | STRIDE — Tampering (4 a 6 ameaças) | 5.2 | Gabriel | 08/08 | 🔴 |
-| E1.11 | STRIDE — Repudiation (3 a 5 ameaças) | 5.3 | Gabriel | 08/08 | 🔴 |
-| E1.12 | STRIDE — Information Disclosure (4 a 6 ameaças) | 5.4 | Luis Fillipe | 08/08 | 🔴 |
-| E1.13 | STRIDE — Denial of Service (3 a 5 ameaças) | 5.5 | Luis Fillipe | 08/08 | 🔴 |
-| E1.14 | STRIDE — Elevation of Privilege (3 a 5 ameaças) | 5.6 | Luis Fillipe | 08/08 | 🔴 |
-| E1.15 | Tabela de consolidação das ameaças | 5.7 | Luis Fillipe | 09/08 | ⚫ depende de E1.9–E1.14 |
-| E1.16 | Casos de abuso CA02 a CA08 | 6 | Murillo | 09/08 | ⚫ depende de E1.9–E1.14 |
+| E1.8 | **Ajustes do PR #1:** corrigir fronteira F5, padronizar as zonas de confiança, reexportar as imagens maiores e atualizar os textos de 4.2 e 4.3 | 4 | Deivid | 09/08 | 🟢 |
+| E1.9 | STRIDE — Spoofing (4 a 6 ameaças) | 5.1 | Gabriel | 08/08 | 🟢 T01–T06 |
+| E1.10 | STRIDE — Tampering (4 a 6 ameaças) | 5.2 | Gabriel | 08/08 | 🟢 T07–T12 |
+| E1.11 | STRIDE — Repudiation (3 a 5 ameaças) | 5.3 | Gabriel | 08/08 | 🟢 T13–T16 |
+| E1.12 | STRIDE — Information Disclosure (4 a 6 ameaças) | 5.4 | Luis Fillipe | 08/08 | 🟢 T18–T23 |
+| E1.13 | STRIDE — Denial of Service (3 a 5 ameaças) | 5.5 | Luis Fillipe | 08/08 | 🟢 T24–T28 |
+| E1.14 | STRIDE — Elevation of Privilege (3 a 5 ameaças) | 5.6 | Luis Fillipe | 08/08 | 🟢 T29–T32 |
+| E1.15 | Tabela de consolidação das ameaças. **Atenção:** corrigir os intervalos de ID, que hoje estão errados (Repudiation vai até T16, não T17; Elevation vai até T32, não T33) | 5.7 | Luis Fillipe | 09/08 | 🔴 |
+| E1.16 | Casos de abuso CA02 a CA08 | 6 | Murillo | 09/08 | 🔴 desbloqueado |
 | E1.17 | Rastreabilidade caso de abuso ↔ ameaça | 6.1 | Murillo | 09/08 | ⚫ depende de E1.16 |
 | E1.18 | Diagrama de casos de abuso (opcional) | 6 | Murillo | 09/08 | 🔴 |
 | E1.19 | Considerações finais da Etapa 1 | 7 | Luis Fillipe | 09/08 | ⚫ depende de E1.15 e E1.17 |
@@ -112,8 +112,8 @@ Arquivo: [`docs/etapa-2-riscos-nist.md`](etapa-2-riscos-nist.md)
 |---|---|---|---|---|---|
 | E2.1 | Justificar os critérios de probabilidade | 8.1 | Fernando | 08/08 | 🔴 |
 | E2.2 | Justificar os critérios de impacto | 8.2 | Fernando | 08/08 | 🔴 |
-| E2.3 | Converter as ameaças de S/T/R em riscos | 9 | Gabriel | 10/08 | ⚫ depende de E1.11 |
-| E2.4 | Converter as ameaças de I/D/E em riscos | 9 | Luis Fillipe | 10/08 | ⚫ depende de E1.14 |
+| E2.3 | Converter as ameaças T01–T16 (S/T/R) em riscos | 9 | Gabriel | 10/08 | 🔴 desbloqueado |
+| E2.4 | Converter as ameaças T18–T32 (I/D/E) em riscos | 9 | Luis Fillipe | 10/08 | 🔴 desbloqueado |
 | E2.5 | Consolidar a tabela mestre, conferir cálculos e numeração | 9 | Fernando | 10/08 | ⚫ depende de E2.3 e E2.4 |
 | E2.6 | Justificativas dos riscos de S/T/R (5 pontos cada) | 10 | Gabriel | 10/08 | ⚫ |
 | E2.7 | Justificativas dos riscos de I/D/E (5 pontos cada) | 10 | Luis Fillipe | 10/08 | ⚫ |
