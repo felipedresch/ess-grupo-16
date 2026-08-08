@@ -301,6 +301,11 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 |---|---|---|---|
 | T18 | API de pedidos (A09) | A API retorna o pedido pelo identificador sem verificar se ele pertence ao usuário autenticado (IDOR), permitindo enumerar pedidos e ler endereço e telefone de qualquer cliente | Vazamento em massa de dados pessoais, violação da LGPD e risco físico aos clientes |
 | T19 | App do entregador (A03) | O endereço completo do cliente permanece visível no app do entregador depois de concluída a entrega, sem limitação de tempo | Entregador consegue montar uma base de endereços de clientes; risco de assédio e perseguição |
+| **T20** | Banco de dados principal **(A10)** | Um backup do banco de dados é disponibilizado sem proteção adequada, permitindo que um atacante obtenha uma cópia contendo dados de clientes, pedidos e outras informações armazenadas. | Vazamento em massa de dados pessoais e comerciais, violação da LGPD e comprometimento de informações de toda a plataforma. |
+| **T21** | Chaves de API dos serviços externos **(A13)** | Uma chave de API utilizada pelo aplicativo para acessar o provedor de mapas/rotas é incorporada diretamente no aplicativo, permitindo que um atacante obtenha a chave e a utilize fora do sistema. | Exposição de uma credencial da plataforma, uso indevido do serviço externo e possível geração de custos ou abuso de cota. |
+| **T22** | Logs de auditoria **(A08)** | Logs da aplicação registram dados sensíveis de pagamento ou tokens de autenticação, permitindo que pessoas com acesso aos logs obtenham informações que não deveriam estar disponíveis nesse ambiente. | Exposição de dados financeiros ou credenciais, possibilidade de fraude e comprometimento de contas. |
+| **T23** | Credenciais de acesso **(A01)** | As mensagens de erro do login informam explicitamente quando um e-mail não está cadastrado, permitindo que um atacante enumere quais endereços possuem contas na plataforma. | Exposição da existência de contas de usuários, facilitando ataques direcionados, phishing e tentativas de comprometimento de credenciais. |
+
 <!-- TODO(Luis): sugestões — vazamento do banco de dados por backup exposto; chave de API do
      provedor de mapas embutida no aplicativo móvel; logs gravando dados de cartão ou tokens;
      enumeração de usuários pela mensagem de erro do login ("e-mail não cadastrado"). -->
