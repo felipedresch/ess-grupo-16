@@ -586,7 +586,53 @@ Continua criando contas até maximizar o número de pedidos com desconto.
 | CA07 | T29, T31 | Elevation of Privilege |
 | CA08 | T12, T14 | Tampering, Repudiation |
 ---
+### 6.2 Diagrama de casos de abuso
+┌──────────────────────────────────────────────────────────────┐
+│              DIAGRAMA DE CASOS DE ABUSO                     │
+│                    SABOREXPRESS                              │
+└──────────────────────────────────────────────────────────────┘
 
+┌──────────────────────┐
+│ Atacante externo     │
+└──────────┬───────────┘
+           │
+           ├──► CA01 — Cadastro de entregador com identidade falsa
+           │       └──► T02, T19
+           │
+           ├──► CA02 — Liberação de pedido mediante pagamento falso
+           │       └──► T06
+           │
+           ├──► CA04 — Acesso indevido aos pedidos de outros clientes
+           │       └──► T18
+           │
+           └──► CA07 — Alteração indevida dos dados bancários de repasse
+                   └──► T09
+
+
+┌──────────────────────┐
+│ Usuário legítimo     │
+└──────────┬───────────┘
+           │
+           ├──► CA03 — Manipulação do valor do pedido
+           │       └──► T07
+           │
+           ├──► CA05 — Obtenção indevida de privilégios
+           │       └──► T30
+           │
+           ├──► CA06 — Negação fraudulenta de uma entrega
+           │       └──► T13, T14
+           │
+           └──► CA08 — Abuso de cupons por criação de contas
+                   └──► T08
+
+
+┌──────────────────────┐
+│ Funcionário interno  │
+└──────────┬───────────┘
+           │
+           └──► CA07 — Alteração indevida dos dados bancários de repasse
+                   └──► T09
+                   
 ## 7. Considerações finais da Etapa 1
 
 <!-- RESPONSÁVEL: Luis Fillipe (com revisão de Felipe) -->
