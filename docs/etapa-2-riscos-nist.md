@@ -220,8 +220,8 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 | Risco | Govern | Identify | Protect | Detect | Respond | Recover | Observação |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|---|
 | R01 | X | | X | X | X | X | *Govern* entra porque é preciso uma política que torne o MFA obrigatório; *Identify* não foi marcado porque o ativo e a vulnerabilidade já estão plenamente mapeados e não há trabalho adicional de descoberta |
-| R02 | | | X | X | | | <!-- TODO --> |
-| R03 | | | | | | | <!-- TODO --> |
+| R02*(Tampering)* | | | X | X | |  | *Protect* é vital para implementar a verificação no lado do servidor, impedindo que requisições adulteradas sejam aceitas. *Detect* entra para registrar logs de discrepâncias entre os valores enviados pelo aplicativo e o catálogo real de preços. |
+| R03*(Inf. Disclosure)* | | | **X** | **X** | **X** | **X** | *Protect* trata de impedir o acesso não autorizado IDOR e de aplicar *rate limit*. *Detect* monitora picos de chamadas na API. *Respond* é necessário para revogar tokens suspeitos. *Recover* é crucial para restaurar credenciais, comunicar o vazamento à ANPD e reestabelecer a privacidade dos dados. |
 
 ---
 
