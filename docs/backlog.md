@@ -168,8 +168,8 @@ e `evidencias/etapa-5/`
 | # | Tarefa | Seção | Responsável | Prazo | Status |
 |---|---|---|---|---|---|
 | E5.1 | Instalar o ZAP e subir o OWASP Juice Shop localmente | 1 | Murillo | 09/08 | 🟢 |
-| E5.2 | Executar a sessão de verificação e salvar capturas em `evidencias/etapa-5/` | 2 e 3 | Murillo | 10/08 | ⚫ depende de E5.1 |
-| E5.3 | Analisar três achados, com correção proposta para cada | 4 | Murillo | 12/08 | ⚫ depende de E5.2 |
+| E5.2 | Executar a sessão de verificação e salvar capturas em `evidencias/etapa-5/` | 2 e 3 | Murillo | 10/08 |  🟡 |
+| E5.3 | Analisar três achados, com correção proposta para cada | 4 | Murillo | 12/08 |  🟡 |
 | E5.4 | Registrar alertas descartados e falsos positivos | 4.2 | Murillo | 12/08 | ⚫ |
 | E5.5 | Relacionar os achados com os riscos do SaborExpress e registrar limitações | 5 e 6 | Murillo | 12/08 | ⚫ depende de E2.8 |
 
