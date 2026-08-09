@@ -390,7 +390,7 @@ Privilege — o atacante obtém, sem direito, as permissões de um perfil verifi
 
 <!-- TODO(Murillo): título -->
 
-###CA02 — Liberação de pedido mediante pagamento falso
+### CA02 — Liberação de pedido mediante pagamento falso
 
 **Ator malicioso:** atacante externo.
 
@@ -414,7 +414,7 @@ O atacante recebe o pedido sem realizar o pagamento correspondente.
 
 **Ameaças STRIDE** relacionadas: T06 (Spoofing).
 
-###CA03 — Manipulação do valor do pedido
+### CA03 — Manipulação do valor do pedido
 
 **Ator malicioso:** cliente autenticado.
 
@@ -438,7 +438,7 @@ O cliente recebe os produtos pagando um valor menor que o devido.
 
 **Ameaças STRIDE relacionadas:** T07 (Tampering).
 
-###CA04 — Acesso indevido aos pedidos de outros clientes
+### CA04 — Acesso indevido aos pedidos de outros clientes
 
 **Ator malicioso:** cliente autenticado ou atacante que obtenha uma sessão válida.
 
@@ -462,7 +462,7 @@ O atacante coleta informações de outros clientes.
 
 **Ameaças STRIDE** relacionadas: T18 (Information Disclosure).
 
-###CA05 — Obtenção indevida de privilégios
+### CA05 — Obtenção indevida de privilégios
 
 **Ator malicioso:** cliente ou usuário com acesso limitado à plataforma.
 
@@ -486,7 +486,7 @@ O atacante acessa funcionalidades destinadas a usuários com permissões superio
 
 **Ameaças STRIDE relacionadas:** T30 (Elevation of Privilege).
 
-###CA06 — Negação fraudulenta de uma entrega
+### CA06 — Negação fraudulenta de uma entrega
 
 **Ator malicioso:** cliente ou entregador legítimo.
 
@@ -510,7 +510,7 @@ Um reembolso ou outra decisão é tomada com base nos relatos apresentados.
 
 **Ameaças STRIDE relacionadas:** T13, T14 (Repudiation).
 
-###CA07 — Alteração indevida dos dados bancários de repasse
+### CA07 — Alteração indevida dos dados bancários de repasse
 
 **Ator malicioso:** atacante com acesso indevido à conta de um restaurante ou funcionário mal-intencionado.
 
@@ -534,7 +534,7 @@ No ciclo seguinte, o dinheiro destinado ao restaurante é enviado para a conta d
 
 **Ameaças STRIDE relacionadas:** T09 (Tampering).
 
-###CA08 — Abuso de cupons por criação de contas
+### CA08 — Abuso de cupons por criação de contas
 
 **Ator malicioso:** cliente mal-intencionado.
 
