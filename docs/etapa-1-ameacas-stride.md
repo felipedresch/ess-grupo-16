@@ -388,17 +388,175 @@ Privilege — o atacante obtém, sem direito, as permissões de um perfil verifi
 
 ---
 
-### CA02 — <!-- TODO(Murillo): título -->
+<!-- TODO(Murillo): título -->
 
-**Ator malicioso:**
-**Objetivo do abuso:**
+###CA02 — Liberação de pedido mediante pagamento falso
+
+**Ator malicioso:** atacante externo.
+
+**Objetivo do abuso:** obter produtos e serviços sem realizar um pagamento legítimo, fazendo a plataforma acreditar que o pedido foi pago.
+
 **Condições necessárias:**
+
+O endpoint de webhook do gateway de pagamento está acessível pela internet.
+A aplicação não valida corretamente a assinatura das notificações recebidas.
+O sistema considera a notificação recebida como suficiente para confirmar o pagamento.
+
 **Sequência de ações:**
-1.
-2.
-3.
-**Impacto esperado:**
-**Ameaças STRIDE relacionadas:**
+
+O atacante cria um pedido legítimo no SaborExpress e inicia o processo de pagamento.
+Em vez de realizar o pagamento, envia uma requisição falsa ao endpoint de webhook, simulando uma confirmação do gateway.
+A API aceita a requisição sem validar sua autenticidade e altera o status da transação para "pago".
+O sistema libera o pedido para o restaurante e inicia o processo de entrega.
+O atacante recebe o pedido sem realizar o pagamento correspondente.
+
+**Impacto esperado:** prejuízo financeiro direto para a plataforma e para o restaurante, além da possibilidade de exploração repetida em escala.
+
+**Ameaças STRIDE** relacionadas: T06 (Spoofing).
+
+###CA03 — Manipulação do valor do pedido
+
+**Ator malicioso:** cliente autenticado.
+
+**Objetivo do abuso:** pagar menos do que o valor real dos produtos modificando os dados enviados pelo aplicativo.
+
+**Condições necessárias:**
+
+O cliente consegue modificar as requisições enviadas pelo aplicativo.
+A API confia no preço ou no total enviado pelo cliente.
+O servidor não recalcula o valor do pedido com base nos produtos e preços armazenados.
+
+**Sequência de ações:**
+
+O cliente adiciona produtos normalmente ao carrinho.
+Intercepta a requisição enviada durante a finalização do pedido.
+Altera o preço ou o valor total enviado ao servidor.
+A API aceita o valor manipulado e cria a cobrança com preço inferior ao correto.
+O cliente recebe os produtos pagando um valor menor que o devido.
+
+**Impacto esperado:** prejuízo financeiro para a plataforma e para os restaurantes, com possibilidade de exploração repetida.
+
+**Ameaças STRIDE relacionadas:** T07 (Tampering).
+
+###CA04 — Acesso indevido aos pedidos de outros clientes
+
+**Ator malicioso:** cliente autenticado ou atacante que obtenha uma sessão válida.
+
+**Objetivo do abuso:** consultar dados pessoais de outros clientes, principalmente endereços e telefones.
+
+**Condições necessárias:**
+
+A API permite consultar pedidos utilizando um identificador fornecido pelo cliente.
+O servidor não verifica se o pedido pertence ao usuário autenticado.
+Os identificadores dos pedidos podem ser descobertos ou enumerados.
+
+**Sequência de ações:**
+
+O atacante acessa um pedido pertencente à sua própria conta.
+Obtém ou modifica o identificador utilizado na requisição.
+Envia requisições utilizando identificadores de outros pedidos.
+A API retorna os dados sem verificar corretamente a autorização.
+O atacante coleta informações de outros clientes.
+
+**Impacto esperado:** vazamento de dados pessoais em escala, violação da LGPD e risco de perseguição ou outros danos aos clientes afetados.
+
+**Ameaças STRIDE** relacionadas: T18 (Information Disclosure).
+
+###CA05 — Obtenção indevida de privilégios
+
+**Ator malicioso:** cliente ou usuário com acesso limitado à plataforma.
+
+**Objetivo do abuso:** obter permissões superiores às originalmente atribuídas para acessar funcionalidades restritas.
+
+**Condições necessárias:**
+
+A autorização é realizada incorretamente ou apenas no frontend.
+O perfil ou as permissões do usuário podem ser manipulados.
+O backend não valida adequadamente o nível de acesso da conta.
+
+**Sequência de ações:**
+
+O atacante utiliza uma conta comum no SaborExpress.
+Identifica uma requisição relacionada ao perfil ou às permissões da conta.
+Modifica os dados enviados para tentar assumir um perfil privilegiado.
+A API aceita a alteração sem validar corretamente a autorização.
+O atacante acessa funcionalidades destinadas a usuários com permissões superiores.
+
+**Impacto esperado:** acesso indevido a dados e operações administrativas, possibilidade de fraude financeira e comprometimento de recursos críticos.
+
+**Ameaças STRIDE relacionadas:** T30 (Elevation of Privilege).
+
+###CA06 — Negação fraudulenta de uma entrega
+
+**Ator malicioso:** cliente ou entregador legítimo.
+
+**Objetivo do abuso:** obter um reembolso indevido ou registrar uma entrega falsa sem que a plataforma consiga determinar o que realmente ocorreu.
+
+**Condições necessárias:**
+
+O sistema não registra evidências suficientes no momento da entrega.
+A confirmação depende principalmente das informações enviadas pelo aplicativo.
+Os registros não permitem reconstruir adequadamente o ocorrido.
+
+**Sequência de ações:**
+
+O pedido é entregue normalmente ou o entregador registra uma entrega sem realizá-la.
+Uma das partes posteriormente contesta o ocorrido.
+O cliente ou entregador apresenta uma versão diferente dos acontecimentos.
+O suporte consulta os registros disponíveis, mas não encontra evidências suficientes.
+Um reembolso ou outra decisão é tomada com base nos relatos apresentados.
+
+**Impacto esperado:** reembolsos indevidos, prejuízo financeiro, disputas entre as partes e dificuldade de responsabilização.
+
+**Ameaças STRIDE relacionadas:** T13, T14 (Repudiation).
+
+###CA07 — Alteração indevida dos dados bancários de repasse
+
+**Ator malicioso:** atacante com acesso indevido à conta de um restaurante ou funcionário mal-intencionado.
+
+**Objetivo do abuso:** redirecionar os repasses financeiros destinados a um restaurante para uma conta controlada pelo atacante.
+
+**Condições necessárias:**
+
+O atacante consegue acessar a conta do restaurante ou uma funcionalidade administrativa relacionada aos dados bancários.
+A alteração da conta de repasse não exige uma confirmação adicional.
+O sistema não possui controles suficientes para detectar alterações suspeitas.
+
+**Sequência de ações:**
+
+O atacante obtém acesso à conta do restaurante ou a uma funcionalidade administrativa.
+Acessa os dados bancários cadastrados para recebimento dos repasses.
+Substitui a conta legítima por uma conta controlada por ele.
+O sistema aceita a alteração e mantém a nova conta como destino dos próximos repasses.
+No ciclo seguinte, o dinheiro destinado ao restaurante é enviado para a conta do atacante.
+
+**Impacto esperado:** perda financeira direta para o restaurante, dificuldade de recuperação dos valores e possível comprometimento da confiança no sistema de repasses.
+
+**Ameaças STRIDE relacionadas:** T09 (Tampering).
+
+###CA08 — Abuso de cupons por criação de contas
+
+**Ator malicioso:** cliente mal-intencionado.
+
+**Objetivo do abuso:** utilizar repetidamente cupons destinados exclusivamente a novos clientes para obter descontos indevidos.
+
+**Condições necessárias:**
+
+O sistema oferece cupons restritos à primeira compra.
+A validação da condição de "novo cliente" é baseada apenas na existência da conta.
+O atacante consegue criar múltiplas contas ou utilizar identidades diferentes.
+
+**Sequência de ações:**
+
+O atacante cria uma conta no SaborExpress e utiliza o cupom de primeira compra.
+Finaliza o pedido com o desconto.
+Cria uma nova conta utilizando outro e-mail ou telefone.
+Repete o processo para obter novamente o benefício.
+Continua criando contas até maximizar o número de pedidos com desconto.
+
+**Impacto esperado:** prejuízo financeiro acumulado, abuso das campanhas promocionais e distorção das métricas utilizadas para avaliar a eficácia dos cupons.
+
+**Ameaças STRIDE relacionadas:** T08 (Tampering).
 
 <!-- TODO(Murillo): duplicar o bloco acima para CA03..CA08.
      Sugestões de temas, um por perfil e por categoria STRIDE ainda não coberta:
@@ -420,8 +578,13 @@ Privilege — o atacante obtém, sem direito, as permissões de um perfil verifi
 | Caso de abuso | Ameaças relacionadas | Categorias STRIDE |
 |---|---|---|
 | CA01 | T02, T19 | Spoofing, Information Disclosure, Elevation of Privilege |
-| CA02 | — | — |
-
+| CA02 | T06, T13 | Spoofing, Repudiation |
+| CA03 | T07, T08 | Tampering |
+| CA04 | T09, T15 | Tampering, Repudiation |
+| CA05 | T18, T23 | Information Disclosure |
+| CA06 | T24, T27 | Denial of Service |
+| CA07 | T29, T31 | Elevation of Privilege |
+| CA08 | T12, T14 | Tampering, Repudiation |
 ---
 
 ## 7. Considerações finais da Etapa 1
