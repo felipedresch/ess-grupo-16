@@ -105,10 +105,22 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 | R01 | T01 — Spoofing | Um atacante assume a conta de clientes e realiza pedidos e alterações em nome deles | Credenciais reaproveitadas de outros vazamentos; ausência de MFA e de limite de tentativas de login | 3 | 4 | 12 | Crítico |
 | R02 | T07 — Tampering | O valor de pedidos é alterado antes do pagamento, gerando cobrança menor que a devida | O servidor confia no total calculado pelo aplicativo em vez de recalculá-lo | 2 | 3 | 6 | Médio |
 | R03 | T18 — Information Disclosure | Dados pessoais de clientes (endereço, telefone) são extraídos em massa pela API | Falha de autorização por objeto (IDOR) e ausência de limite de requisições | 3 | 4 | 12 | Crítico |
-| R04 | — | — | — | — | — | — | — |
-
-<!-- TODO(Gabriel): riscos originados de T01–T17 (Spoofing, Tampering, Repudiation).
-     TODO(Luis): riscos originados de T18–T33 (Information Disclosure, DoS, Elevation of Privilege).
+| R04 | T02 — Spoofing | Uma pessoa não verificada realiza entregas usando a conta de um entregador homologado, acessando o endereço de clientes sem qualquer checagem de identidade | Ausência de verificação periódica de identidade após a homologação inicial do entregador | 3 | 3 | 9 | Alto |
+| R05 | T03 — Spoofing | O entregador usa GPS falso para simular proximidade e receber corridas às quais não teria acesso legítimo | Ausência de detecção de localização simulada no aplicativo do entregador | 3 | 2 | 6 | Médio |
+| R06 | T04 — Spoofing | Um cliente tem sua conta comprometida após inserir credenciais em uma página de phishing que imita o fluxo de recuperação de senha do SaborExpress | Ausência de MFA e de verificação de dispositivo/local incomum no login, somada à falta de informação do usuário sobre phishing | 3 | 4 | 12 | Crítico |
+| R07 | T05 — Spoofing | Um estabelecimento fictício é homologado como restaurante e recebe pagamentos de clientes sem nunca preparar os pedidos | Validação apenas documental (sem verificação cruzada com bases oficiais) no cadastro de restaurantes | 2 | 3 | 6 | Médio |
+| R08 | T06 — Spoofing | Um atacante envia uma notificação forjada de "pagamento aprovado" ao endpoint de webhook do gateway, liberando pedidos sem pagamento real | Endpoint do webhook não valida a assinatura criptográfica da requisição recebida | 2 | 4 | 8 | Alto |
+| R09 | T08 — Tampering | Contas descartáveis são criadas em massa para reaplicar cupons de primeira compra, gerando prejuízo recorrente às campanhas promocionais | Ausência de verificação do titular do cupom (ex.: por CPF, dispositivo ou meio de pagamento) | 3 | 3 | 9 | Alto |
+| R10 | T09 — Tampering | Os dados bancários de repasse de um restaurante são alterados, redirecionando os pagamentos devidos para uma conta diferente | Alteração de dados bancários sensíveis sem uma segunda camada de confirmação | 2 | 3 | 6 | Médio |
+| R11 | T10 — Tampering | Um item do cardápio é vendido por um preço diferente do exibido ao cliente no momento da compra | Ausência de auditoria e de aprovação para alterações de preço já publicadas | 3 | 2 | 6 | Médio |
+| R12 | T11 — Tampering | Avaliações negativas de um restaurante são editadas ou apagadas indevidamente, distorcendo sua reputação real | Falha de autorização na API de avaliações, permitindo alteração por quem não é o autor original | 2 | 2 | 4 | Médio |
+| R13 | T12 — Tampering | O endereço de entrega de um pedido já pago é alterado para um destino diferente do informado pelo cliente | API aceita alteração de endereço após a confirmação do pagamento, sem revalidação | 2 | 3 | 6 | Médio |
+| R14 | T13 — Repudiation | Um entregador marca um pedido como entregue sem tê-lo entregado, e a plataforma não consegue provar o contrário | Ausência de evidência de entrega (foto, geolocalização no momento da confirmação, assinatura) | 4 | 3 | 12 | Crítico |
+| R15 | T14 — Repudiation | Um cliente alega falsamente não ter recebido o pedido para obter reembolso indevido | Mesma ausência de evidência de entrega, somada à política de reembolso sem contestação estruturada | 4 | 3 | 12 | Crítico |
+| R16 | T15 — Repudiation | Um atendente emite estornos fraudulentos sem que seja possível identificar quem tomou a decisão | Ausência de log de auditoria vinculando cada estorno ao atendente responsável | 2 | 3 | 6 | Médio |
+| R17 | T16 — Repudiation | Um restaurante nega ter aceitado um pedido para justificar atraso ou não preparo, sem prova do momento do aceite | Ausência de registro íntegro e com timestamp do aceite do pedido pelo restaurante | 3 | 2 | 6 | Médio |
+<!-- 
+     TODO(Luis): riscos originados de T17–T33 (Information Disclosure, DoS, Elevation of Privilege).
      TODO(Fernando): consolidar tudo nesta tabela única, conferir os cálculos e garantir que a
      numeração R## seja contínua e sem repetições. -->
 
