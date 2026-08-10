@@ -3,7 +3,7 @@
 **Sistema:** SaborExpress — plataforma de delivery de comida
 **Grupo:** 16 — Engenharia de Software Seguro
 **Continuidade de:** [Etapa 1 — Casos de Abuso e Modelagem de Ameaças](etapa-1-ameacas-stride.md)
-**Última atualização:** <!-- atualize a data ao editar --> 05/08/2026
+**Última atualização:** <!-- atualize a data ao editar --> 09/08/2026
 
 > Esta etapa **não substitui** a Etapa 1: ela transforma as ameaças `T##` e os casos de abuso
 > `CA##` já identificados em riscos avaliáveis, priorizáveis e tratáveis. O sistema, os ativos,
