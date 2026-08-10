@@ -153,8 +153,223 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
   usuários simultaneamente e sua recuperação é lenta — dados pessoais expostos não podem ser
   "desvazados".
 
-### R02 — <!-- TODO -->
+### R02 — Manipulação do valor do pedido
+
+- **Por que a probabilidade é 2 (média-baixa):** o ataque exige interceptar e alterar a
+  requisição do aplicativo (uso de proxy) e depende de uma falha específica — o servidor confiar
+  no valor enviado em vez de recalculá-lo. Não é um caminho ao alcance de qualquer cliente comum,
+  exige conhecimento técnico de interceptação de tráfego.
+- **Por que o impacto é 3 (alto):** gera prejuízo financeiro direto por pedido manipulado,
+  afetando tanto a plataforma quanto o restaurante, mas cada ocorrência é isolada e identificável
+  por auditoria de valores — não expõe dados pessoais nem compromete a operação inteira.
+- **Quem ou o que é afetado:** a plataforma (perde comissão), o restaurante (recebe menos que o
+  devido) e a conciliação financeira.
+- **Consequências possíveis:** prejuízo cumulativo se repetido, necessidade de auditoria manual
+  de pedidos suspeitos, desconfiança do restaurante quanto à exatidão dos repasses.
+- **Por que o nível Médio é adequado:** a barreira técnica reduz a frequência esperada do ataque,
+  mas o prejuízo financeiro real quando ocorre mantém o risco relevante — nem baixo, nem urgente
+  como os críticos.
+
+### R03 — <!-- TODO -->
 <!-- TODO: repetir a estrutura de cinco pontos para todos os riscos registrados. -->
+
+### R04 — Conta de entregador alugada ou comprada
+
+- **Por que a probabilidade é 3 (média-alta):** aluguel e venda de contas de entregador já são
+  práticas documentadas no mercado de apps de entrega no Brasil (grupos de redes sociais
+  anunciando contas homologadas), sem exigir qualquer habilidade técnica — apenas um acordo entre
+  pessoas.
+- **Por que o impacto é 3 (alto):** dá acesso ao endereço residencial do cliente (A03) durante
+  corridas ativas, mas o alcance de cada ocorrência é limitado às corridas aceitas por aquela
+  conta, não uma exposição em massa de toda a base.
+- **Quem ou o que é afetado:** clientes cujos endereços são coletados por pessoa não verificada; a
+  credibilidade do processo de homologação de entregadores.
+- **Consequências possíveis:** risco físico ao cliente (perseguição, assalto), impossibilidade de
+  responsabilizar quem de fato realizou a entrega.
+- **Por que o nível Alto é adequado:** a prática já é comum no mercado (alta probabilidade) e a
+  consequência envolve segurança física, mas fica abaixo de Crítico porque o volume de dados
+  exposto por vez é limitado, não uma exfiltração em massa.
+
+### R05 — GPS falso do entregador
+
+- **Por que a probabilidade é 3 (média-alta):** aplicativos de localização falsa são gratuitos e
+  fáceis de instalar, sem exigir conhecimento técnico, e há incentivo econômico direto (mais
+  corridas).
+- **Por que o impacto é 2 (moderado):** o dano é operacional — alocação injusta de corridas e
+  possíveis atrasos — sem expor dados sensíveis nem gerar prejuízo financeiro direto à
+  plataforma; é identificável e corrigível rapidamente.
+- **Quem ou o que é afetado:** outros entregadores (perdem corridas justas) e clientes (atraso).
+- **Consequências possíveis:** insatisfação de entregadores legítimos, necessidade de revisar o
+  algoritmo de alocação de corridas.
+- **Por que o nível Médio é adequado:** fácil de executar, mas o estrago é limitado e reversível,
+  sem comprometer dados ou finanças.
+
+### R06 — Comprometimento de conta via phishing
+
+- **Por que a probabilidade é 3 (média-alta):** phishing é um vetor de baixo custo e baixo risco
+  para o atacante, não depende de nenhuma vulnerabilidade técnica do SaborExpress — apenas de
+  engenharia social sobre o cliente — e campanhas em massa são fáceis de disparar.
+- **Por que o impacto é 4 (muito alto):** uma vez capturada a senha, o atacante tem acesso total
+  à conta — endereço, histórico, pagamento salvo — idêntico ao R01, podendo afetar qualquer
+  cliente-alvo, com dano irreversível de exposição de dados pessoais.
+- **Quem ou o que é afetado:** qualquer cliente atingido pela campanha; a área de atendimento
+  (volume de contestações).
+- **Consequências possíveis:** pedidos fraudulentos, exposição de endereço residencial, dano
+  reputacional à marca, possível notificação à ANPD conforme o volume afetado.
+- **Por que o nível Crítico é adequado:** barreira de entrada baixíssima somada a um impacto
+  máximo — mesmo raciocínio do R01, por um vetor diferente.
+
+### R07 — Cadastro de restaurante fictício
+
+- **Por que a probabilidade é 2 (média-baixa):** exige obter ou falsificar documentos de
+  terceiros (CNPJ, alvará, contrato social) e passar pela homologação — mais atrito do que um
+  ataque aberto ao público.
+- **Por que o impacto é 3 (alto):** gera prejuízo financeiro direto aos clientes lesados e dano à
+  confiança na plataforma, mas fica limitado ao raio de atuação daquele estabelecimento até ser
+  identificado e suspenso.
+- **Quem ou o que é afetado:** clientes que pedem no estabelecimento fictício; a reputação da
+  marca.
+- **Consequências possíveis:** reembolsos, reclamações públicas, necessidade de reforçar a
+  homologação.
+- **Por que o nível Médio é adequado:** a barreira de entrada reduz a probabilidade mesmo com um
+  impacto relevante por ocorrência.
+
+### R08 — Falsificação do webhook de pagamento
+
+- **Por que a probabilidade é 2 (média-baixa):** exige conhecimento técnico específico para
+  identificar o endpoint e forjar uma requisição válida sem assinatura — depende de uma falha
+  pontual (ausência de validação de assinatura), não acessível ao usuário comum.
+- **Por que o impacto é 4 (muito alto):** se explorado, libera pedidos sem pagamento real de
+  forma repetível e automatizável, comprometendo a integridade financeira do modelo de negócio
+  enquanto não for detectado.
+- **Quem ou o que é afetado:** a receita da plataforma como um todo; os restaurantes, que
+  produzem pedidos não pagos.
+- **Consequências possíveis:** prejuízo financeiro crescente e sistemático, possível dano a
+  restaurantes que produziram sem receber.
+- **Por que o nível Alto é adequado:** a exigência técnica contém a probabilidade, mas o
+  potencial de dano financeiro sistemático justifica ficar no patamar mais alto abaixo do
+  crítico.
+
+### R09 — Fábrica de contas para abuso de cupom
+
+- **Por que a probabilidade é 3 (média-alta):** criar contas descartáveis é automatizável (e-mails
+  temporários, scripts de cadastro) e não exige conhecimento técnico avançado — prática já
+  observada com frequência em plataformas com cupons de primeira compra.
+- **Por que o impacto é 3 (alto):** gera prejuízo financeiro recorrente e escalável às campanhas
+  promocionais; o valor por fraude individual é pequeno, mas a escala é o problema.
+- **Quem ou o que é afetado:** o orçamento de marketing/promoções da plataforma.
+- **Consequências possíveis:** distorção de métricas de aquisição, prejuízo financeiro acumulado,
+  necessidade de revisar a elegibilidade dos cupons.
+- **Por que o nível Alto é adequado:** facilidade de execução somada ao potencial de escala
+  justifica um nível alto mesmo sem afetar dados pessoais.
+
+### R10 — Alteração de dados bancários de repasse
+
+- **Por que a probabilidade é 2 (média-baixa):** exige acesso ao cadastro bancário do restaurante
+  — via conta comprometida ou insider — uma condição mais restrita que ataques abertos ao
+  público.
+- **Por que o impacto é 3 (alto):** resulta em prejuízo financeiro direto ao restaurante lesado,
+  mas afeta um parceiro por vez, não a base inteira.
+- **Quem ou o que é afetado:** o restaurante lesado; a área financeira, que precisa investigar.
+- **Consequências possíveis:** perda financeira do parceiro, dano à confiança de restaurantes na
+  plataforma.
+- **Por que o nível Médio é adequado:** a condição de acesso restrita equilibra o impacto
+  financeiro relevante.
+
+### R11 — Alteração de preço do cardápio por funcionário do restaurante
+
+- **Por que a probabilidade é 3 (média-alta):** o autor já é um usuário legítimo com acesso ao
+  painel — não há barreira técnica, apenas falta de controle de processo (aprovação, auditoria).
+- **Por que o impacto é 2 (moderado):** o dano por ocorrência é limitado a cobranças divergentes
+  em pedidos pontuais, geralmente identificável e reembolsável rapidamente.
+- **Quem ou o que é afetado:** clientes que compraram durante a divergência de preço.
+- **Consequências possíveis:** reclamações individuais, pequenos reembolsos, desgaste pontual de
+  confiança no restaurante específico.
+- **Por que o nível Médio é adequado:** alta probabilidade (acesso já legítimo) compensada por
+  impacto limitado e de fácil correção.
+
+### R12 — Manipulação de avaliações
+
+- **Por que a probabilidade é 2 (média-baixa):** depende de uma falha específica de autorização
+  na API de avaliações, não um caminho amplamente conhecido — exige descoberta técnica da falha.
+- **Por que o impacto é 2 (moderado):** o dano é reputacional e indireto, sem prejuízo financeiro
+  direto imediato nem exposição de dados pessoais.
+- **Quem ou o que é afetado:** restaurantes cuja reputação é manipulada; clientes que decidem com
+  base em avaliações falsas.
+- **Consequências possíveis:** perda de clientes para um restaurante injustamente prejudicado, ou
+  vantagem indevida para quem apaga críticas negativas.
+- **Por que o nível Médio é adequado (na borda inferior):** tanto probabilidade quanto impacto são
+  contidos, mas a integridade da reputação é um pilar de confiança do marketplace.
+
+### R13 — Alteração de endereço de entrega após pagamento
+
+- **Por que a probabilidade é 2 (média-baixa):** exige explorar uma falha pontual de validação
+  (a API aceitar alteração após confirmação do pagamento), não um caminho aberto a qualquer
+  usuário.
+- **Por que o impacto é 3 (alto):** pode ser usado para redirecionar mercadoria paga (furto) ou
+  causar entregas erradas, gerando prejuízo financeiro e operacional relevante.
+- **Quem ou o que é afetado:** o cliente que teve o pedido desviado; o entregador, instrumentalizado
+  sem saber.
+- **Consequências possíveis:** furto de mercadoria, reembolso ao cliente lesado, repetição do
+  golpe até ser identificado.
+- **Por que o nível Médio é adequado:** a exigência de uma falha técnica específica equilibra a
+  gravidade da consequência por ocorrência.
+
+### R14 — Entregador nega ter deixado de entregar
+
+- **Por que a probabilidade é 4 (alta):** não há nenhuma barreira — o entregador apenas marca
+  "entregue" no aplicativo, sem exigência de prova alguma (foto, código, geolocalização),
+  tornando o evento tão fácil quanto qualquer uso normal do app.
+- **Por que o impacto é 3 (alto):** gera reembolso indevido e prejuízo financeiro recorrente à
+  plataforma e ao restaurante, mas cada ocorrência é isolada e não expõe dados pessoais.
+- **Quem ou o que é afetado:** a plataforma (arca com o reembolso), o restaurante (já preparou o
+  pedido), o cliente legítimo (se o produto de fato não chegou e não há como provar).
+- **Consequências possíveis:** prejuízo financeiro acumulado se o padrão se repetir,
+  impossibilidade de responsabilizar quem está errado, desgaste com restaurantes.
+- **Por que o nível Crítico é adequado:** ausência total de controle (probabilidade máxima)
+  somada a um impacto financeiro recorrente justifica o nível mais alto, mesmo o dano por
+  unidade não sendo catastrófico — a exposição está na repetição sem controle.
+
+### R15 — Cliente alega falsamente não ter recebido o pedido
+
+- **Por que a probabilidade é 4 (alta):** basta abrir um chamado alegando não recebimento —
+  nenhuma barreira técnica, um padrão de fraude já documentado em plataformas de delivery reais
+  ("item não recebido").
+- **Por que o impacto é 3 (alto):** reembolso indevido recorrente, prejuízo financeiro tanto à
+  plataforma quanto ao restaurante que já produziu o pedido.
+- **Quem ou o que é afetado:** plataforma e restaurantes (absorvem o custo), o atendimento
+  (sobrecarga de chamados).
+- **Consequências possíveis:** prejuízo financeiro sistemático se não houver controle, incentivo a
+  clientes reincidentes explorarem a falha.
+- **Por que o nível Crítico é adequado:** mesmo raciocínio do R14 — facilidade extrema de execução
+  multiplicada por impacto financeiro real e recorrente.
+
+### R16 — Estorno sem rastreabilidade do responsável
+
+- **Por que a probabilidade é 2 (média-baixa):** depende de um agente interno (atendente)
+  disposto a abusar do próprio acesso — condição mais restrita do que uma fraude aberta ao
+  público externo.
+- **Por que o impacto é 3 (alto):** compromete a integridade financeira ao permitir estornos não
+  rastreáveis, dificultando auditoria e podendo mascarar fraude interna continuada.
+- **Quem ou o que é afetado:** a área financeira e de compliance; indiretamente, clientes cujas
+  contas são usadas no estorno fraudulento.
+- **Consequências possíveis:** dificuldade de investigar fraudes internas, prejuízo continuado não
+  detectado por falta de rastreabilidade.
+- **Por que o nível Médio é adequado:** a exigência de um agente interno malicioso reduz a
+  probabilidade em relação às fraudes abertas ao público, mesmo com impacto financeiro relevante.
+
+### R17 — Restaurante nega ter aceitado o pedido
+
+- **Por que a probabilidade é 3 (média-alta):** negar o aceite é uma alegação simples e sem custo
+  para o restaurante, plausível em situações comuns de atraso ou sobrecarga na cozinha.
+- **Por que o impacto é 2 (moderado):** o dano é limitado ao atraso e à insatisfação do cliente
+  naquele pedido específico, geralmente resolvido via reembolso pontual.
+- **Quem ou o que é afetado:** o cliente que sofre o atraso; a relação comercial entre plataforma e
+  restaurante.
+- **Consequências possíveis:** desgaste na relação com o restaurante, dificuldade de aplicar
+  penalidades justas sem prova do momento do aceite.
+- **Por que o nível Médio é adequado:** fácil de alegar, mas o estrago por ocorrência é limitado e
+  recuperável.
 
 ---
 
