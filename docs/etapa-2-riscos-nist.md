@@ -467,18 +467,66 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 | **Compartilhar** | Atribuir parte da operação ou das consequências a um terceiro |
 | **Aceitar** | Reconhecer e manter conscientemente o risco, com justificativa e acompanhamento |
 
-<!-- TODO(Deivid): escolher e JUSTIFICAR uma estratégia principal por risco. Registrar a escolha
-     na tabela da seção 14.
-     Atenção: se algum risco for ACEITO, é obrigatório indicar (a) o motivo da decisão,
-     (b) quem aprova, (c) sob quais condições o risco é aceito e (d) quando a decisão será
-     revisada. Aceitar não é ignorar. -->
+<!-- Preenchido para R01, R02, R04–R32 (todos os riscos consolidados na seção 9, exceto R03).
+     Pendente: R03, aguardando Luis Fillipe completar a justificativa na seção 10. -->
+
+| Risco | Estratégia escolhida | Justificativa |
+|---|---|---|
+| R01 — Tomada de contas de clientes | Reduzir | O risco é inerente a qualquer sistema com login (não dá para evitar autenticação), mas MFA e rate limit reduzem probabilidade a um custo de implementação baixo frente ao impacto crítico |
+| R02 — Manipulação do valor do pedido | Reduzir | Recalcular o valor no servidor elimina a vulnerabilidade técnica sem exigir mudança de produto; controle simples e de baixo custo relativo ao risco financeiro evitado |
+| R04 — Conta de entregador alugada/comprada | Reduzir | Não é viável evitar o modelo de entregador autônomo (é o núcleo do negócio); verificação periódica de identidade reduz a probabilidade sem inviabilizar a operação |
+| R05 — GPS falso do entregador | Reduzir | Detecção de *mock location* é tecnicamente simples e ataca diretamente a causa raiz, sem exigir mudança de processo |
+| R06 — Comprometimento via phishing | Reduzir | Phishing não é algo que o SaborExpress possa evitar (é um ataque externo), mas MFA e autenticação de e-mail reduzem drasticamente sua eficácia |
+| R07 — Cadastro de restaurante fictício | Reduzir | Validação cruzada de CNPJ é uma verificação automatizável de baixo custo, compatível com a necessidade de manter o cadastro de restaurantes acessível |
+| R08 — Falsificação do webhook de pagamento | Reduzir | Validar assinatura HMAC é uma correção técnica direta na vulnerabilidade, sem qualquer trade-off relevante — deveria ser tratado como prioridade técnica imediata |
+| R09 — Fábrica de contas para cupom | Reduzir | Vincular cupom a CPF/pagamento único reduz a fraude sem restringir o acesso legítimo de novos clientes |
+| R10 — Alteração de dados bancários de repasse | Reduzir | Confirmação dupla (e-mail + SMS) e carência de 48h são controles de baixo atrito que preservam a funcionalidade de autoatendimento do restaurante |
+| R11 — Alteração de preço do cardápio | Reduzir | Aplicar mudança de preço só no próximo pedido é uma regra de negócio simples que elimina o risco sem restringir a autonomia do restaurante |
+| R12 — Manipulação de avaliações | Reduzir | Autorização por objeto é a correção padrão de uma falha de controle de acesso; não há razão para aceitar esse risco quando a correção é direta |
+| R13 — Alteração de endereço pós-pagamento | Reduzir | Bloquear alteração após pagamento elimina a janela de exploração sem impedir que o cliente altere o pedido antes da confirmação |
+| R14 — Entrega marcada sem ser feita | Reduzir | Exigir código + geolocalização + foto ataca diretamente a causa (ausência de evidência), controle já usado por concorrentes do setor |
+| R15 — Cliente nega recebimento | Reduzir | Mesma evidência de entrega do R14 resolve este risco em conjunto — tratamento combinado e eficiente |
+| R16 — Estorno sem rastreabilidade | Reduzir | Vincular estorno ao ID do atendente é um controle de auditoria de custo desprezível frente ao risco de fraude interna não rastreável |
+| R17 — Restaurante nega aceite do pedido | Reduzir | Registro imutável com timestamp resolve a disputa sem alterar o fluxo operacional do restaurante |
+| R18 — Extração de dados pessoais pela API (IDOR) | Reduzir | Autorização por objeto no servidor é a correção padrão e direta da vulnerabilidade; evitar a funcionalidade de consulta de pedidos não é viável, é central ao produto |
+| R19 — Exposição prolongada do endereço ao entregador | Reduzir | Expirar/remover o endereço após a conclusão da entrega elimina a janela de exposição sem afetar a operação da entrega em si |
+| R20 — Exposição de backup do banco de dados | Reduzir | Controle de acesso e criptografia do backup são medidas padrão de baixo custo frente ao impacto de uma exposição em massa |
+| R21 — Exposição de chave de API de mapas | Reduzir | Mover a chave para o backend (proxy de requisições) em vez do app elimina a exposição sem restringir a funcionalidade de mapas |
+| R22 — Exposição de dados sensíveis nos logs | Reduzir | Mascarar dados sensíveis antes de gravar em log é um controle técnico direto, sem impacto na função de auditoria dos logs |
+| R23 — Enumeração de usuários pelo login | Reduzir | Padronizar a mensagem de erro do login (sem revelar se o e-mail existe) é uma correção simples de baixíssimo custo |
+| R24 — DoS na API em horário de pico | Reduzir | Não é possível evitar o tráfego em horário de pico (é o momento de maior receita); rate limiting e proteção contra tráfego abusivo reduzem a exposição sem afetar usuários legítimos |
+| R25 — DoS contra restaurante específico via pedidos falsos | Reduzir | Detecção de padrão abusivo de criação de pedidos é viável tecnicamente e não restringe o fluxo normal de pedidos legítimos |
+| R26 — DoS por aceite/cancelamento em massa de corridas | Reduzir | Limitar a taxa de aceite/cancelamento por entregador desestimula o abuso sem impedir o uso normal do aplicativo |
+| R27 — DoS no serviço de SMS de verificação | Reduzir | Limite de solicitações por usuário/telefone é um controle padrão de baixo custo frente ao risco de esgotamento de cota paga |
+| R28 — DoS por upload de arquivos grandes | Reduzir | Limitar tamanho/frequência de upload é uma validação simples que não afeta o cadastro legítimo de documentos |
+| R29 — Escalonamento de privilégio por atendente | Reduzir | Mesma lógica do R01/D01: validar autorização no servidor (não só no frontend) é a correção arquitetural direta da causa |
+| R30 — Cliente obtém privilégio de restaurante | Reduzir | Validar o campo de perfil no servidor, ignorando o valor enviado pelo cliente, elimina o vetor sem exigir mudança de fluxo de cadastro |
+| R31 — Forjamento de papel via JWT | Reduzir | Validar corretamente a assinatura do token é uma correção técnica obrigatória, sem trade-off — deveria ser tratada com prioridade máxima |
+| R32 — Funcionário acessa pedidos de outra loja da rede | Reduzir | Validar o vínculo usuário↔restaurante↔pedido no backend é uma extensão direta do mesmo controle de autorização por objeto usado em outros riscos |
+
+**Padrão observado:** dos 31 riscos avaliados (R01–R32, exceto R03), **todos foram classificados
+como Reduzir**. Nenhum foi considerado para Evitar (as funcionalidades envolvidas são centrais ao
+negócio do SaborExpress), Compartilhar (não há terceiro adequado para transferir essas
+responsabilidades) ou Aceitar (todos têm impacto Médio ou superior, e todos têm controle técnico
+viável e de custo proporcional ao risco).
+
+**Observação sobre concentração de causa raiz:** vários riscos aparentemente distintos
+compartilham a mesma vulnerabilidade de fundo — falta de verificação de autorização no servidor
+aparece em R18, R29, R30, R32 (e no R03, quando justificado); ausência de MFA aparece em R01 e
+R06. Isso é retomado na priorização (seção 11) e na ordem de implementação (seção 15), já que um
+único controle bem implementado reduz múltiplos riscos ao mesmo tempo.
 
 ### 12.1 Riscos aceitos e suas condições
 
+Nenhum dos 31 riscos avaliados (R01–R32, exceto R03) foi classificado como **Aceitar**. O padrão
+observado — nenhum risco Crítico ou Alto foi aceito, todos com controle técnico viável — torna
+provável que o R03 (Crítico, mesma natureza de falha de autorização do R18) siga o mesmo padrão
+quando sua justificativa for concluída por Luis Fillipe. Esta seção será formalmente confirmada
+após essa pendência.
+
 | Risco | Motivo da aceitação | Quem aprova | Condições | Revisão |
 |---|---|---|---|---|
-| — | <!-- TODO --> | | | |
-
+| — | Nenhum risco aceito nesta etapa | — | — | Confirmar após conclusão do R03 |
 ---
 
 ## 13. Funções do NIST CSF 2.0 e mapeamento
