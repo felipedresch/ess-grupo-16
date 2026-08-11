@@ -188,6 +188,16 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 | R32 | T32 — Elevation of Privilege | Um funcionário de restaurante acessa ou modifica pedidos pertencentes a outra loja da mesma rede | Ausência de validação no backend do vínculo entre usuário, restaurante e pedido | 3 | 3 | 9 | Alto |
 | *R18* | *T18 — Info Disclosure* | *Risco duplicado de IDOR consolidado no R03 para manter rastreabilidade 1-para-1* | *Consolidado no R03 (T18)* | *—* | *—* | *—* | *Consolidado no R03* |
 
+### Distribuição Estatística dos Riscos Consolidados
+
+- **Riscos Críticos (Pontuação 12 a 16):** 10 riscos (R01, R03, R06, R14, R15, R19, R22, R24, R29).
+- **Riscos Altos (Pontuação 8 a 11):** 11 riscos (R04, R08, R09, R20, R21, R23, R25, R26, R27, R28, R30, R31, R32).
+- **Riscos Médios (Pontuação 4 a 7):** 10 riscos (R02, R05, R07, R10, R11, R12, R13, R16, R17).
+- **Riscos Baixos (Pontuação 1 a 3):** 0 riscos.
+
+### Observa-se:
+A ausência de riscos de nível "Baixo" é justificada pelo modelo de negócio da aplicação (**delivery com intermediação financeira sob custódia**, transações em tempo real com cartões/Pix e processamento de dados pessoais residenciais protegidos pela LGPD). Toda e qualquer falha na superfície de ataque de um marketplace transacional gera, por padrão, impactos que iniciam no nível Moderado (2) ou Alto (3), validando cientificamente a sensibilidade do sistema modelado.
+
 ---
 
 ## 10. Justificativas das avaliações
