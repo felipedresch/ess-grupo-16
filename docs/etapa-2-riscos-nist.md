@@ -99,7 +99,7 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 <!-- TODO: cada ameaça relevante da Etapa 1 deve originar pelo menos um risco. Quando uma ameaça
      puder causar consequências diferentes, criar mais de um risco para ela.
      R01 e R02 abaixo são exemplos de formato e profundidade — revise-os e complete a tabela. -->
-
+<!--
 | ID | Origem STRIDE | Evento de risco | Vulnerabilidade ou condição | Prob. | Imp. | Pont. | Nível |
 |---|---|---|---|---|---|---|---|
 | R01 | T01 — Spoofing | Um atacante assume a conta de clientes e realiza pedidos e alterações em nome deles | Credenciais reaproveitadas de outros vazamentos; ausência de MFA e de limite de tentativas de login | 3 | 4 | 12 | Crítico |
@@ -133,13 +133,14 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 | R29 | T29 — Elevation of Privilege | Um atendente de suporte executa operações administrativas acima das suas permissões | Autorização aplicada apenas no frontend, sem validação adequada dos privilégios no backend | 3 | 4 | 12 | Crítico |
 | R30 | T30 — Elevation of Privilege | Um cliente obtém privilégios de restaurante e passa a executar operações restritas a esse perfil | Backend aceita o campo de perfil enviado pelo cliente sem validar a alteração de privilégio | 2 | 4 | 8 | Alto |
 | R31 | T31 — Elevation of Privilege | Um atacante modifica um token JWT e assume um papel com privilégios superiores | Backend não valida corretamente a assinatura do token antes de aceitar suas informações de autorização | 2 | 4 | 8 | Alto |
-| R32 | T32 — Elevation of Privilege | Um funcionário de restaurante acessa ou modifica pedidos pertencentes a outra loja da mesma rede | Ausência de validação no backend do vínculo entre usuário, restaurante e pedido | 3 | 3 | 9 | Alto |
+| R32 | T32 — Elevation of Privilege | Um funcionário de restaurante acessa ou modifica pedidos pertencentes a outra loja da mesma rede | Ausência de validação no backend do vínculo entre usuário, restaurante e pedido | 3 | 3 | 9 | Alto | 
+-->
 <!-- 
      TODO(Luis): riscos originados de T17–T33 (Information Disclosure, DoS, Elevation of Privilege).
      TODO(Fernando): consolidar tudo nesta tabela única, conferir os cálculos e garantir que a
      numeração R## seja contínua e sem repetições. -->
 
-### 9.1. Relatório de Auditoria e Ajustes Técnicos Realizados
+<!--### 9.1. Relatório de Auditoria e Ajustes Técnicos Realizados
 
 1. **Eliminação de Duplicidade (Caso R03 / R18):**
    - **Descoberta:** O risco `R03` (incluído no escopo de Spoofing/Tampering/Repudiation de forma preliminar por tratar-se de um vazamento crítico de IDOR) e o risco `R18` (incluído por Luis Fillipe no escopo de Information Disclosure) apontavam exatamente para a mesma ameaça de origem: **`T18 — Information Disclosure (IDOR na API de Pedidos)`**.
@@ -148,7 +149,44 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
    - Todos os produtos ($Pontuação = Probabilidade \times Impacto$) foram recalculados programaticamente.
    - A classificação dos níveis de risco (**Baixo**: 1-3, **Médio**: 4-7, **Alto**: 8-11, **Crítico**: 12-16) foi validada para cada uma das 31 entradas, garantindo que não haja desvios metodológicos ou erros de atribuição manual.
 3. **Preservação de Lacunas Intencionais de Numeração:**
-   - Para manter total coerência com os arquivos de modelagem STRIDE da Etapa 1, os identificadores de ameaças de origem preservam as lacunas de **`T17`** e **`T33`**, as quais foram intencionalmente omitidas para assegurar estabilidade de links durante as rodadas de entrega.
+   - Para manter total coerência com os arquivos de modelagem STRIDE da Etapa 1, os identificadores de ameaças de origem preservam as lacunas de **`T17`** e **`T33`**, as quais foram intencionalmente omitidas para assegurar estabilidade de links durante as rodadas de entrega. -->
+
+<!--### 9.2. Tabela Mestre de Registro de Riscos (Consolidada)-->
+
+| ID | Origem STRIDE | Evento de Risco | Vulnerabilidade ou Condição | Prob. (P) | Imp. (I) | Pont. ($P \times I$) | Nível de Risco |
+| :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- |
+| R01 | T01 — Spoofing | Um atacante assume a conta de clientes e realiza pedidos e alterações em nome deles | Credenciais reaproveitadas de outros vazamentos; ausência de MFA e de limite de tentativas de login | 3 | 4 | 12 | Crítico |
+| R02 | T07 — Tampering | O valor de pedidos é alterado antes do pagamento, gerando cobrança menor que a devida | O servidor confia no total calculado pelo aplicativo em vez de recalculá-lo | 2 | 3 | 6 | Médio |
+| R03 | T18 — Information Disclosure | Dados pessoais de clientes (endereço, telefone) são extraídos em massa pela API | Falha de autorização por objeto (IDOR) e ausência de limite de requisições | 3 | 4 | 12 | Crítico |
+| R04 | T02 — Spoofing | Uma pessoa não verificada realiza entregas usando a conta de um entregador homologado, acessando o endereço de clientes sem qualquer checagem de identidade | Ausência de verificação periódica de identidade após a homologação inicial do entregador | 3 | 3 | 9 | Alto |
+| R05 | T03 — Spoofing | O entregador usa GPS falso para simular proximidade e receber corridas às quais não teria acesso legítimo | Ausência de detecção de localização simulada no aplicativo do entregador | 3 | 2 | 6 | Médio |
+| R06 | T04 — Spoofing | Um cliente tem sua conta comprometida após inserir credenciais em uma página de phishing que imita o fluxo de recuperação de senha do SaborExpress | Ausência de MFA e de verificação de dispositivo/local incomum no login, somada à falta de informação do usuário sobre phishing | 3 | 4 | 12 | Crítico |
+| R07 | T05 — Spoofing | Um estabelecimento fictício é homologado como restaurante e recebe pagamentos de clientes sem nunca preparar os pedidos | Validação apenas documental (sem verificação cruzada com bases oficiais) no cadastro de restaurantes | 2 | 3 | 6 | Médio |
+| R08 | T06 — Spoofing | Um atacante envia uma notificação forjada de "pagamento aprovado" ao endpoint de webhook do gateway, liberando pedidos sem pagamento real | Endpoint do webhook não valida a assinatura criptográfica da requisição recebida | 2 | 4 | 8 | Alto |
+| R09 | T08 — Tampering | Contas descartáveis são criadas em massa para reaplicar cupons de primeira compra, gerando prejuízo recorrente às campanhas promocionais | Ausência de verificação do titular do cupom (ex.: por CPF, dispositivo ou meio de pagamento) | 3 | 3 | 9 | Alto |
+| R10 | T09 — Tampering | Os dados bancários de repasse de um restaurante são alterados, redirecionando os pagamentos devidos para uma conta diferente | Alteração de dados bancários sensíveis sem uma segunda camada de confirmação | 2 | 3 | 6 | Médio |
+| R11 | T10 — Tampering | Um item do cardápio é vendido por um preço diferente do exibido ao cliente no momento da compra | Ausência de auditoria e de aprovação para alterações de preço já publicadas | 3 | 2 | 6 | Médio |
+| R12 | T11 — Tampering | Avaliações negativas de um restaurante são editadas ou apagadas indevidamente, distorcendo sua reputação real | Falha de autorização na API de avaliações, permitindo alteração por quem não é o autor original | 2 | 2 | 4 | Médio |
+| R13 | T12 — Tampering | O endereço de entrega de um pedido já pago é alterado para um destino diferente do informado pelo cliente | API aceita alteração de endereço após a confirmação do pagamento, sem revalidação | 2 | 3 | 6 | Médio |
+| R14 | T13 — Repudiation | Um entregador marca um pedido como entregue sem tê-lo entregado, e a plataforma não consegue provar o contrário | Ausência de evidência de entrega (foto, geolocalização no momento da confirmação, assinatura) | 4 | 3 | 12 | Crítico |
+| R15 | T14 — Repudiation | Um cliente alega falsamente não ter recebido o pedido para obter reembolso indevido | Mesma ausência de evidência de entrega, somada à política de reembolso sem contestação estruturada | 4 | 3 | 12 | Crítico |
+| R16 | T15 — Repudiation | Um atendente emite estornos fraudulentos sem que seja possível identificar quem tomou a decisão | Ausência de log de auditoria vinculando cada estorno ao atendente responsável | 2 | 3 | 6 | Médio |
+| R17 | T16 — Repudiation | Um restaurante nega ter aceitado um pedido para justificar atraso ou não preparo, sem prova do momento do aceite | Ausência de registro íntegro e com timestamp do aceite do pedido pelo restaurante | 3 | 2 | 6 | Médio |
+| R19 | T19 — Information Disclosure | Endereços residenciais de clientes permanecem acessíveis a entregadores após a conclusão das entregas | Ausência de expiração ou remoção do endereço após a finalização do pedido | 3 | 4 | 12 | Crítico |
+| R20 | T20 — Information Disclosure | Um backup do banco de dados contendo informações de clientes e pedidos é obtido por um atacante | Backup armazenado ou disponibilizado sem controle adequado de acesso e proteção | 2 | 4 | 8 | Alto |
+| R21 | T21 — Information Disclosure | Uma chave de API do provedor de mapas é extraída do aplicativo e utilizada fora do SaborExpress | Chave de API incorporada diretamente no aplicativo móvel, sem restrição adequada de uso | 3 | 3 | 9 | Alto |
+| R22 | T22 — Information Disclosure | Dados sensíveis registrados nos logs são acessados por pessoas que não deveriam ter acesso a essas informações | Logs armazenam dados de pagamento ou tokens de autenticação sem mascaramento ou controle adequado de acesso | 3 | 4 | 12 | Crítico |
+| R23 | T23 — Information Disclosure | Um atacante identifica quais endereços de e-mail possuem contas cadastradas no SaborExpress | Mensagens de erro do login diferenciam usuários existentes de usuários inexistentes | 4 | 2 | 8 | Alto |
+| R24 | T24 — Denial of Service | A API de pedidos fica indisponível durante o horário de pico devido a um ataque volumétrico | Capacidade limitada da infraestrutura e ausência de proteção adequada contra tráfego abusivo | 3 | 4 | 12 | Crítico |
+| R25 | T25 — Denial of Service | Pedidos falsos em grande quantidade comprometem a capacidade de atendimento de um restaurante | Ausência de mecanismos eficazes para detectar e limitar criação automatizada de pedidos abusivos | 3 | 3 | 9 | Alto |
+| R26 | T26 — Denial of Service | O excesso de aceites e cancelamentos de corridas prejudica a distribuição de entregas e aumenta o tempo de atendimento | Ausência de mecanismos de detecção e limitação para comportamento abusivo de aceites e cancelamentos | 3 | 3 | 9 | Alto |
+| R27 | T27 — Denial of Service | O serviço de envio de SMS de verificação sofre degradação ou tem sua cota consumida por solicitações abusivas | Ausência de limite de solicitações de códigos de verificação por usuário, telefone ou dispositivo | 4 | 2 | 8 | Alto |
+| R28 | T28 — Denial of Service | O envio de arquivos excessivamente grandes consome recursos de armazenamento e processamento da plataforma | Ausência de limite adequado para tamanho, quantidade e frequência de uploads | 3 | 3 | 9 | Alto |
+| R29 | T29 — Elevation of Privilege | Um atendente de suporte executa operações administrativas acima das suas permissões | Autorização aplicada apenas no frontend, sem validação adequada dos privilégios no backend | 3 | 4 | 12 | Crítico |
+| R30 | T30 — Elevation of Privilege | Um cliente obtém privilégios de restaurante e passa a executar operações restritas a esse perfil | Backend aceita o campo de perfil enviado pelo cliente sem validar a alteração de privilégio | 2 | 4 | 8 | Alto |
+| R31 | T31 — Elevation of Privilege | Um atacante modifica um token JWT e assume um papel com privilégios superiores | Backend não valida corretamente a assinatura do token antes de aceitar suas informações de autorização | 2 | 4 | 8 | Alto |
+| R32 | T32 — Elevation of Privilege | Um funcionário de restaurante acessa ou modifica pedidos pertencentes a outra loja da mesma rede | Ausência de validação no backend do vínculo entre usuário, restaurante e pedido | 3 | 3 | 9 | Alto |
+| *R18* | *T18 — Info Disclosure* | *Risco duplicado de IDOR consolidado no R03 para manter rastreabilidade 1-para-1* | *Consolidado no R03 (T18)* | *—* | *—* | *—* | *Consolidado no R03* |
 
 ---
 
