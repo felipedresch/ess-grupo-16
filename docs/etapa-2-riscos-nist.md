@@ -572,6 +572,12 @@ Esta seção apresenta a ordenação estratégica para o tratamento dos riscos i
 
 ### 11.1 Metodologia de Priorização e Critérios de Desempate
 
+<!-- RESPONSÁVEL: Fernando -->
+<!-- TODO: ordenar os riscos e JUSTIFICAR por que um deve ser tratado antes do outro.
+     A ordem não pode ser apenas a pontuação decrescente — o enunciado pede que se considere
+     também gravidade das consequências, número de usuários afetados, importância do ativo,
+     possibilidade de recuperação, dependências entre riscos e urgência. -->
+
 Para desempatar e ordenar os riscos críticos (pontuação 12), foram adotados quatro critérios científicos hierárquicos:
 
 1. **Critério A: Irreversibilidade do Dano e Impacto à Privacidade (LGPD):** Incidentes que resultam na exfiltração em massa de dados cadastrais (especialmente a correlação entre nome, telefone e endereço residencial) são irreversíveis — dados uma vez vazados não podem ser recuperados ou "desvazados" [96, 116]. Sob a LGPD, acarretam sanções civis graves e multas pesadas, além de expor clientes a riscos reais de violência física ou perseguição devido à entrega de alimentos em suas residências [61, 96].
@@ -579,19 +585,36 @@ Para desempatar e ordenar os riscos críticos (pontuação 12), foram adotados q
 3. **Critério C: Disponibilidade Sistêmica e Integridade do Modelo de Negócio:** Interrupções completas das operações de backend por ataques volumétricos (DDoS) ou fraudes transacionais sistemáticas na validação de pagamentos afetam o faturamento da empresa no horário de pico, comprometendo a subsistência financeira dos restaurantes parceiros [56, 122].
 4. **Critério D: Perdas Financeiras e Confiabilidade da Entrega (*Last-Mile*):** Riscos associados a fraudes pontuais de repúdio ou desvios de conduta no ato de entrega. Embora críticos na contabilidade final, tratam-se de perdas transacionais que ocorrem de forma isolada (pedido a pedido) e que admitem processos administrativos secundários para contenção e ressarcimento [101, 112, 113].
 
-<!-- RESPONSÁVEL: Fernando -->
-<!-- TODO: ordenar os riscos e JUSTIFICAR por que um deve ser tratado antes do outro.
-     A ordem não pode ser apenas a pontuação decrescente — o enunciado pede que se considere
-     também gravidade das consequências, número de usuários afetados, importância do ativo,
-     possibilidade de recuperação, dependências entre riscos e urgência. -->
 
+### 11.2 Tabela de Priorização dos Riscos (Top 15)
 
+A tabela abaixo estabelece a ordem prioritária de tratamento de riscos, cruzando as pontuações quantitativas com os critérios de triagem qualitativa detalhados anteriormente:
+
+| Ordem | ID | Origem STRIDE | Evento de Risco | Pont. | Nível | Foco do Tratamento / Justificativa Estratégica |
+| :---: | :---: | :--- | :--- | :---: | :--- | :--- |
+| **1º** | **R03** | T18 — Info Disclosure | Vazamento em massa de dados de clientes (endereço, telefone) via IDOR na API de pedidos | 12 | Crítico | **Privacidade e LGPD:** Vazamento em larga escala, irreversível e com alto potencial de responsabilização jurídica imediata [96, 116]. |
+| **2º** | **R19** | T19 — Info Disclosure | Endereços residenciais de clientes permanecem acessíveis a entregadores após a conclusão das entregas | 12 | Crítico | **Segurança Física:** Risco contínuo e silencioso de assédio ou perseguição física contra clientes utilizando dados expostos [117]. |
+| **3º** | **R22** | T22 — Info Disclosure | Dados sensíveis de pagamento ou tokens de autenticação gravados nos logs de aplicação | 12 | Crítico | **Vetor Interno Passivo:** Exposição passiva de credenciais e dados financeiros a desenvolvedores e operadores, alimentando fraudes em massa [120]. |
+| **4º** | **R29** | T29 — Elevation of Priv. | Atendente de suporte executa operações administrativas abusivas (ex.: estornos ilimitados) por falta de validação no backend | 12 | Crítico | **Efeito Cascata Administrativo:** Controle de acesso ao painel de backoffice, que é o ativo mais crítico do sistema de controle [63, 127]. |
+| **5º** | **R01** | T01 — Spoofing | Sequestro em massa de contas de clientes via *credential stuffing* por falta de MFA e restrição de login | 12 | Crítico | **Vetor de Entrada Ativo:** Ataque automatizável de alta frequência que serve como ponte para fraudes transacionais e roubo de dados [100]. |
+| **6º** | **R06** | T04 — Spoofing | Comprometimento massivo de contas de clientes por campanhas direcionadas de phishing no fluxo de senha | 12 | Crítico | **Proteção de Identidade:** Ataque direto contra a identidade digital do cliente, mitigado pelas mesmas barreiras robustas do R01 [104]. |
+| **7º** | **R24** | T24 — Denial of Service | Indisponibilidade total da API de pedidos no horário de pico por ataque volumétrico (DDoS) | 12 | Crítico | **Continuidade de Negócio:** Interrupção catastrófica de vendas e danos imediatos à reputação e saúde dos lojistas parceiros [122]. |
+| **8º** | **R14** | T13 — Repudiation | Entregador simula falsamente a conclusão de entrega sem realizá-la, gerando ônus financeiro | 12 | Crítico | **Fraude Operacional (*Last-Mile*):** Fraude direta no faturamento, de alta frequência, dependente de novos processos físicos de verificação [112]. |
+| **9º** | **R15** | T14 — Repudiation | Cliente contesta falsamente o recebimento de pedidos para obter reembolsos indevidos de forma sistemática | 12 | Crítico | **Abuso do Consumidor:** Fraude transacional repetitiva que corrói as margens financeiras e exige conciliação probatória robusta [113]. |
+| **10º** | **R08** | T06 — Spoofing | Forjamento de webhook de pagamento aprovado, gerando liberação de pedidos sem lastro financeiro | 8 | Alto | **Integridade Transacional:** Risco financeiro severo (liberação automática de mercadorias grátis), contido pela facilidade técnica de mitigação [106]. |
+| **11º** | **R20** | T20 — Info Disclosure | Exfiltração de backup do banco de dados por exposição ou configuração inadequada | 8 | Alto | **Proteção de Infraestrutura:** Concentração máxima de dados históricos, protegida por controles de segurança em nível de nuvem e criptografia em repouso [118]. |
+| **12º** | **R31** | T31 — Elevation of Priv. | Modificação e adulteração da assinatura de tokens JWT para assumir privilégios superiores de restaurante/admin | 8 | Alto | **Segurança de Protocolo:** Vulnerabilidade técnica grave na camada de autenticação, cujo tratamento de backend blinda APIs inteiras [129]. |
+| **13º** | **R04** | T02 — Spoofing | Uso de contas de entregador alugadas ou compradas por terceiros não verificados | 9 | Alto | **Confiabilidade da Entrega:** Fraude de mercado comum que gera riscos de segurança física localizados na entrega física [102]. |
+| **14º** | **R21** | T21 — Info Disclosure | Extração da chave de API de mapas integrada diretamente no código do aplicativo móvel | 9 | Alto | **Perda Financeira Indireta:** Abuso de cota e custos imprevistos com o provedor de mapas, mitigável por restrições na console do parceiro [119]. |
+| **15º** | **R02** | T07 — Tampering | Alteração do valor do carrinho/pedido interceptando requisições antes do pagamento | 6 | Médio | **Consistência de Dados:** Fraude financeira isolada com barreira técnica média, facilmente corrigível com recálculo estrito no servidor [101]. |
+
+<!--
 | Ordem | Risco | Pontuação | Nível | Motivo de estar nesta posição |
 |---|---|---|---|---|
 | 1º | R03 | 12 | Crítico | Mesma pontuação de R01, mas colocado à frente porque o vazamento em massa é irreversível: dados exfiltrados não podem ser recuperados, enquanto uma conta tomada pode ser bloqueada e as transações estornadas |
 | 2º | R01 | 12 | Crítico | <!-- TODO --> |
 | 3º | — | — | — | <!-- TODO --> |
-
+-->
 <!-- TODO: acrescentar 1 ou 2 parágrafos explicando o raciocínio geral da priorização e
      apontando as dependências entre riscos (por exemplo: tratar a falha de autorização da API
      reduz simultaneamente vários riscos de vazamento e de escalonamento de privilégio). -->
