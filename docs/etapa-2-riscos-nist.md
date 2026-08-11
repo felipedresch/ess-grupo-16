@@ -434,6 +434,45 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 - **Consequências possíveis:** criação de listas de usuários válidos, aumento da eficácia de campanhas de phishing, engenharia social e tentativas posteriores de comprometimento de contas.
 - **Por que o nível Alto é adequado:** a pontuação 8 resulta da alta probabilidade de exploração combinada com impacto moderado. Embora a vulnerabilidade isoladamente não conceda acesso às contas, a facilidade de automação e seu potencial de servir como etapa para ataques posteriores justificam o nível Alto.
 
+### R24 — Indisponibilidade da API de pedidos por ataque volumétrico
+
+- **Por que a probabilidade é 3 (média-alta):** ataques volumétricos são uma técnica conhecida e podem ser realizados por meio de grandes volumes de requisições direcionadas à API. O risco aumenta durante os horários de pico, quando a infraestrutura já está próxima de sua capacidade. Não é 4 porque o ataque depende de recursos suficientes para gerar tráfego e de a infraestrutura não conseguir absorvê-lo ou filtrá-lo adequadamente.
+- **Por que o impacto é 4 (muito alto):** a API de pedidos é um componente central do SaborExpress, sendo utilizada para operações essenciais da plataforma. Sua indisponibilidade pode impedir clientes de realizar pedidos, restaurantes de processá-los e entregadores de atualizarem as entregas.
+- **Quem ou o que é afetado:** API de pedidos, clientes, restaurantes, entregadores e a operação financeira da plataforma.
+- **Consequências possíveis:** interrupção das vendas durante períodos de maior faturamento, pedidos não processados, atrasos nas entregas, prejuízos aos restaurantes, perda de receita e danos à reputação do SaborExpress.
+- **Por que o nível Crítico é adequado:** a pontuação 12 combina probabilidade média-alta com impacto muito alto. A indisponibilidade de um componente central durante horários de pico pode afetar simultaneamente grande quantidade de usuários e gerar prejuízo financeiro significativo.
+
+### R25 — Pedidos falsos em massa contra um restaurante
+
+- **Por que a probabilidade é 3 (média-alta):** a criação automatizada de pedidos pode ser realizada por meio de múltiplas contas ou requisições automatizadas caso não existam mecanismos eficazes de detecção e limitação. Não é 4 porque o ataque depende da capacidade de criar ou controlar contas e de contornar eventuais controles existentes na plataforma.
+- **Por que o impacto é 3 (alto):** uma grande quantidade de pedidos falsos pode ocupar a capacidade de produção de um restaurante, consumir ingredientes e funcionários e impedir que pedidos legítimos sejam preparados dentro do prazo.
+- **Quem ou o que é afetado:** restaurantes, clientes que realizam pedidos legítimos, API de pedidos e a operação de entrega.
+- **Consequências possíveis:** desperdício de alimentos, sobrecarga da equipe do restaurante, atrasos, cancelamentos, perda de vendas legítimas e prejuízo financeiro ao estabelecimento.
+- **Por que o nível Alto é adequado:** a pontuação 9 resulta da combinação de probabilidade média-alta com impacto alto. O ataque pode comprometer diretamente a capacidade operacional de um restaurante, embora seu impacto seja mais localizado do que uma indisponibilidade completa da plataforma.
+
+### R26 — Abuso de aceites e cancelamentos de corridas
+
+- **Por que a probabilidade é 3 (média-alta):** um entregador que consiga aceitar e cancelar corridas repetidamente pode realizar o comportamento abusivo sem necessidade de técnicas sofisticadas, caso não existam mecanismos de detecção e limitação. Não é 4 porque o ataque depende de uma conta de entregador e de a plataforma não identificar o padrão de comportamento.
+- **Por que o impacto é 3 (alto):** o comportamento pode prejudicar a distribuição das entregas e reduzir a disponibilidade de entregadores para pedidos legítimos, aumentando o tempo de espera dos clientes.
+- **Quem ou o que é afetado:** entregadores, clientes, restaurantes e o sistema de distribuição de corridas da plataforma.
+- **Consequências possíveis:** aumento do tempo de entrega, pedidos cancelados, sobrecarga de outros entregadores, insatisfação dos clientes e perda de eficiência operacional.
+- **Por que o nível Alto é adequado:** a pontuação 9 combina probabilidade média-alta com impacto alto. O problema pode afetar a disponibilidade do serviço de entrega, mas tende a possuir alcance mais limitado do que um ataque direto à API de pedidos.
+
+### R27 — Abuso do envio de SMS de verificação
+
+- **Por que a probabilidade é 4 (alta):** o envio repetido de códigos de verificação pode ser automatizado caso a plataforma não limite as solicitações por usuário, telefone ou dispositivo. A técnica não exige comprometimento de outros componentes do sistema e pode ser repetida em grande quantidade.
+- **Por que o impacto é 2 (moderado):** o abuso pode consumir a cota contratada de mensagens e gerar custos para a plataforma, além de prejudicar temporariamente o recebimento de códigos por usuários legítimos. O impacto sobre os demais serviços da plataforma tende a ser limitado.
+- **Quem ou o que é afetado:** serviço de notificações, orçamento da plataforma e usuários que dependem do SMS para autenticação ou recuperação de acesso.
+- **Consequências possíveis:** aumento dos custos com SMS, esgotamento da cota contratada, atraso no recebimento de códigos e dificuldade para usuários legítimos concluírem processos de autenticação.
+- **Por que o nível Alto é adequado:** a pontuação 8 resulta da alta probabilidade combinada com impacto moderado. A facilidade de automatização e a possibilidade de gerar custos repetidamente justificam o nível Alto.
+
+### R28 — Sobrecarga por upload de arquivos excessivamente grandes
+
+- **Por que a probabilidade é 3 (média-alta):** o envio de arquivos grandes pode ser automatizado caso a plataforma não estabeleça limites adequados de tamanho, quantidade e frequência. O ataque não exige necessariamente técnicas avançadas, mas depende de existir uma funcionalidade de upload acessível ao atacante.
+- **Por que o impacto é 3 (alto):** arquivos excessivamente grandes podem consumir armazenamento, processamento e largura de banda, reduzindo a disponibilidade dos recursos para usuários legítimos.
+- **Quem ou o que é afetado:** infraestrutura da plataforma, armazenamento de arquivos, serviços responsáveis pelo processamento dos uploads e usuários que utilizam essas funcionalidades.
+- **Consequências possíveis:** consumo excessivo de armazenamento, degradação do desempenho, aumento de custos de infraestrutura, indisponibilidade parcial de funcionalidades e lentidão para outros usuários.
+- **Por que o nível Alto é adequado:** a pontuação 9 combina probabilidade média-alta com impacto alto. A exploração pode ser automatizada e consumir recursos da plataforma, embora normalmente tenha alcance mais limitado do que um ataque volumétrico contra a API principal.
 ---
 
 ## 11. Priorização
