@@ -386,7 +386,7 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 - **Por que o nível Médio é adequado:** fácil de alegar, mas o estrago por ocorrência é limitado e
   recuperável.
 
-  ### R18 — Extração de dados pessoais pela API
+### R18 — Extração de dados pessoais pela API
 
 - **Por que a probabilidade é 3 (média-alta):** a exploração de uma falha de autorização por objeto (IDOR) pode ser realizada diretamente pela API e não exige necessariamente conhecimento técnico avançado. Se os identificadores dos pedidos puderem ser obtidos ou enumerados, um atacante pode automatizar requisições para consultar pedidos de outros usuários. Não é 4 porque o ataque depende da existência da falha de autorização e da possibilidade de obter identificadores válidos.
 - **Por que o impacto é 4 (muito alto):** a exploração permite acessar informações pessoais como endereço residencial e telefone de diversos clientes. Em escala, isso representa uma violação significativa de privacidade e pode gerar riscos físicos e consequências relacionadas à LGPD.
