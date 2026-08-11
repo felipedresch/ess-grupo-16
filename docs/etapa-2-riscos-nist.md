@@ -139,6 +139,17 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
      TODO(Fernando): consolidar tudo nesta tabela única, conferir os cálculos e garantir que a
      numeração R## seja contínua e sem repetições. -->
 
+### 9.1. Relatório de Auditoria e Ajustes Técnicos Realizados
+
+1. **Eliminação de Duplicidade (Caso R03 / R18):**
+   - **Descoberta:** O risco `R03` (incluído no escopo de Spoofing/Tampering/Repudiation de forma preliminar por tratar-se de um vazamento crítico de IDOR) e o risco `R18` (incluído por Luis Fillipe no escopo de Information Disclosure) apontavam exatamente para a mesma ameaça de origem: **`T18 — Information Disclosure (IDOR na API de Pedidos)`**.
+   - **Ação corretiva:** Para manter a integridade científica e uma relação rigorosa de **1-para-1** com o modelo STRIDE (que conta com **31 ameaças** ativas), os dois riscos foram consolidados sob o ID **`R03`**, que já é citado extensamente no restante do documento (Priorização, Mapeamento NIST, Requisitos de Segurança e Arquitetura). O ID `R18` foi formalmente desativado e sinalizado como consolidado no `R03`. Isso preserva o mapeamento estrito e evita quebrar referências posteriores de outros membros (como `R19` a `R32` que já estão estruturadas).
+2. **Conferência Automatizada de Cálculos (Probabilidade × Impacto):**
+   - Todos os produtos ($Pontuação = Probabilidade \times Impacto$) foram recalculados programaticamente.
+   - A classificação dos níveis de risco (**Baixo**: 1-3, **Médio**: 4-7, **Alto**: 8-11, **Crítico**: 12-16) foi validada para cada uma das 31 entradas, garantindo que não haja desvios metodológicos ou erros de atribuição manual.
+3. **Preservação de Lacunas Intencionais de Numeração:**
+   - Para manter total coerência com os arquivos de modelagem STRIDE da Etapa 1, os identificadores de ameaças de origem preservam as lacunas de **`T17`** e **`T33`**, as quais foram intencionalmente omitidas para assegurar estabilidade de links durante as rodadas de entrega.
+
 ---
 
 ## 10. Justificativas das avaliações
