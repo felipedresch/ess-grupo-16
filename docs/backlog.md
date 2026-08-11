@@ -114,7 +114,7 @@ Arquivo: [`docs/etapa-2-riscos-nist.md`](etapa-2-riscos-nist.md)
 | E2.2 | Justificar os critérios de impacto | 8.2 | Fernando | 08/08 | 🟢 |
 | E2.3 | Converter as ameaças T01–T16 (S/T/R) em riscos | 9 | Gabriel | 10/08 | 🟢 desbloqueado |
 | E2.4 | Converter as ameaças T18–T32 (I/D/E) em riscos | 9 | Luis Fillipe | 10/08 | 🔴 desbloqueado |
-| E2.5 | Consolidar a tabela mestre, conferir cálculos e numeração | 9 | Fernando | 10/08 | ⚫ depende de E2.3 e E2.4 |
+| E2.5 | Consolidar a tabela mestre, conferir cálculos e numeração | 9 | Fernando | 10/08 | 🟢 depende de E2.3 e E2.4 |
 | E2.6 | Justificativas dos riscos de S/T/R (5 pontos cada) | 10 | Gabriel | 10/08 | 🟢 |
 | E2.7 | Justificativas dos riscos de I/D/E (5 pontos cada) | 10 | Luis Fillipe | 10/08 | ⚫ |
 | E2.8 | Priorização com justificativa da ordem | 11 | Fernando | 10/08 | ⚫ depende de E2.5 |
