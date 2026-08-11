@@ -570,13 +570,21 @@ A ausência de riscos de nível "Baixo" é justificada pelo modelo de negócio d
 
 Esta seção apresenta a ordenação estratégica para o tratamento dos riscos identificados no ecossistema do SaborExpress. Como a modelagem matemática tradicional baseada no NIST SP 800-30 resultou em múltiplos riscos empatados com a pontuação máxima (**Criticidade 12**), foi necessária a aplicação de uma metodologia qualitativa de triagem secundária, baseada em princípios consagrados de engenharia de software seguro, na severidade jurídica sob a égide da LGPD e no potencial de danos físicos e operacionais diretos [92, 94, 96, 97].
 
----
+### 11.1 Metodologia de Priorização e Critérios de Desempate
+
+Para desempatar e ordenar os riscos críticos (pontuação 12), foram adotados quatro critérios científicos hierárquicos:
+
+1. **Critério A: Irreversibilidade do Dano e Impacto à Privacidade (LGPD):** Incidentes que resultam na exfiltração em massa de dados cadastrais (especialmente a correlação entre nome, telefone e endereço residencial) são irreversíveis — dados uma vez vazados não podem ser recuperados ou "desvazados" [96, 116]. Sob a LGPD, acarretam sanções civis graves e multas pesadas, além de expor clientes a riscos reais de violência física ou perseguição devido à entrega de alimentos em suas residências [61, 96].
+2. **Critério B: Dependência Sistêmica e Efeito Cascata (Vetor de Entrada):** Vulnerabilidades que atuam como porta de entrada para o comprometimento de outros ativos críticos do sistema ou que franqueiam privilégios administrativos (como a quebra de autenticação, sequestro de contas e falhas no painel administrativo de suporte) devem ser mitigadas prioritariamente [61, 63, 100]. A blindagem das credenciais protege indiretamente as transações e as informações corporativas [63].
+3. **Critério C: Disponibilidade Sistêmica e Integridade do Modelo de Negócio:** Interrupções completas das operações de backend por ataques volumétricos (DDoS) ou fraudes transacionais sistemáticas na validação de pagamentos afetam o faturamento da empresa no horário de pico, comprometendo a subsistência financeira dos restaurantes parceiros [56, 122].
+4. **Critério D: Perdas Financeiras e Confiabilidade da Entrega (*Last-Mile*):** Riscos associados a fraudes pontuais de repúdio ou desvios de conduta no ato de entrega. Embora críticos na contabilidade final, tratam-se de perdas transacionais que ocorrem de forma isolada (pedido a pedido) e que admitem processos administrativos secundários para contenção e ressarcimento [101, 112, 113].
 
 <!-- RESPONSÁVEL: Fernando -->
 <!-- TODO: ordenar os riscos e JUSTIFICAR por que um deve ser tratado antes do outro.
      A ordem não pode ser apenas a pontuação decrescente — o enunciado pede que se considere
      também gravidade das consequências, número de usuários afetados, importância do ativo,
      possibilidade de recuperação, dependências entre riscos e urgência. -->
+
 
 | Ordem | Risco | Pontuação | Nível | Motivo de estar nesta posição |
 |---|---|---|---|---|
