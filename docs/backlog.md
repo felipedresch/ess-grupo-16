@@ -110,8 +110,8 @@ Arquivo: [`docs/etapa-2-riscos-nist.md`](etapa-2-riscos-nist.md)
 
 | # | Tarefa | Seção | Responsável | Prazo | Status |
 |---|---|---|---|---|---|
-| E2.1 | Justificar os critérios de probabilidade | 8.1 | Fernando | 08/08 | 🔴 |
-| E2.2 | Justificar os critérios de impacto | 8.2 | Fernando | 08/08 | 🔴 |
+| E2.1 | Justificar os critérios de probabilidade | 8.1 | Fernando | 08/08 | 🟢 |
+| E2.2 | Justificar os critérios de impacto | 8.2 | Fernando | 08/08 | 🟢 |
 | E2.3 | Converter as ameaças T01–T16 (S/T/R) em riscos | 9 | Gabriel | 10/08 | 🟢 desbloqueado |
 | E2.4 | Converter as ameaças T18–T32 (I/D/E) em riscos | 9 | Luis Fillipe | 10/08 | 🔴 desbloqueado |
 | E2.5 | Consolidar a tabela mestre, conferir cálculos e numeração | 9 | Fernando | 10/08 | ⚫ depende de E2.3 e E2.4 |
@@ -120,7 +120,7 @@ Arquivo: [`docs/etapa-2-riscos-nist.md`](etapa-2-riscos-nist.md)
 | E2.8 | Priorização com justificativa da ordem | 11 | Fernando | 10/08 | ⚫ depende de E2.5 |
 | E2.9 | Estratégia de tratamento por risco | 12 | Deivid | 11/08 | ⚫ |
 | E2.10 | Tabela de riscos aceitos | 12.1 | Deivid | 11/08 | ⚫ |
-| E2.11 | As 6 funções do NIST CSF aplicadas ao SaborExpress | 13.1 | Fernando | 10/08 | 🔴 |
+| E2.11 | As 6 funções do NIST CSF aplicadas ao SaborExpress | 13.1 | Fernando | 10/08 | 🟢 |
 | E2.12 | Mapear cada risco para as funções do NIST | 13.2 | Fernando | 10/08 | ⚫ depende de E2.5 |
 | E2.13 | Controles concretos para os riscos de S/T/R | 14 | Gabriel | 11/08 | 🟢 |
 | E2.14 | Controles concretos para os riscos de I/D/E | 14 | Luis Fillipe | 11/08 | ⚫ |
