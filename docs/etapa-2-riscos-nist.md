@@ -473,6 +473,38 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 - **Quem ou o que é afetado:** infraestrutura da plataforma, armazenamento de arquivos, serviços responsáveis pelo processamento dos uploads e usuários que utilizam essas funcionalidades.
 - **Consequências possíveis:** consumo excessivo de armazenamento, degradação do desempenho, aumento de custos de infraestrutura, indisponibilidade parcial de funcionalidades e lentidão para outros usuários.
 - **Por que o nível Alto é adequado:** a pontuação 9 combina probabilidade média-alta com impacto alto. A exploração pode ser automatizada e consumir recursos da plataforma, embora normalmente tenha alcance mais limitado do que um ataque volumétrico contra a API principal.
+
+### R29 — Execução de operações administrativas por atendente de suporte
+
+- **Por que a probabilidade é 3 (média-alta):** a exploração pode ocorrer diretamente por meio da API caso a autorização seja aplicada somente na interface do sistema. Um atendente com uma conta legítima pode tentar acessar endpoints administrativos diretamente, sem precisar comprometer outra conta. Não é 4 porque o atacante precisa possuir uma conta de suporte e conhecer ou descobrir os endpoints disponíveis.
+- **Por que o impacto é 4 (muito alto):** a exploração pode permitir que um atendente execute operações acima das suas permissões, como emitir estornos, alterar comissões e acessar dados de usuários. Essas ações podem gerar prejuízos financeiros e comprometer informações de diversos clientes.
+- **Quem ou o que é afetado:** painel administrativo, registros financeiros, dados dos usuários e a própria plataforma.
+- **Consequências possíveis:** estornos fraudulentos, alteração indevida de comissões, acesso não autorizado a dados de clientes, prejuízos financeiros e perda de confiança na plataforma.
+- **Por que o nível Crítico é adequado:** a pontuação 12 combina probabilidade média-alta com impacto muito alto. Uma única conta de suporte comprometida ou utilizada de forma indevida pode permitir operações administrativas com impacto sobre diversos usuários e sobre a situação financeira da plataforma.
+
+### R30 — Obtenção indevida de privilégios de restaurante
+
+- **Por que a probabilidade é 2 (média-baixa):** a exploração depende de o backend aceitar diretamente um campo de perfil enviado pelo cliente durante o cadastro ou alteração da conta. Caso essa falha exista, a exploração pode ser simples, mas o risco é reduzido pela necessidade de existir uma implementação vulnerável desse mecanismo. Não é 3 ou 4 porque depende de uma falha específica no processo de atribuição de privilégios.
+- **Por que o impacto é 4 (muito alto):** um cliente que consiga obter privilégios de restaurante pode acessar funcionalidades destinadas a estabelecimentos, podendo alterar informações de cardápio, preços e pedidos. Dependendo das permissões concedidas, isso pode causar prejuízos financeiros e comprometer a integridade das operações.
+- **Quem ou o que é afetado:** API de pedidos, restaurantes, clientes e informações relacionadas aos pedidos e cardápios.
+- **Consequências possíveis:** alteração indevida de preços e cardápios, manipulação de pedidos, fraude, prejuízos aos restaurantes e comprometimento da confiança na plataforma.
+- **Por que o nível Alto é adequado:** a pontuação 8 combina probabilidade média-baixa com impacto muito alto. Embora a exploração dependa de uma falha específica na atribuição de perfis, a obtenção de privilégios de restaurante pode permitir ações significativamente superiores às permitidas para um cliente.
+
+### R31 — Falsificação de privilégios por alteração de JWT
+
+- **Por que a probabilidade é 2 (média-baixa):** a exploração depende de uma falha na validação da assinatura do JWT pelo backend. Se essa condição existir, um atacante pode tentar modificar as informações de autorização contidas no token. Não é 3 ou 4 porque a exploração depende de uma implementação específica e de o backend aceitar tokens cuja autenticidade não tenha sido validada corretamente.
+- **Por que o impacto é 4 (muito alto):** um token adulterado que seja aceito pelo backend pode permitir que um atacante assuma um papel com privilégios superiores aos seus. Isso pode possibilitar acesso a funcionalidades administrativas ou operações destinadas a outros perfis.
+- **Quem ou o que é afetado:** credenciais e tokens de sessão, API de pedidos, painel administrativo e dados dos usuários.
+- **Consequências possíveis:** acesso não autorizado a funcionalidades restritas, alteração de dados, fraude financeira, acesso a informações de outros usuários e comprometimento de contas com privilégios elevados.
+- **Por que o nível Alto é adequado:** a pontuação 8 combina probabilidade média-baixa com impacto muito alto. A falha não é necessariamente fácil de encontrar ou explorar, mas, caso exista e seja explorada, pode permitir uma elevação significativa de privilégios.
+
+### R32 — Acesso de funcionário a pedidos de outra loja
+
+- **Por que a probabilidade é 3 (média-alta):** um funcionário de restaurante já possui uma conta legítima e acesso à API utilizada para gerenciar pedidos. Se o backend não verificar corretamente o vínculo entre o funcionário, o restaurante e o pedido solicitado, o usuário pode tentar acessar identificadores pertencentes a outra loja. Não é 4 porque a exploração depende da existência da falha de isolamento entre restaurantes.
+- **Por que o impacto é 3 (alto):** o acesso indevido pode permitir consultar ou modificar pedidos de outros estabelecimentos. Isso compromete a separação entre restaurantes e pode causar alterações indevidas nas operações de terceiros.
+- **Quem ou o que é afetado:** API de pedidos, pedidos dos restaurantes, restaurantes participantes da plataforma e clientes relacionados aos pedidos.
+- **Consequências possíveis:** exposição de informações de pedidos, alteração ou cancelamento indevido de pedidos, prejuízos aos restaurantes, problemas nas entregas e perda de confiança na plataforma.
+- **Por que o nível Alto é adequado:** a pontuação 9 combina probabilidade média-alta com impacto alto. A exploração pode ser realizada por um usuário que já possui acesso legítimo à plataforma, mas o impacto tende a ficar limitado aos pedidos e estabelecimentos alcançados pela falha de autorização.
 ---
 
 ## 11. Priorização
