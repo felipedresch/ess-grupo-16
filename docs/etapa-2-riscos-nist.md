@@ -612,8 +612,8 @@ A tabela abaixo estabelece a ordem prioritária de tratamento de riscos, cruzand
 | Ordem | Risco | Pontuação | Nível | Motivo de estar nesta posição |
 |---|---|---|---|---|
 | 1º | R03 | 12 | Crítico | Mesma pontuação de R01, mas colocado à frente porque o vazamento em massa é irreversível: dados exfiltrados não podem ser recuperados, enquanto uma conta tomada pode ser bloqueada e as transações estornadas |
-| 2º | R01 | 12 | Crítico | <!-- TODO --> |
-| 3º | — | — | — | <!-- TODO --> |
+| 2º | R01 | 12 | Crítico | <TODOS> |
+| 3º | — | — | — | <TODOS> |
 -->
 <!-- TODO: acrescentar 1 ou 2 parágrafos explicando o raciocínio geral da priorização e
      apontando as dependências entre riscos (por exemplo: tratar a falha de autorização da API
