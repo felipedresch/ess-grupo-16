@@ -386,6 +386,54 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 - **Por que o nível Médio é adequado:** fácil de alegar, mas o estrago por ocorrência é limitado e
   recuperável.
 
+  ### R18 — Extração de dados pessoais pela API
+
+- **Por que a probabilidade é 3 (média-alta):** a exploração de uma falha de autorização por objeto (IDOR) pode ser realizada diretamente pela API e não exige necessariamente conhecimento técnico avançado. Se os identificadores dos pedidos puderem ser obtidos ou enumerados, um atacante pode automatizar requisições para consultar pedidos de outros usuários. Não é 4 porque o ataque depende da existência da falha de autorização e da possibilidade de obter identificadores válidos.
+- **Por que o impacto é 4 (muito alto):** a exploração permite acessar informações pessoais como endereço residencial e telefone de diversos clientes. Em escala, isso representa uma violação significativa de privacidade e pode gerar riscos físicos e consequências relacionadas à LGPD.
+- **Quem ou o que é afetado:** clientes e seus dados pessoais, especialmente endereço e telefone, além da plataforma e sua área de atendimento.
+- **Consequências possíveis:** vazamento em massa de dados pessoais, golpes, assédio, perseguição, reclamações de clientes, danos à reputação e possíveis consequências regulatórias.
+- **Por que o nível Crítico é adequado:** a pontuação 12 resulta da combinação de probabilidade média-alta e impacto muito alto. Além disso, uma exploração automatizada pode atingir muitos clientes e os dados pessoais expostos não podem ser simplesmente recuperados após o vazamento.
+
+### R19 — Exposição prolongada do endereço dos clientes
+
+- **Por que a probabilidade é 3 (média-alta):** o problema ocorre sempre que um entregador continua tendo acesso ao endereço após a conclusão da entrega, caso não exista uma política de expiração ou remoção dessas informações. A exploração não exige técnicas sofisticadas, pois basta consultar os dados já disponibilizados ao entregador. Não é 4 porque o acesso depende de o indivíduo ter realizado uma entrega para aquele cliente.
+- **Por que o impacto é 4 (muito alto):** endereços residenciais são dados pessoais que podem revelar diretamente o local onde uma pessoa mora. A exposição prolongada aumenta o risco de perseguição, assédio e outros usos indevidos.
+- **Quem ou o que é afetado:** clientes e seus endereços residenciais, além da plataforma, que pode sofrer danos reputacionais e reclamações.
+- **Consequências possíveis:** criação de bases de endereços, perseguição, assédio, invasão de privacidade e perda de confiança dos clientes na plataforma.
+- **Por que o nível Crítico é adequado:** a pontuação 12 combina probabilidade média-alta com impacto muito alto. Embora o cenário dependa do acesso prévio do entregador, o potencial de dano decorrente da exposição de endereços residenciais é elevado.
+
+### R20 — Exposição de backup do banco de dados
+
+- **Por que a probabilidade é 2 (média-baixa):** backups normalmente ficam em ambientes separados e podem possuir controles de acesso próprios, reduzindo a facilidade de exploração. Entretanto, uma configuração inadequada de armazenamento ou permissões pode permitir que um atacante obtenha acesso ao arquivo. Não é 3 ou 4 porque o atacante precisa primeiro localizar e acessar o backup protegido.
+- **Por que o impacto é 4 (muito alto):** um backup do banco pode concentrar grandes quantidades de dados de clientes, pedidos e outras informações da plataforma. A exposição de um único arquivo pode comprometer diversos ativos simultaneamente.
+- **Quem ou o que é afetado:** banco de dados principal, dados pessoais dos clientes, credenciais e tokens e informações relacionadas aos pedidos.
+- **Consequências possíveis:** vazamento em massa de dados, comprometimento de credenciais, fraude, violação da LGPD, prejuízos financeiros e danos reputacionais.
+- **Por que o nível Alto é adequado:** a pontuação 8 resulta da combinação de probabilidade média-baixa com impacto muito alto. Apesar de a obtenção do backup depender de uma falha de controle de acesso, o impacto potencial é significativo porque um único backup pode concentrar informações de muitos usuários.
+
+### R21 — Exposição de chave de API do provedor de mapas
+
+- **Por que a probabilidade é 3 (média-alta):** uma chave incorporada diretamente em um aplicativo distribuído aos usuários pode ser obtida por análise do aplicativo ou observação das requisições realizadas. Não é necessário comprometer o backend para tentar reutilizar a chave. Não é 4 porque a exploração ainda depende de a chave possuir permissões ou restrições insuficientes.
+- **Por que o impacto é 3 (alto):** o uso indevido da chave pode permitir consumo não autorizado dos serviços do provedor, gerar custos e atingir limites de utilização contratados pela plataforma. Dependendo das permissões associadas à chave, o impacto pode ser maior.
+- **Quem ou o que é afetado:** chaves de API de serviços externos, orçamento da plataforma e o serviço de mapas utilizado pelo SaborExpress.
+- **Consequências possíveis:** consumo indevido da API, aumento de custos, esgotamento de cotas, indisponibilidade do serviço de mapas e possível comprometimento de funcionalidades que dependem do provedor.
+- **Por que o nível Alto é adequado:** a pontuação 9 combina probabilidade média-alta com impacto alto. A exposição de uma chave distribuída no aplicativo é uma condição plausível, e seu uso indevido pode gerar prejuízo financeiro e indisponibilidade de serviços dependentes da API.
+
+### R22 — Exposição de dados sensíveis nos logs
+
+- **Por que a probabilidade é 3 (média-alta):** logs são acessados frequentemente por equipes de desenvolvimento, suporte e operações. Se informações sensíveis forem registradas sem mascaramento e os controles de acesso forem inadequados, uma quantidade significativa de dados pode ficar disponível para pessoas que não precisam deles. Não é 4 porque o atacante ou usuário indevido ainda precisa obter acesso ao ambiente de logs.
+- **Por que o impacto é 4 (muito alto):** logs podem conter tokens de autenticação, dados de pagamento ou outras informações sensíveis. A exposição desses dados pode permitir acesso indevido a contas e comprometer informações pessoais e financeiras.
+- **Quem ou o que é afetado:** logs de auditoria, credenciais e tokens de sessão, dados de pagamento e clientes da plataforma.
+- **Consequências possíveis:** comprometimento de contas, fraude financeira, exposição de dados pessoais, violação da LGPD e utilização dos dados registrados para novos ataques.
+- **Por que o nível Crítico é adequado:** a pontuação 12 combina probabilidade média-alta com impacto muito alto. Além disso, logs podem acumular informações de muitos usuários durante longos períodos, aumentando a quantidade de dados potencialmente expostos.
+
+### R23 — Enumeração de usuários pelo login
+
+- **Por que a probabilidade é 4 (alta):** a técnica é simples e pode ser automatizada por meio de várias tentativas de login ou recuperação de senha. Se o sistema apresentar mensagens diferentes para e-mails cadastrados e não cadastrados, um atacante consegue identificar usuários sem precisar comprometer suas contas.
+- **Por que o impacto é 2 (moderado):** descobrir que determinado e-mail possui uma conta não fornece, por si só, acesso à conta ou aos demais dados do usuário. Entretanto, essa informação pode ser utilizada como etapa inicial de phishing, engenharia social ou ataques direcionados.
+- **Quem ou o que é afetado:** credenciais de acesso e os clientes que possuem contas cadastradas na plataforma.
+- **Consequências possíveis:** criação de listas de usuários válidos, aumento da eficácia de campanhas de phishing, engenharia social e tentativas posteriores de comprometimento de contas.
+- **Por que o nível Alto é adequado:** a pontuação 8 resulta da alta probabilidade de exploração combinada com impacto moderado. Embora a vulnerabilidade isoladamente não conceda acesso às contas, a facilidade de automação e seu potencial de servir como etapa para ataques posteriores justificam o nível Alto.
+
 ---
 
 ## 11. Priorização
