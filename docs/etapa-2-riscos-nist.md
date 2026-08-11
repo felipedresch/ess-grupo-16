@@ -568,6 +568,10 @@ A ausência de riscos de nível "Baixo" é justificada pelo modelo de negócio d
 
 ## 11. Priorização
 
+Esta seção apresenta a ordenação estratégica para o tratamento dos riscos identificados no ecossistema do SaborExpress. Como a modelagem matemática tradicional baseada no NIST SP 800-30 resultou em múltiplos riscos empatados com a pontuação máxima (**Criticidade 12**), foi necessária a aplicação de uma metodologia qualitativa de triagem secundária, baseada em princípios consagrados de engenharia de software seguro, na severidade jurídica sob a égide da LGPD e no potencial de danos físicos e operacionais diretos [92, 94, 96, 97].
+
+---
+
 <!-- RESPONSÁVEL: Fernando -->
 <!-- TODO: ordenar os riscos e JUSTIFICAR por que um deve ser tratado antes do outro.
      A ordem não pode ser apenas a pontuação decrescente — o enunciado pede que se considere
