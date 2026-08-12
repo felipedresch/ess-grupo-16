@@ -327,13 +327,13 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 
 | Categoria | Nº de ameaças | Intervalo de IDs |
 |---|---|---|
-| Spoofing | — | T01 a T06 |
-| Tampering | — | T07 a T12 |
-| Repudiation | — | T13 a T16 |
-| Information Disclosure | — | T18 a T23 |
-| Denial of Service | — | T24 a T28 |
-| Elevation of Privilege | — | T29 a T32 |
-| **Total** | **—** | |
+| Spoofing | 6 | T01 a T06 |
+| Tampering | 6 | T07 a T12 |
+| Repudiation | 4 | T13 a T16 |
+| Information Disclosure | 6 | T18 a T23 |
+| Denial of Service | 5 | T24 a T28 |
+| Elevation of Privilege | 4 | T29 a T32 |
+| **Total** | **31** | |
 
 > **Sobre os identificadores T17 e T33:** eles não existem. Os intervalos de IDs foram reservados
 > por categoria antes da análise, e nem toda categoria usou todos os números reservados. Como os
