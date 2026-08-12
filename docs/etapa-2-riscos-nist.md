@@ -608,6 +608,29 @@ A tabela abaixo estabelece a ordem prioritária de tratamento de riscos, cruzand
 | **14º** | **R21** | T21 — Info Disclosure | Extração da chave de API de mapas integrada diretamente no código do aplicativo móvel | 9 | Alto | **Perda Financeira Indireta:** Abuso de cota e custos imprevistos com o provedor de mapas, mitigável por restrições na console do parceiro [119]. |
 | **15º** | **R02** | T07 — Tampering | Alteração do valor do carrinho/pedido interceptando requisições antes do pagamento | 6 | Médio | **Consistência de Dados:** Fraude financeira isolada com barreira técnica média, facilmente corrigível com recálculo estrito no servidor [101]. |
 
+### 11.3 Justificativa Detalhada da Ordem de Tratamento
+
+### Bloco 1 (1º ao 4º lugar): Blindagem de Dados de Clientes e Risco Físico (R03, R19, R22, R29)
+*   **Fundamentação Científica:** No ecossistema do SaborExpress, o maior ativo a ser protegido são os dados residenciais e telefônicos dos clientes [61, 63]. O vazamento massivo por IDOR (**R03**) lidera a priorização por ser uma ameaça cibernética silenciosa e totalmente automatizável, cujos impactos legais (LGPD) e danos à reputação da plataforma são irreparáveis [96, 116]. 
+*   Em seguida, a exposição prolongada de endereços no aplicativo móvel dos entregadores (**R19**) representa uma ameaça de alto risco para a segurança física de pessoas no mundo real, com potencial de evoluir para assédio ou perseguição física [117]. 
+*   A inclusão da gravação de dados sensíveis nos logs (**R22**) em 3º lugar se justifica porque logs desprotegidos expõem tokens e dados bancários de forma passiva para múltiplos agentes internos de desenvolvimento sem autorização formal [120]. 
+*   O risco **R29** (abuso administrativo por atendentes de suporte) fecha este primeiro bloco de atenção imediata por representar o vetor interno de maior impacto lateral nas finanças e dados de toda a base corporativa [127].
+
+### Bloco 2 (5º ao 6º lugar): Defesa de Identidade e Controle de Acesso Ativo (R01, R06)
+*   **Fundamentação Científica:** O comprometimento ativo de contas através de ataques de força bruta ou *credential stuffing* (**R01**) e campanhas de phishing focado em recuperação de senha (**R06**) representam a principal porta de entrada técnica externa para o roubo de dados individuais [100, 104]. 
+*   Uma vez tomada a conta, o atacante obtém acesso automático aos meios de pagamento salvos e aos dados cadastrais da vítima [100]. Mitigar estes riscos reduz drasticamente a superfície de ataque inicial do SaborExpress [61, 100].
+
+### Bloco 3 (7º lugar): Disponibilidade Operacional e Faturamento (R24)
+*   **Fundamentação Científica:** A indisponibilidade da API de pedidos (**R24**) por ataques distribuídos de negação de serviço (DDoS) paralisa integralmente o modelo operacional de delivery em horários de maior tráfego [122]. Sem a API, o SaborExpress é incapaz de processar transações, gerando perda imediata de faturamento para si e para os restaurantes parceiros, inviabilizando temporariamente a operação do negócio [56, 122].
+
+### Bloco 4 (8º ao 9º lugar): Confiabilidade Operacional na Entrega e Combate ao Repúdio (R14, R15)
+*   **Fundamentação Científica:** As fraudes do último quilômetro de entrega (*last-mile*) — onde entregadores fingem entregar (**R14**) ou clientes alegam falsamente não terem recebido os pedidos (**R15**) para fraudar reembolsos — ocupam as posições 8º e 9º [112, 113]. Embora classificados como críticos pela pontuação matemática (Criticidade 12), estes riscos tratam de problemas de processo físico e operacional pulverizados. Suas consequências financeiras são restritas a transações individuais (pedido por pedido) e, diferentemente dos vazamentos de dados, admitem auditoria de geolocalização e estornos compensatórios a posteriori para remediação [112, 113].
+
+### Bloco 5 (10º ao 15º lugar): Controles Técnicos, Infraestrutura e Mitigação de Fraudes de Escala (R08, R20, R31, R04, R21, R02)
+*   **Fundamentação Científica:** Este bloco agrupa riscos com pontuações de criticidade "Alta" e "Média". A mitigação do forjamento de webhook de pagamento aprovado (**R08**) surge em 10º lugar devido à necessidade urgente de garantir o fluxo correto de liquidação financeira da plataforma [106]. 
+*   O risco de exfiltração de backup (**R20**) e adulteração de JWT (**R31**) situam-se nos postos seguintes como defesas de infraestrutura profunda e sanitização de código de backend [118, 129]. 
+*   Por fim, o aluguel de contas de entregador (**R04**), a extração de chaves de API (**R21**) e a alteração local de preços de pedidos (**R02**) completam o roteiro por apresentarem maior dificuldade de exploração automatizada ou menor severidade direta de dano sistêmico [101, 102, 119].
+
 <!--
 | Ordem | Risco | Pontuação | Nível | Motivo de estar nesta posição |
 |---|---|---|---|---|
