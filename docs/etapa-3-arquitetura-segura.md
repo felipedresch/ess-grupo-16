@@ -21,6 +21,25 @@
 
 ## 1. Requisitos de segurança
 
+### Tabela de Requisitos de Segurança do SaborExpress
+
+| ID | Risco de Origem (Etapa 2) | Requisito de Segurança | Critério de Verificação |
+| :--- | :--- | :--- | :--- |
+| **RS01** | **R01 — Tomada de contas de clientes** <br>*(Origem: T01 — Spoofing)* | **Autenticação Multifator (MFA) Adaptativa e Reautenticação Sensível:**<br>O sistema deverá exigir obrigatoriamente um segundo fator de autenticação (MFA via código SMS ou TOTP) sempre que uma tentativa de autenticação for realizada a partir de um dispositivo ou endereço IP não reconhecido pelo histórico do usuário. Adicionalmente, o backend deverá forçar a reautenticação estrita (senha ou MFA) imediatamente antes de processar qualquer alteração cadastral sensível (e-mail, telefone) ou modificação de meios de pagamento. | **1.** O login originado de um dispositivo ou IP inédito deve ser sumariamente bloqueado e recusado pela API enquanto o segundo fator correto não for fornecido.<br>**2.** Qualquer chamada de API para alteração de e-mail, telefone ou cartão de crédito deve retornar erro `HTTP 401 (Unauthorized)` se a reautenticação do usuário não tiver ocorrido com sucesso nos últimos 5 minutos anteriores ao envio do payload. |
+| **RS02** | **R03 — Vazamento de dados via IDOR** <br>*(Origem: T18 — Info Disclosure)* | **Autorização Contextual Baseada em Objeto e Rate Limiting na API:**<br>A API de pedidos do SaborExpress deve validar, no lado do servidor (backend), se o usuário autenticado na sessão possui permissão de propriedade direta sobre o recurso solicitado (ID do pedido) antes de retornar qualquer dado cadastral, endereço residencial ou histórico de consumo. O controle deve empregar chaves de acesso indiretas e não-previsíveis (UUIDv4) e aplicar um limite de taxa (*rate limiting*) volumétrico de requisições por token e endereço IP. | **1.** Requisições autenticadas de clientes comuns tentando ler, editar ou excluir dados de pedidos pertencentes a outros IDs de usuários devem ser rejeitadas no backend com códigos de retorno `HTTP 403 (Forbidden)` ou `HTTP 404 (Not Found)` para evitar varreduras.<br>**2.** Chamadas repetitivas de consulta de pedidos que ultrapassem o limite de 60 requisições por minuto por IP/Token devem ser bloqueadas temporariamente, retornando o código de erro padrão de throttling `HTTP 429 (Too Many Requests)`. |
+| **RS03** | **R02 — Manipulação do valor do pedido** <br>*(Origem: T07 — Tampering)* | **Validação e Recálculo Centralizado de Checkout no Servidor:**<br>O backend da aplicação deve realizar o recálculo compulsório e estrito do valor total de cada carrinho de compras no momento do checkout. Esse processo deve ignorar sumariamente quaisquer preços unitários, descontos ou valores totais enviados ou computados pela aplicação cliente (aplicativo móvel ou frontend web), utilizando exclusivamente como única fonte de verdade os preços vigentes dos itens armazenados de forma protegida no banco de dados corporativo. | **1.** Uma requisição de criação de pedido (checkout) contendo preços unitários alterados (abaixo dos valores definidos no catálogo do banco) deve resultar na cobrança automática do valor recalculado de forma correta pelo servidor ou na rejeição integral da transação com status `HTTP 400 (Bad Request)`.<br>**2.** Esse comportamento deve ser comprovado e auditado através de testes automatizados de injeção de parâmetros (alteração direta de payloads HTTP em proxy de interceptação), onde o valor transacionado final no gateway de pagamento deve corresponder exatamente ao catálogo oficial de preços do lojista. |
+
+### Fundamentação Acadêmica e de Segurança da Informação
+
+1. **RS01 (Mitigação de Spoofing e Acesso não Autorizado):**
+   A exigência de MFA adaptativo ataca diretamente a vulnerabilidade de reuso de credenciais (*credential stuffing*). De acordo com os padrões do **NIST SP 800-63B** (Seção 5), a autenticação baseada em múltiplos fatores reduz severamente o risco de falsificação de identidade digital, enquanto a reautenticação em janelas curtas de tempo blinda a sessão do usuário contra sequestros de sessão ativos (*session hijacking*) em computadores ou celulares compartilhados.
+
+2. **RS02 (Mitigação de Exposição de Informações por Broken Object Level Authorization):**
+   O uso de UUIDv4 remove a previsibilidade típica de IDs sequenciais numéricos (evitando ataques de enumeração horizontal). A validação rigorosa de propriedade de dados no servidor impede a manifestação de falhas de controle de acesso ao nível de objeto, caracterizadas pelo **OWASP API Security Top 10** como a vulnerabilidade de maior criticidade no ecossistema moderno de APIs (API1:2023 - Broken Object Level Authorization).
+
+3. **RS03 (Mitigação de Tampering de Dados e Confiança Imprópria no Cliente):**
+   Um dos erros clássicos em engenharia de software é delegar regras de negócio críticas ou cálculos de segurança à camada de apresentação (dispositivo do cliente). Como o frontend do aplicativo roda em um ambiente hostil e fora do controle do SaborExpress, ele é facilmente manipulável através de proxies (como OWASP ZAP ou Burp Suite). O recálculo integral no servidor garante a conformidade com o princípio de segurança de **Validação de Entrada Rigorosa** e blinda a integridade financeira do marketplace.
+
 <!-- RESPONSÁVEL: Fernando -->
 <!-- TODO(Fernando): selecionar TRÊS riscos classificados como críticos ou altos na Etapa 2 e
      derivar um requisito de cada. Nem mais nem menos que três — o enunciado pede exatamente
@@ -28,13 +47,13 @@
      Atenção: o requisito precisa ser VERIFICÁVEL. O teste é conseguir escrever, na última
      coluna, uma frase do tipo "a operação é recusada quando X" que alguém consiga executar.
      O enunciado rejeita explicitamente requisitos genéricos como "o sistema deverá ser seguro". -->
-
+<!--
 | ID | Risco de origem | Requisito de segurança | Critério de verificação |
 |---|---|---|---|
 | RS01 | R01 — Tomada de contas de clientes | O sistema deverá exigir um segundo fator de autenticação sempre que o login ocorrer a partir de um dispositivo não reconhecido, e deverá exigir reautenticação antes de alterar e-mail, telefone ou meio de pagamento | O login a partir de um dispositivo novo deve ser recusado enquanto o segundo fator não for informado; a alteração de meio de pagamento deve ser recusada quando a reautenticação não ocorrer nos últimos 5 minutos |
-| RS02 | <!-- TODO --> | | |
-| RS03 | <!-- TODO --> | | |
-
+| RS02 | <- TODO -> | | |
+| RS03 | <- TODO -> | | |
+-->
 <!-- TODO(Fernando): sugestão de riscos a usar em RS02 e RS03, se eles se confirmarem como
      críticos na priorização: R03 (extração em massa de dados pessoais pela API) → requisito de
      autorização por objeto no servidor; e o risco derivado de T29 (escalonamento de privilégio
@@ -103,6 +122,37 @@ O enunciado (item 18.3) exige que o diagrama mostre:
      A D01 é o modelo. Uma decisão de arquitetura responde "o que escolhemos fazer e por quê",
      não "o que é bom em geral" — deve haver uma alternativa que foi descartada. -->
 
+### D01 — Controle de Acesso Híbrido (RBAC/ABAC) com Validação Server-Side Estrita para Operações Administrativas
+
+| Campo | Conteúdo |
+| :--- | :--- |
+| **Problema ou risco tratado** | **R29 — Execução de operações administrativas por atendente de suporte** (Origem: *T29 — Elevation of Privilege*). Trata-se de um risco crítico (Pontuação 12) que afeta a integridade financeira e de dados cadastrais de todo o backoffice. |
+| **Decisão tomada** | Implementação de um modelo de controle de acesso híbrido combinando Controle de Acesso Baseado em Papéis (**RBAC**) para segregação geral e Controle de Acesso Baseado em Atributos (**ABAC**) para políticas dinâmicas (como limites máximos de alçada para estornos baseados no horário e histórico do atendente). Esta verificação é executada obrigatoriamente no lado do servidor (backend) a cada chamada de API administrativa (`P04`). O backend extrai a identidade e os atributos do usuário de um token criptográfico assinado (JWT) no cabeçalho `Authorization` e valida se o perfil possui privilégios para executar a operação antes de acessar o banco de dados. Nenhuma checagem é confiada ao frontend do painel administrativo (`A12`). |
+| **Motivo** | Ocultar botões ou rotas na interface gráfica do usuário (frontend) é uma medida de usabilidade e não uma barreira de segurança. O código do frontend do painel administrativo (`A12`) roda em ambiente hostil (dispositivo do usuário) e pode ser inspecionado ou manipulado para descobrir e disparar requisições diretamente contra endpoints de API administrativos expostos na internet. Segundo as diretrizes do **OWASP Top 10 (A01:2021 — Broken Access Control)**, toda validação de privilégios de acesso a recursos deve ser centralizada e aplicada estritamente no backend. |
+| **Componente afetado** | API Administrativa (`P04`), Painel Administrativo de Backoffice (`A12`) e Banco de Dados Principal (`A10`). |
+| **Resultado esperado** | Tentativas de atendentes de suporte (`Role: Support`) de chamar rotas administrativas restritas (como alteração de comissão ou estornos acima do teto de alçada) por meio de ferramentas externas (ex: curl, Postman ou scripts) serão interceptadas e recusadas pelo backend com código `HTTP 403 Forbidden`, registrando um log de auditoria estruturado em nível `Critical`. |
+
+### D02 — Implantação de API Gateway Centralizado com Web Application Firewall (WAF) e Rate Limiting Ativo
+
+| Campo | Conteúdo |
+| :--- | :--- |
+| **Problema ou risco tratado** | **R24 — Indisponibilidade da API de pedidos por ataque volumétrico (DDoS)** (Origem: *T24 — Denial of Service*) e **R27 — Abuso do envio de SMS de verificação** (Origem: *T27 — Denial of Service*). Ambas são ameaças de alta criticidade e impacto financeiro direto. |
+| **Decisão tomada** | Adotar o padrão de design de arquitetura de microsserviços centrado em um **API Gateway** unificado como ponto único de entrada para todo o tráfego externo da plataforma. Acoplado a ele, implementa-se um **Web Application Firewall (WAF)** para inspeção profunda de cabeçalhos e payloads HTTP, associado a regras de **Rate Limiting** ativo por IP e por token. O controle utiliza o algoritmo de *Token Bucket* com limites diferenciados para rotas sensíveis: endpoints normais de consulta possuem teto de 100 req/min, enquanto endpoints altamente explorados por robôs, como `/auth/send-sms` e `/orders/checkout`, possuem limite estrito de 5 req/min por IP/Dispositivo. |
+| **Motivo** | Tratar negação de serviço e abuso de bots individualmente em cada aplicação ou microsserviço de backend introduz grande complexidade de engenharia e inconsistência de políticas. De acordo com as diretrizes de proteção do **NIST SP 800-95 (Guide to Secure Web Services)**, centralizar a triagem de requisições na borda da rede (camada de Gateway) permite mitigar ataques volumétricos e abusos de força bruta de maneira escalável antes que eles atinjam as APIs de negócio (`A09`) e o banco de dados principal (`A10`), preservando a CPU, a memória e a largura de banda operacional da plataforma. |
+| **Componente afetado** | Pontos de interação externos (`P01`, `P02`, `P03`), API de Pedidos (`A09`) e Banco de Dados Principal (`A10`). |
+| **Resultado esperado** | Requisições volumétricas maliciosas ou disparos de spam de SMS serão barrados de forma automatizada na borda de rede. O API Gateway rejeitará imediatamente o tráfego excedente retornando código `HTTP 429 Too Many Requests` com latência mínima, garantindo que o banco de dados e a API de Pedidos permaneçam 100% disponíveis para os clientes legítimos mesmo durante um ataque volumétrico ativo. |
+
+### D03 — Isolamento Lógico Multi-Tenant com Middleware de Autorização Contextual baseada no padrão Interception Filter
+
+| Campo | Conteúdo |
+| :--- | :--- |
+| **Problema ou risco tratado** | **R03 — Vazamento de dados pessoais via IDOR na API de pedidos** (Origem: *T18 — Information Disclosure*) e **R32 — Acesso de funcionário de restaurante a pedidos de outra loja** (Origem: *T32 — Elevation of Privilege*). Ambos são riscos críticos que expõem PII (dados de privacidade) e violam as obrigações da LGPD. |
+| **Decisão tomada** | Implementar uma arquitetura de dados baseada em **Isolamento Lógico Multi-Tenant** que opera de forma automática por meio de um **Middleware Global de Autorização Contextual** utilizando o padrão de projeto *Interception Filter*. Em vez de depender de validações manuais de acesso dentro de cada controlador de rota, o middleware intercepta todas as requisições que contenham identificadores de recursos no caminho (como `/orders/{orderId}`). O middleware descriptografa o JWT, extrai o identificador do usuário e o ID do restaurante vinculado, e executa uma validação na base de dados para garantir que aquele proprietário (tenant) tem direito de posse sobre o objeto `{orderId}` antes de repassar o controle para o controlador de rota. |
+| **Motivo** | Confiar que os programadores lembrarão de escrever checagens de propriedade manuais a cada novo endpoint é um vetor clássico para a ocorrência de falhas críticas de Broken Object Level Authorization (BOLA/IDOR). Segundo o catálogo **OWASP API Security Top 10 (API1:2023 - BOLA)**, as falhas de autorização de nível de objeto são a vulnerabilidade mais frequente e destrutiva em ecossistemas de APIs modernas. Centralizar o filtro contextual em um middleware de roteamento genérico remove o erro humano do fluxo de desenvolvimento e garante que nenhum endpoint fique exposto por esquecimento. |
+| **Componente afetado** | API de Pedidos (`A09`), Middleware de Roteamento Global do Backend e Banco de Dados Principal (`A10`). |
+| **Resultado esperado** | Qualquer tentativa horizontal de acessar dados pessoais trocando o ID do pedido na URL ou tentativa de um funcionário de restaurante de espionar dados de estabelecimentos concorrentes será interceptada e sumariamente bloqueada com status `HTTP 403 Forbidden` ou `HTTP 404 Not Found` (propositalmente para evitar que o atacante confirme a existência do recurso), sem executar nenhuma linha de código da lógica interna do controlador. |
+
+<!--
 ### D01 — Verificar autorização no servidor em todas as operações administrativas
 
 | Campo | Conteúdo |
@@ -113,7 +163,7 @@ O enunciado (item 18.3) exige que o diagrama mostre:
 | **Componente afetado** | API administrativa (P04) e o painel de backoffice (A12) |
 | **Resultado esperado** | Requisições administrativas feitas por perfis sem permissão são recusadas com 403 e o evento é registrado em log de auditoria, mesmo quando a chamada não passa pela interface |
 
-### D02 — <!-- TODO(Fernando): título -->
+### D02 — <- TODO(Fernando): título ->
 
 | Campo | Conteúdo |
 |---|---|
@@ -123,7 +173,7 @@ O enunciado (item 18.3) exige que o diagrama mostre:
 | **Componente afetado** | |
 | **Resultado esperado** | |
 
-### D03 — <!-- TODO(Fernando): título -->
+### D03 — <- TODO(Fernando): título ->
 
 | Campo | Conteúdo |
 |---|---|
@@ -132,6 +182,7 @@ O enunciado (item 18.3) exige que o diagrama mostre:
 | **Motivo** | |
 | **Componente afetado** | |
 | **Resultado esperado** | |
+-->
 
 <!-- TODO(Fernando): sugestões de decisões, caso ajudem —
      - Recalcular sempre o valor do pedido no servidor, ignorando o total enviado pelo app

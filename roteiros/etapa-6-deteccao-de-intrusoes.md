@@ -3,7 +3,7 @@
 **Sistema:** SaborExpress — plataforma de delivery de comida
 **Grupo:** 16 — Engenharia de Software Seguro
 **Continuidade de:** [Etapa 5 — Verificação de Vulnerabilidades](../docs/etapa-5-verificacao-vulnerabilidades.md)
-**Última atualização:** <!-- atualize a data ao editar --> 08/08/2026
+**Última atualização:** <!-- atualize a data ao editar --> 12/08/2026
 
 <!-- RESPONSÁVEL: Felipe -->
 
@@ -112,10 +112,13 @@ registrado.
 
 ## 4. Regras de detecção
 
-<!-- TODO(Felipe): TRÊS regras. O enunciado diz que três bastam.
-     Cada regra precisa dos quatro campos. A primeira está preenchida como modelo.
-     Importante: cada regra deve apontar para um risco ou caso de abuso REAL das etapas
-     anteriores — é isso que o professor avalia como "relação com os riscos do projeto". -->
+O grupo definiu três regras. A escolha seguiu a priorização de riscos da Etapa 2 e um segundo
+critério: cobrir fontes de dados diferentes, para que a detecção não dependa de um único ponto de
+instrumentação. A regra 1 lê os logs de autenticação, a regra 2 os logs de autorização da API e a
+regra 3 os registros operacionais de entrega.
+
+Os valores numéricos das condições (quantidades, distâncias e janelas de tempo) são estimativas
+iniciais. A seção 6 trata do que isso implica.
 
 ### Regra 1 — Tentativas de login em massa
 
@@ -131,55 +134,125 @@ registrado.
 > quase não gera falhas repetidas na mesma conta. Só a primeira condição deixaria passar
 > justamente o ataque mais provável.
 
-### Regra 2 — <!-- TODO(Felipe): título -->
+### Regra 2 — Extração em massa de dados pela API
 
 | Campo | Conteúdo |
 |---|---|
-| **Risco observado** | |
-| **Fonte de dados** | |
-| **Condição de alerta** | |
-| **Resposta inicial** | |
+| **Risco observado** | R03, primeiro colocado na priorização da Etapa 2. Vazamento de dados pessoais de clientes pela API de pedidos (origem: T18, Information Disclosure) |
+| **Fonte de dados** | Logs de autorização da API de pedidos, com a conta autenticada, o identificador solicitado e o resultado da verificação de propriedade |
+| **Condição de alerta** | Qualquer uma das três: uma conta consulta mais de 30 identificadores de pedido distintos em 10 minutos; uma conta recebe mais de 20 negativas de autorização em 5 minutos; a proporção entre pedidos consultados e pedidos que a conta realmente possui passa de 3 para 1 em uma janela de 24 horas |
+| **Resposta inicial** | Encerrar a sessão e invalidar o token da conta, exigir reautenticação com segundo fator, aplicar limite de requisições agressivo àquela conta e ao IP, e acionar a equipe de segurança para medir quantos registros foram efetivamente lidos |
 
-### Regra 3 — <!-- TODO(Felipe): título -->
+> **Por que três condições:** a primeira pega quem enumera identificadores sequenciais e acerta
+> alvos válidos. A segunda pega quem erra, gerando negativas em série. A terceira existe para o
+> caso de o atacante ir devagar o bastante para ficar abaixo das duas primeiras, situação em que a
+> desproporção entre o que ele consulta e o que ele possui continua visível. Esta é a regra mais
+> importante das três, porque o dano do R03 é irreversível: dado exfiltrado não volta atrás, e a
+> LGPD ainda impõe o dever de notificar.
+
+### Regra 3 — Entrega confirmada longe do endereço de destino
 
 | Campo | Conteúdo |
 |---|---|
-| **Risco observado** | |
-| **Fonte de dados** | |
-| **Condição de alerta** | |
-| **Resposta inicial** | |
+| **Risco observado** | R14 e R15, oitavo e nono na priorização. O entregador marca como entregue sem entregar, ou o cliente nega ter recebido (origem: T13 e T14, Repudiation) |
+| **Fonte de dados** | Registro de confirmação de entrega, com data, hora e coordenadas do entregador no momento, comparado ao endereço do pedido |
+| **Condição de alerta** | Confirmação registrada a mais de 300 metros do endereço de destino, ou sem leitura de localização disponível, ou com intervalo menor que 2 minutos entre a coleta no restaurante e a confirmação. O alerta sobe de prioridade quando o mesmo entregador acumula três ocorrências em 7 dias |
+| **Resposta inicial** | Reter o repasse daquela corrida até a apuração, notificar o cliente pedindo confirmação, e abrir disputa com os dados registrados. Na reincidência, suspender o entregador preventivamente e revisar as entregas anteriores dele |
 
-<!-- TODO(Felipe): sugestões para as regras 2 e 3, escolher as que casarem com os riscos que
-     ficaram no topo da priorização —
-     - Raspagem de dados: uma mesma conta consulta mais de N pedidos distintos em X minutos, ou
-       recebe muitos 404 de autorização em sequência (indica enumeração de IDs → R03).
-     - Entregador que marca entrega sem entregar: confirmação de entrega registrada a mais de
-       300 metros do endereço de destino (→ T13, repúdio).
-     - Abuso de cupom: mais de N contas novas usando cupom de primeira compra no mesmo
-       dispositivo, cartão ou endereço em 24h (→ T08).
-     - Escalonamento de privilégio: conta de suporte chamando endpoint administrativo fora da
-       sua alçada (→ T29).
-     - Pico anômalo de requisições em horário de pico (→ T24, DoS). -->
+> **Por que esta regra cobre dois riscos:** o R14 e o R15 são o mesmo evento visto de lados
+> opostos, e a evidência que resolve um resolve o outro. Registrar onde e quando a entrega foi
+> confirmada permite tanto responsabilizar o entregador que não entregou quanto recusar o
+> reembolso de quem recebeu e alegou o contrário. É também o exemplo mais claro do argumento da
+> seção 2: as duas ações são executadas por usuários legítimos, dentro das permissões deles, e
+> nenhuma prevenção conseguiria bloqueá-las sem inviabilizar a operação.
+
+**Riscos de alta prioridade não cobertos por estas três regras.** O R19, o R22 e o R29 estão acima
+do R14 na priorização e não geraram regra própria. O R19 e o R22 são tratados de forma preventiva,
+por expiração do endereço no aplicativo e por sanitização dos logs, e a verificação deles cabe
+melhor a uma auditoria periódica do que a um alerta em tempo real. O R29 é parcialmente coberto
+pela segunda condição da regra 2, já que a chamada de um endpoint administrativo fora da alçada
+também produz negativa de autorização registrada. Em uma próxima rodada, valeria uma regra
+dedicada ao backoffice.
 
 ---
 
 ## 5. O que acontece depois de um alerta
 
-<!-- TODO(Felipe): descrever o fluxo em 5 a 8 passos. Quem recebe o alerta, o que faz primeiro,
-     como decide se é incidente real ou falso positivo, quando escala, quem comunica os usuários
-     afetados, quando a ANPD precisa ser notificada (LGPD), e como o aprendizado volta para as
-     regras.
-     Amarre com as funções Respond e Recover do NIST que o Fernando mapeou na Etapa 2 — é o mesmo
-     raciocínio, agora em nível operacional. -->
+Um alerta que ninguém trata tem o mesmo valor prático de um alerta que nunca disparou. O fluxo
+abaixo descreve o caminho entre a detecção e o encerramento do incidente. Ele corresponde, no
+nível operacional, às funções **Respond** e **Recover** que o grupo mapeou na Etapa 2.
+
+1. **Recebimento.** O alerta chega ao canal da equipe de plantão com o mínimo necessário para
+   agir: qual regra disparou, qual conta, IP ou entregador está envolvido, a janela de tempo e o
+   trecho do registro que motivou o disparo. Alerta sem contexto obriga a investigação a começar
+   do zero e atrasa a contenção.
+
+2. **Triagem.** A pessoa de plantão classifica o alerta em incidente real, falso positivo ou
+   ruído conhecido. Essa decisão tem prazo, porque um alerta parado na fila é indistinguível de um
+   alerta ignorado. O grupo adota 15 minutos para as regras 1 e 2, que tratam de dados e contas, e
+   até 2 horas para a regra 3, cujo dano é financeiro e não se agrava na mesma velocidade.
+
+3. **Contenção.** Confirmado o incidente, aplica-se de imediato a resposta inicial prevista na
+   própria regra, como invalidar sessões, limitar requisições ou reter o repasse. A contenção vem
+   antes de entender o caso por completo, porque cada minuto a mais é mais dado lido ou mais
+   dinheiro perdido.
+
+4. **Escalonamento.** Se o incidente envolve dados pessoais, dinheiro ou mais de um usuário, ele
+   deixa de ser tratado apenas pelo plantão. São acionados a pessoa responsável pelo componente
+   afetado, a liderança técnica e, nos casos de dado pessoal, o encarregado de proteção de dados.
+
+5. **Investigação.** Determinar o alcance: quantos usuários foram afetados, quais dados foram
+   acessados, desde quando aquilo estava acontecendo e por qual falha entrou. Essa etapa depende
+   inteiramente da qualidade do registro descrito na seção 3.
+
+6. **Comunicação.** Os usuários afetados são avisados do que aconteceu e do que precisam fazer,
+   como trocar a senha ou conferir a fatura. Quando há exposição de dados pessoais com risco
+   relevante às pessoas, a LGPD obriga a comunicação à ANPD e aos titulares, e a decisão sobre
+   isso é do jurídico com o encarregado, não do plantão.
+
+7. **Recuperação.** Restaurar o estado íntegro: revogar credenciais e tokens comprometidos,
+   estornar transações fraudulentas, reverter alterações indevidas e reabilitar o que foi
+   suspenso preventivamente e se mostrou legítimo.
+
+8. **Aprendizado.** Todo incidente encerrado gera duas saídas. A primeira é o ajuste da própria
+   detecção, calibrando limiares, criando regra nova ou removendo a que só gerou ruído. A segunda
+   é devolver o caso à modelagem de ameaças: o que aconteceu em produção vira ameaça conhecida na
+   próxima rodada de STRIDE. É o fechamento do ciclo descrito no pipeline da
+   [Etapa 7](etapa-7-devsecops-e-video-final.md).
 
 ---
 
 ## 6. Limitações
 
-<!-- TODO(Felipe): registrar que as regras não foram implementadas nem testadas, que os limiares
-     (20 falhas, 5 minutos, 300 metros) são estimativas iniciais que precisariam ser calibradas
-     com dados reais de uso, e que regra mal calibrada gera ruído — alerta demais faz a equipe
-     parar de olhar, o que é pior do que não ter alerta. -->
+O grupo registra as seguintes limitações desta etapa.
+
+**Nada foi implementado nem testado.** As três regras são propostas em papel. A eficácia real
+delas só poderia ser afirmada depois de implantadas, com medição de quantos incidentes reais
+foram pegos e quantos passaram.
+
+**Os limiares são chutes informados.** Os números escolhidos, como 20 falhas de login, 30
+identificadores em 10 minutos e 300 metros de distância, não vieram de dados históricos, porque o
+sistema não existe e o grupo não tem base de incidentes para analisar. Eles servem para tornar as
+regras concretas e verificáveis. Em operação real, precisariam ser calibrados a partir do
+comportamento observado dos usuários legítimos.
+
+**Regra mal calibrada é pior que regra ausente.** Um limiar apertado demais enche a fila de falsos
+positivos, e uma equipe que recebe alerta demais aprende a ignorar todos, inclusive o verdadeiro.
+Um limiar frouxo demais deixa passar o ataque. Esse ajuste é contínuo e não tem resposta correta
+definida de antemão.
+
+**A detecção depende do registro, que também pode falhar.** Se o log não for gravado, se o serviço
+de registro cair ou se alguém com acesso conseguir apagar linhas, a regra simplesmente não
+dispara. O registro é o ativo A08 e está sujeito às mesmas ameaças que o resto do sistema, o que
+inclui a alteração por um usuário interno descrita em T15.
+
+**A cobertura é parcial.** Três regras alcançam quatro dos trinta e um riscos. A escolha foi por
+prioridade e por variedade de fonte de dados, mas riscos altos ficaram sem detecção dedicada,
+conforme registrado ao final da seção 4.
+
+**Ataque lento escapa.** Todas as três regras dependem de acumular eventos dentro de uma janela de
+tempo. Um atacante paciente, que consulte poucos registros por dia durante semanas, permanece
+abaixo de qualquer limiar e não é detectado por nenhuma delas.
 
 ---
 
