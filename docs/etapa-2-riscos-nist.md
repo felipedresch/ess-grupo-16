@@ -691,6 +691,14 @@ A tabela abaixo estabelece a ordem prioritária de tratamento de riscos, cruzand
 
 ### 13.2 Mapeamento dos riscos para as funções
 
+Conforme as diretrizes científicas do NIST CSF 2.0, as funções não devem ser marcadas automaticamente [33]. Cada atribuição nesta matriz reflete uma necessidade técnica e operacional explícita na modelagem de segurança da plataforma SaborExpress, onde:
+*   **Govern (GO)** incide quando o tratamento do risco exige a definição formal de políticas de conformidade, governança de identidade ou normas contratuais de parceiros.
+*   **Identify (ID)** aplica-se quando o risco exige o mapeamento dinâmico de novos ativos, verificação cadastral contra bases governamentais externas ou classificação ativa de dados.
+*   **Protect (PR)** é a base tecnológica de controle ativo (middlewares, criptografia, autenticação multifator, filtros de requisição) para impedir ou mitigar a ocorrência do risco na camada de aplicação.
+*   **Detect (DE)** envolve o monitoramento e a geração de alarmes em tempo real para comportamentos ou requisições suspeitas baseadas em assinaturas ou anomalias operacionais.
+*   **Respond (RS)** refere-se à capacidade de conter incidentes ativos na infraestrutura ou no negócio, aplicando regras de contenção automática (ex: rate-limit dinâmico ou bloqueio temporário).
+*   **Recover (RC)** destina-se a processos de recuperação de estado e continuidade (ex: comunicação legal à ANPD, restauração de estados de dados íntegros, reversão de estornos de cartões).
+
 <!-- TODO(Murillo): analisar cada relação. NÃO marcar todas as funções automaticamente — o
      enunciado adverte contra isso. Marque apenas quando houver um resultado de segurança
      concreto a ser alcançado naquela função, e explique as escolhas menos óbvias na coluna final. -->
