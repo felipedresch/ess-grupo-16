@@ -130,14 +130,14 @@ Arquivo: [`docs/etapa-2-riscos-nist.md`](etapa-2-riscos-nist.md)
 | E2.6 | Justificativas dos riscos de S/T/R (5 pontos cada) | 10 | Gabriel | 10/08 | 🟢 |
 | E2.7 | Justificativas dos riscos de I/D/E (5 pontos cada) | 10 | Luis Fillipe | 10/08 | 🟢 |
 | E2.8 | Priorização com justificativa da ordem | 11 | Fernando | 10/08 | 🟢 depende de E2.5 |
-| E2.9 | Estratégia de tratamento por risco | 12 | Deivid | 11/08 | 🔵 PR #3 aberto, aguardando correção de R18 para R03 |
-| E2.10 | Tabela de riscos aceitos | 12.1 | Deivid | 11/08 | 🔵 PR #3 aberto |
+| E2.9 | Estratégia de tratamento por risco | 12 | Deivid | 11/08 |🟢  PR #3 aberto, aguardando correção de R18 para R03 |
+| E2.10 | Tabela de riscos aceitos | 12.1 | Deivid | 11/08 | 🟢  PR #3 aberto |
 | E2.11 | As 6 funções do NIST CSF aplicadas ao SaborExpress | 13.1 | Fernando | 10/08 | 🟢 |
 | E2.12 | Mapear cada risco para as funções do NIST | 13.2 | Fernando | 10/08 | 🟢 depende de E2.5 |
 | E2.13 | Controles concretos para os riscos de S/T/R | 14 | Gabriel | 11/08 | 🟢 |
 | E2.14 | Controles concretos para os riscos de I/D/E | 14 | Luis Fillipe | 11/08 | 🟢 seção 14 cobre R01 a R32 |
-| E2.15 | Consolidar o plano: responsáveis e evidências | 14 | Deivid | **12/08** | 🔴 desbloqueada, E2.13 e E2.14 concluídas |
-| E2.16 | Ordem inicial de implementação | 15 | Deivid | **12/08** | 🔴 desbloqueada |
+| E2.15 | Consolidar o plano: responsáveis e evidências | 14 | Deivid | **12/08** | 🟢 desbloqueada, E2.13 e E2.14 concluídas |
+| E2.16 | Ordem inicial de implementação | 15 | Deivid | **12/08** | 🟢 desbloqueada |
 | E2.17 | Estimativa de risco residual | 16 | Felipe | 13/08 | ⚫ depende de E2.15 |
 | E2.18 | Considerações finais da Etapa 2 | 17 | Felipe | 13/08 | ⚫ depende de E2.16 |
 
