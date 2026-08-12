@@ -142,6 +142,16 @@ O enunciado (item 18.3) exige que o diagrama mostre:
 | **Componente afetado** | Pontos de interação externos (`P01`, `P02`, `P03`), API de Pedidos (`A09`) e Banco de Dados Principal (`A10`). |
 | **Resultado esperado** | Requisições volumétricas maliciosas ou disparos de spam de SMS serão barrados de forma automatizada na borda de rede. O API Gateway rejeitará imediatamente o tráfego excedente retornando código `HTTP 429 Too Many Requests` com latência mínima, garantindo que o banco de dados e a API de Pedidos permaneçam 100% disponíveis para os clientes legítimos mesmo durante um ataque volumétrico ativo. |
 
+### D03 — Isolamento Lógico Multi-Tenant com Middleware de Autorização Contextual baseada no padrão Interception Filter
+
+| Campo | Conteúdo |
+| :--- | :--- |
+| **Problema ou risco tratado** | **R03 — Vazamento de dados pessoais via IDOR na API de pedidos** (Origem: *T18 — Information Disclosure*) e **R32 — Acesso de funcionário de restaurante a pedidos de outra loja** (Origem: *T32 — Elevation of Privilege*). Ambos são riscos críticos que expõem PII (dados de privacidade) e violam as obrigações da LGPD. |
+| **Decisão tomada** | Implementar uma arquitetura de dados baseada em **Isolamento Lógico Multi-Tenant** que opera de forma automática por meio de um **Middleware Global de Autorização Contextual** utilizando o padrão de projeto *Interception Filter*. Em vez de depender de validações manuais de acesso dentro de cada controlador de rota, o middleware intercepta todas as requisições que contenham identificadores de recursos no caminho (como `/orders/{orderId}`). O middleware descriptografa o JWT, extrai o identificador do usuário e o ID do restaurante vinculado, e executa uma validação na base de dados para garantir que aquele proprietário (tenant) tem direito de posse sobre o objeto `{orderId}` antes de repassar o controle para o controlador de rota. |
+| **Motivo** | Confiar que os programadores lembrarão de escrever checagens de propriedade manuais a cada novo endpoint é um vetor clássico para a ocorrência de falhas críticas de Broken Object Level Authorization (BOLA/IDOR). Segundo o catálogo **OWASP API Security Top 10 (API1:2023 - BOLA)**, as falhas de autorização de nível de objeto são a vulnerabilidade mais frequente e destrutiva em ecossistemas de APIs modernas. Centralizar o filtro contextual em um middleware de roteamento genérico remove o erro humano do fluxo de desenvolvimento e garante que nenhum endpoint fique exposto por esquecimento. |
+| **Componente afetado** | API de Pedidos (`A09`), Middleware de Roteamento Global do Backend e Banco de Dados Principal (`A10`). |
+| **Resultado esperado** | Qualquer tentativa horizontal de acessar dados pessoais trocando o ID do pedido na URL ou tentativa de um funcionário de restaurante de espionar dados de estabelecimentos concorrentes será interceptada e sumariamente bloqueada com status `HTTP 403 Forbidden` ou `HTTP 404 Not Found` (propositalmente para evitar que o atacante confirme a existência do recurso), sem executar nenhuma linha de código da lógica interna do controlador. |
+
 <!--
 ### D01 — Verificar autorização no servidor em todas as operações administrativas
 
