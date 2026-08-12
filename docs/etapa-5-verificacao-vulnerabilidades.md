@@ -102,53 +102,53 @@ A primeira captura registra a configuração utilizada antes da execução do Au
 incluindo a política de scan **Pentest**, o **Modern Spider**, o navegador **Chrome** e a opção
 **If Modern**.
 
-![Print 01 — Configuração do ataque](evidencias/etapa-5/capturas-de-tela/01-zap-automated-scan-configuracao.png)
+![Print 01 — Configuração do ataque](../evidencias/etapa-5/capturas-de-tela/01-zap-automated-scan-configuracao.png)
 
 **Arquivo:**
 
-`evidencias/etapa-5/capturas-de-tela/01-zap-configuracao-ataque.png`
+`evidencias/etapa-5/capturas-de-tela/01-zap-automated-scan-configuracao.png`
 
 ### Print 02 — Cross-Domain Misconfiguration
 
 A segunda captura registra o alerta **Cross-Domain Misconfiguration** apresentado pelo ZAP.
 
-![Print 02 — Cross-Domain Misconfiguration](../evidencias/etapa-5/capturas-de-tela/02-zap-alerta-cross-domain-misconfiguration.png)
+![Print 02 — Cross-Domain Misconfiguration](../evidencias/etapa-5/capturas-de-tela/03-zap-alerta-cross-domain-misconfiguration.png)
 
 **Arquivo:**
 
-`evidencias/etapa-5/capturas-de-tela/02-zap-alerta-cross-domain-misconfiguration.png`
+`evidencias/etapa-5/capturas-de-tela/03-zap-alerta-cross-domain-misconfiguration.png`
 
 ### Print 03 — Content Security Policy (CSP) Header Not Set
 
 A terceira captura registra o alerta **Content Security Policy (CSP) Header Not Set** apresentado
 pelo ZAP.
 
-![Print 03 — Content Security Policy (CSP) Header Not Set](../evidencias/etapa-5/capturas-de-tela/03-zap-alerta-csp-header-not-set.png)
+![Print 03 — Content Security Policy (CSP) Header Not Set](../evidencias/etapa-5/capturas-de-tela/04-zap-alerta-csp-header-not-set.png)
 
 **Arquivo:**
 
-`evidencias/etapa-5/capturas-de-tela/03-zap-alerta-csp-header-not-set.png`
+`evidencias/etapa-5/capturas-de-tela/04-zap-alerta-csp-header-not-set.png`
 
 ### Print 04 — HTTP Only Site
 
 A quarta captura registra o alerta **HTTP Only Site** apresentado pelo ZAP.
 
-![Print 04 — HTTP Only Site](../evidencias/etapa-5/capturas-de-tela/04-zap-alerta-http-only-site.png)
+![Print 04 — HTTP Only Site](../evidencias/etapa-5/capturas-de-tela/05-zap-alerta-http-only-site.png)
 
 **Arquivo:**
 
-`evidencias/etapa-5/capturas-de-tela/04-zap-alerta-http-only-site.png`
+`evidencias/etapa-5/capturas-de-tela/05-zap-alerta-http-only-site.png`
 
 ### Print 05 — Resumo geral dos alertas
 
 A quinta captura apresenta a tela geral de resultados do ZAP, contendo os **seis
 alertas/resultados** encontrados durante a execução.
 
-![Print 05 — Resumo geral dos alertas](../evidencias/etapa-5/capturas-de-tela/05-zap-resumo-geral-alertas.png)
+![Print 05 — Resumo geral dos alertas](../evidencias/etapa-5/capturas-de-tela/02-zap-alertas-geral.png)
 
 **Arquivo:**
 
-`evidencias/etapa-5/capturas-de-tela/05-zap-resumo-geral-alertas.png`
+`evidencias/etapa-5/capturas-de-tela/02-zap-alertas-geral.png`
 
 ### Relatório da execução
 
@@ -163,7 +163,7 @@ verificação.
 O relatório bruto da ferramenta complementa as capturas de tela, permitindo consultar os
 resultados da execução sem depender exclusivamente das imagens.
 
-![Resumo geral dos resultados da verificação](../evidencias/etapa-5/capturas-de-tela/05-zap-resumo-geral-alertas.png)
+![Resumo geral dos resultados da verificação](../evidencias/etapa-5/capturas-de-tela/02-zap-alertas-geral.png)
 
 ## 4. Análise dos achados
 
@@ -177,9 +177,9 @@ outros dois possuem caráter **Informational**.
 
 | ID | Alerta ou achado | Risco | Confiança | Ocorrências | Relação com OWASP/CWE | Evidência | Correção proposta |
 |---|---|---|---|---:|---|---|---|
-| A01 | **Content Security Policy (CSP) Header Not Set** | Medium | High | 5 | **CWE-693**; **OWASP 2021 A05** | `evidencias/etapa-5/capturas-de-tela/03-zap-alerta-csp-header-not-set.png` e relatório do ZAP | Configurar o cabeçalho `Content-Security-Policy` com uma política restritiva e compatível com os recursos legítimos da aplicação. |
-| A02 | **Cross-Domain Misconfiguration** | Medium | Medium | 5 | **CWE-264**; **OWASP 2021 A01** | `evidencias/etapa-5/capturas-de-tela/02-zap-alerta-cross-domain-misconfiguration.png` e relatório do ZAP | Restringir as origens autorizadas e evitar configurações excessivamente permissivas de compartilhamento entre origens. |
-| A03 | **HTTP Only Site** | Medium | Medium | 1 | **CWE-311**; **OWASP 2021 A05**; **OWASP 2025 A04** | `evidencias/etapa-5/capturas-de-tela/04-zap-alerta-http-only-site.png` e relatório do ZAP | Disponibilizar a aplicação por HTTPS e redirecionar as requisições HTTP para HTTPS. |
+| A01 | **Content Security Policy (CSP) Header Not Set** | Medium | High | 5 | **CWE-693**; **OWASP 2021 A05** | `evidencias/etapa-5/capturas-de-tela/04-zap-alerta-csp-header-not-set.png` e relatório do ZAP | Configurar o cabeçalho `Content-Security-Policy` com uma política restritiva e compatível com os recursos legítimos da aplicação. |
+| A02 | **Cross-Domain Misconfiguration** | Medium | Medium | 5 | **CWE-264**; **OWASP 2021 A01** | `evidencias/etapa-5/capturas-de-tela/03-zap-alerta-cross-domain-misconfiguration.png` e relatório do ZAP | Restringir as origens autorizadas e evitar configurações excessivamente permissivas de compartilhamento entre origens. |
+| A03 | **HTTP Only Site** | Medium | Medium | 1 | **CWE-311**; **OWASP 2021 A05**; **OWASP 2025 A04** | `evidencias/etapa-5/capturas-de-tela/05-zap-alerta-http-only-site.png` e relatório do ZAP | Disponibilizar a aplicação por HTTPS e redirecionar as requisições HTTP para HTTPS. |
 
 ### 4.1 Comentário sobre cada achado
 
@@ -201,7 +201,7 @@ adequada aos recursos legítimos da aplicação, evitando permissões desnecessa
 
 **Evidência:**
 
-![A01 — Content Security Policy (CSP) Header Not Set](../evidencias/etapa-5/capturas-de-tela/03-zap-alerta-csp-header-not-set.png)
+![A01 — Content Security Policy (CSP) Header Not Set](../evidencias/etapa-5/capturas-de-tela/04-zap-alerta-csp-header-not-set.png)
 
 ---
 
@@ -224,7 +224,7 @@ necessidade da aplicação, evitando o uso de permissões mais amplas do que o n
 
 **Evidência:**
 
-![A02 — Cross-Domain Misconfiguration](../evidencias/etapa-5/capturas-de-tela/02-zap-alerta-cross-domain-misconfiguration.png)
+![A02 — Cross-Domain Misconfiguration](../evidencias/etapa-5/capturas-de-tela/03-zap-alerta-cross-domain-misconfiguration.png)
 
 ---
 
@@ -251,7 +251,7 @@ observada no ambiente de teste e não uma vulnerabilidade confirmada do SaborExp
 
 **Evidência:**
 
-![A03 — HTTP Only Site](../evidencias/etapa-5/capturas-de-tela/04-zap-alerta-http-only-site.png)
+![A03 — HTTP Only Site](../evidencias/etapa-5/capturas-de-tela/05-zap-alerta-http-only-site.png)
 
 ---
 
@@ -265,11 +265,40 @@ prioridade no contexto desta atividade.
 Informational**, enquanto **Timestamp Disclosure - Unix** é classificado como **Low** e possui
 **Low confidence**.
 
-| Resultado | Risco | Confiança | Ocorrências | Tratamento |
-|---|---|---|---:|---|
-| **Timestamp Disclosure - Unix** | Low | Low | 5 | Não selecionado para análise detalhada devido ao baixo risco e à baixa confiança indicados pelo ZAP. |
-| **Modern Web Application** | Informational | Medium | 5 | Resultado informativo, mantido no relatório bruto e não tratado como vulnerabilidade. |
-| **User Agent Fuzzer** | Informational | Medium | 5 | Resultado informativo, mantido no relatório bruto e não tratado como vulnerabilidade. |
+| Resultado | Risco | Confiança | Ocorrências | Tratamento | Evidência |
+|---|---|---|---:|---|---|
+| **Timestamp Disclosure - Unix** | Low | Low | 5 | Não selecionado para análise detalhada devido ao baixo risco e à baixa confiança indicados pelo ZAP. | Print 06 |
+| **Modern Web Application** | Informational | Medium | 5 | Resultado informativo, mantido no relatório bruto e não tratado como vulnerabilidade. | Print 07 |
+| **User Agent Fuzzer** | Informational | Medium | 5 | Resultado informativo, mantido no relatório bruto e não tratado como vulnerabilidade. | Print 08 |
+
+Os três resultados também foram capturados na tela do ZAP, e não apenas registrados no relatório
+bruto. As capturas mostram a classificação de risco e o nível de confiança que a ferramenta
+atribuiu a cada um, que é a informação usada para justificar a decisão de não aprofundar a
+análise.
+
+**Print 06 — Timestamp Disclosure - Unix**
+
+![Print 06 — Timestamp Disclosure - Unix](../evidencias/etapa-5/capturas-de-tela/06-zap-alerta-timestamp-disclosure-unix-deterministic.png)
+
+**Arquivo:**
+
+`evidencias/etapa-5/capturas-de-tela/06-zap-alerta-timestamp-disclosure-unix-deterministic.png`
+
+**Print 07 — Modern Web Application**
+
+![Print 07 — Modern Web Application](../evidencias/etapa-5/capturas-de-tela/07-zap-alerta-modern-web-application-systemic.png)
+
+**Arquivo:**
+
+`evidencias/etapa-5/capturas-de-tela/07-zap-alerta-modern-web-application-systemic.png`
+
+**Print 08 — User Agent Fuzzer**
+
+![Print 08 — User Agent Fuzzer](../evidencias/etapa-5/capturas-de-tela/08-zap-alerta-user-agent-fuzzer-systemic.png)
+
+**Arquivo:**
+
+`evidencias/etapa-5/capturas-de-tela/08-zap-alerta-user-agent-fuzzer-systemic.png`
 
 Os resultados acima continuam disponíveis no relatório HTML exportado pelo ZAP. A decisão de
 não analisá-los em profundidade não significa que todos sejam falsos positivos. Em especial,
