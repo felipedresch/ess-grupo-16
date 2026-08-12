@@ -122,6 +122,17 @@ O enunciado (item 18.3) exige que o diagrama mostre:
      A D01 é o modelo. Uma decisão de arquitetura responde "o que escolhemos fazer e por quê",
      não "o que é bom em geral" — deve haver uma alternativa que foi descartada. -->
 
+### D01 — Controle de Acesso Híbrido (RBAC/ABAC) com Validação Server-Side Estrita para Operações Administrativas
+
+| Campo | Conteúdo |
+| :--- | :--- |
+| **Problema ou risco tratado** | **R29 — Execução de operações administrativas por atendente de suporte** (Origem: *T29 — Elevation of Privilege*). Trata-se de um risco crítico (Pontuação 12) que afeta a integridade financeira e de dados cadastrais de todo o backoffice. |
+| **Decisão tomada** | Implementação de um modelo de controle de acesso híbrido combinando Controle de Acesso Baseado em Papéis (**RBAC**) para segregação geral e Controle de Acesso Baseado em Atributos (**ABAC**) para políticas dinâmicas (como limites máximos de alçada para estornos baseados no horário e histórico do atendente). Esta verificação é executada obrigatoriamente no lado do servidor (backend) a cada chamada de API administrativa (`P04`). O backend extrai a identidade e os atributos do usuário de um token criptográfico assinado (JWT) no cabeçalho `Authorization` e valida se o perfil possui privilégios para executar a operação antes de acessar o banco de dados. Nenhuma checagem é confiada ao frontend do painel administrativo (`A12`). |
+| **Motivo** | Ocultar botões ou rotas na interface gráfica do usuário (frontend) é uma medida de usabilidade e não uma barreira de segurança. O código do frontend do painel administrativo (`A12`) roda em ambiente hostil (dispositivo do usuário) e pode ser inspecionado ou manipulado para descobrir e disparar requisições diretamente contra endpoints de API administrativos expostos na internet. Segundo as diretrizes do **OWASP Top 10 (A01:2021 — Broken Access Control)**, toda validação de privilégios de acesso a recursos deve ser centralizada e aplicada estritamente no backend. |
+| **Componente afetado** | API Administrativa (`P04`), Painel Administrativo de Backoffice (`A12`) e Banco de Dados Principal (`A10`). |
+| **Resultado esperado** | Tentativas de atendentes de suporte (`Role: Support`) de chamar rotas administrativas restritas (como alteração de comissão ou estornos acima do teto de alçada) por meio de ferramentas externas (ex: curl, Postman ou scripts) serão interceptadas e recusadas pelo backend com código `HTTP 403 Forbidden`, registrando um log de auditoria estruturado em nível `Critical`. |
+
+<!--
 ### D01 — Verificar autorização no servidor em todas as operações administrativas
 
 | Campo | Conteúdo |
@@ -131,7 +142,7 @@ O enunciado (item 18.3) exige que o diagrama mostre:
 | **Motivo** | Ocultar opções na interface não impede o acesso direto à API. O frontend é código que roda na máquina do usuário e pode ser modificado; a única verificação confiável é a do servidor |
 | **Componente afetado** | API administrativa (P04) e o painel de backoffice (A12) |
 | **Resultado esperado** | Requisições administrativas feitas por perfis sem permissão são recusadas com 403 e o evento é registrado em log de auditoria, mesmo quando a chamada não passa pela interface |
-
+-->
 ### D02 — <!-- TODO(Fernando): título -->
 
 | Campo | Conteúdo |
