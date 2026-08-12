@@ -111,7 +111,7 @@ Arquivo: [`docs/etapa-1-ameacas-stride.md`](etapa-1-ameacas-stride.md)
 | E1.16 | Casos de abuso CA02 a CA08 | 6 | Murillo | 09/08 | 🟢 |
 | E1.17 | Rastreabilidade caso de abuso ↔ ameaça | 6.1 | Murillo | 09/08 | 🟢 |
 | E1.18 | Diagrama de casos de abuso (opcional) | 6 | Murillo | 09/08 | 🟢 |
-| E1.19 | Considerações finais da Etapa 1 | 7 | Luis Fillipe | **12/08** | 🔴 **atrasada**, depende só da E1.15, que é do próprio Luis |
+| E1.19 | Considerações finais da Etapa 1 | 7 | Luis Fillipe | **12/08** | 🟢 **atrasada**, depende só da E1.15, que é do próprio Luis |
 | E1.20 | Revisão de coerência da Etapa 1 | — | Felipe | 13/08 | 🔴 desbloqueada |
 
 ---
