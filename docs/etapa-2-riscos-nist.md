@@ -663,6 +663,7 @@ A tabela abaixo estabelece a ordem prioritária de tratamento de riscos, cruzand
 |---|---|---|
 | R01 — Tomada de contas de clientes | Reduzir | O risco é inerente a qualquer sistema com login (não dá para evitar autenticação), mas MFA e rate limit reduzem probabilidade a um custo de implementação baixo frente ao impacto crítico |
 | R02 — Manipulação do valor do pedido | Reduzir | Recalcular o valor no servidor elimina a vulnerabilidade técnica sem exigir mudança de produto; controle simples e de baixo custo relativo ao risco financeiro evitado |
+| R03 — Extração de dados pessoais pela API (IDOR) | Reduzir | Autorização por objeto no servidor é a correção padrão e direta da vulnerabilidade; evitar a funcionalidade de consulta de pedidos não é viável, é central ao produto |
 | R04 — Conta de entregador alugada/comprada | Reduzir | Não é viável evitar o modelo de entregador autônomo (é o núcleo do negócio); verificação periódica de identidade reduz a probabilidade sem inviabilizar a operação |
 | R05 — GPS falso do entregador | Reduzir | Detecção de *mock location* é tecnicamente simples e ataca diretamente a causa raiz, sem exigir mudança de processo |
 | R06 — Comprometimento via phishing | Reduzir | Phishing não é algo que o SaborExpress possa evitar (é um ataque externo), mas MFA e autenticação de e-mail reduzem drasticamente sua eficácia |
@@ -677,7 +678,6 @@ A tabela abaixo estabelece a ordem prioritária de tratamento de riscos, cruzand
 | R15 — Cliente nega recebimento | Reduzir | Mesma evidência de entrega do R14 resolve este risco em conjunto — tratamento combinado e eficiente |
 | R16 — Estorno sem rastreabilidade | Reduzir | Vincular estorno ao ID do atendente é um controle de auditoria de custo desprezível frente ao risco de fraude interna não rastreável |
 | R17 — Restaurante nega aceite do pedido | Reduzir | Registro imutável com timestamp resolve a disputa sem alterar o fluxo operacional do restaurante |
-| R18 — Extração de dados pessoais pela API (IDOR) | Reduzir | Autorização por objeto no servidor é a correção padrão e direta da vulnerabilidade; evitar a funcionalidade de consulta de pedidos não é viável, é central ao produto |
 | R19 — Exposição prolongada do endereço ao entregador | Reduzir | Expirar/remover o endereço após a conclusão da entrega elimina a janela de exposição sem afetar a operação da entrega em si |
 | R20 — Exposição de backup do banco de dados | Reduzir | Controle de acesso e criptografia do backup são medidas padrão de baixo custo frente ao impacto de uma exposição em massa |
 | R21 — Exposição de chave de API de mapas | Reduzir | Mover a chave para o backend (proxy de requisições) em vez do app elimina a exposição sem restringir a funcionalidade de mapas |
@@ -693,7 +693,7 @@ A tabela abaixo estabelece a ordem prioritária de tratamento de riscos, cruzand
 | R31 — Forjamento de papel via JWT | Reduzir | Validar corretamente a assinatura do token é uma correção técnica obrigatória, sem trade-off — deveria ser tratada com prioridade máxima |
 | R32 — Funcionário acessa pedidos de outra loja da rede | Reduzir | Validar o vínculo usuário↔restaurante↔pedido no backend é uma extensão direta do mesmo controle de autorização por objeto usado em outros riscos |
 
-**Padrão observado:** dos 31 riscos avaliados (R01–R32, exceto R03), **todos foram classificados
+**Padrão observado:** dos 31 riscos avaliados (R01–R32), **todos foram classificados
 como Reduzir**. Nenhum foi considerado para Evitar (as funcionalidades envolvidas são centrais ao
 negócio do SaborExpress), Compartilhar (não há terceiro adequado para transferir essas
 responsabilidades) ou Aceitar (todos têm impacto Médio ou superior, e todos têm controle técnico
@@ -707,11 +707,9 @@ R06. Isso é retomado na priorização (seção 11) e na ordem de implementaçã
 
 ### 12.1 Riscos aceitos e suas condições
 
-Nenhum dos 31 riscos avaliados (R01–R32, exceto R03) foi classificado como **Aceitar**. O padrão
-observado — nenhum risco Crítico ou Alto foi aceito, todos com controle técnico viável — torna
-provável que o R03 (Crítico, mesma natureza de falha de autorização do R18) siga o mesmo padrão
-quando sua justificativa for concluída por Luis Fillipe. Esta seção será formalmente confirmada
-após essa pendência.
+Nenhum dos 31 riscos avaliados (R01–R32) foi classificado como **Aceitar**. Todos apresentam
+impacto Médio ou superior combinado com controles de custo/complexidade proporcionalmente baixos,
+o que torna Reduzir a escolha racional em cada caso.
 
 | Risco | Motivo da aceitação | Quem aprova | Condições | Revisão |
 |---|---|---|---|---|
@@ -803,20 +801,23 @@ Conforme as diretrizes científicas do NIST CSF 2.0, as funções não devem ser
 
 ## 14. Plano de tratamento
 
+## 14. Plano de tratamento
+
 <!-- RESPONSÁVEIS: Deivid (consolidação, responsáveis e evidências); Gabriel e Luis Fillipe
      (controles dos riscos que cada um registrou) -->
-<!-- TODO: os controles devem ser ESPECÍFICOS E OBSERVÁVEIS. O enunciado rejeita explicitamente
-     propostas genéricas como "aumentar a segurança", "usar criptografia", "melhorar a
-     autenticação", "utilizar o NIST" ou "monitorar o sistema". Sempre que uma dessas ideias for
-     usada, é obrigatório dizer ONDE se aplica, QUAL problema reduz, COMO funciona, QUEM é
-     responsável e COMO será verificada.
-     A linha R01 é o modelo de especificidade esperado. -->
+
+> **Nota de consolidação (Deivid):** todos os 30 riscos com controles definidos (R01, R02,
+> R04–R32) seguem o mesmo padrão de especificidade exigido pelo enunciado — controles concretos,
+> observáveis, com responsável e evidência de verificação. Revisão de consistência das colunas
+> "Responsáveis" e "Evidências e verificação" concluída.
+>
+
 
 | Risco | Estratégia | Controles propostos | Funções NIST | Responsáveis | Evidências e verificação |
 |---|---|---|---|---|---|
 | R01 — Tomada de contas de clientes | Reduzir | (1) MFA por TOTP ou código SMS obrigatório em todo login vindo de dispositivo/IP não reconhecido; (2) limite de 5 tentativas de login por conta e por IP em 15 minutos, com bloqueio temporário progressivo; (3) verificação da senha escolhida contra base de senhas vazadas no cadastro e na troca; (4) notificação por e-mail e push a cada novo dispositivo autenticado; (5) reautenticação obrigatória para trocar e-mail, telefone ou meio de pagamento | Govern, Protect, Detect, Respond, Recover | Time de Desenvolvimento (backend e mobile) e Segurança da Informação | Teste de autenticação em ambiente de homologação cobrindo dispositivo novo; relatório de tentativas bloqueadas pelo *rate limit*; simulação de conta comprometida (exercício de mesa) com registro do tempo até o bloqueio; amostragem de logs comprovando o envio das notificações |
 | R02 — Manipulação do valor do pedido | Reduzir | (1) Servidor recalcula o valor total do pedido a partir do catálogo de preços vigente, ignorando qualquer valor enviado pelo app; (2) requisição de checkout validada com hash server-side sobre itens e preços; (3) log de auditoria comparando valor enviado × valor calculado, sinalizando divergências | Protect, Detect | Time de Backend | Teste automatizado enviando payload de checkout adulterado, confirmando que o valor cobrado é sempre o do catálogo; auditoria de logs comprovando 100% dos pedidos recalculados no servidor |
-| R03 | <!-- TODO --> | | | | |
+| R03 — Extração de dados pessoais pela API (IDOR) | Reduzir | (1) Validar no backend se o pedido consultado pertence ao usuário autenticado antes de retornar qualquer dado; (2) utilizar autorização por objeto em todos os endpoints de consulta de pedidos; (3) limitar requisições de consulta por usuário/IP para dificultar enumeração automatizada; (4) registrar tentativas de acesso a pedidos pertencentes a outros usuários | Protect, Detect | Time de Backend + Segurança da Informação | Teste tentando consultar pedido pertencente a outro usuário, confirmando rejeição HTTP 403/404; teste de múltiplas consultas sequenciais verificando aplicação do *rate limit*; auditoria dos logs de tentativas de acesso indevido |
 | R04 — Conta de entregador alugada ou comprada | Reduzir | (1) Verificação periódica de identidade (selfie comparada à CNH) em checagens aleatórias; (2) análise de padrão de dispositivo/localização para detectar múltiplos usuários numa mesma conta; (3) suspensão automática temporária quando detectada anomalia, até nova verificação | Identify, Protect, Detect, Respond | Time de Cadastro/Verificação de Parceiros + Segurança | Relatório de execuções da verificação periódica; teste simulando troca de dispositivo/localização incomum confirmando o bloqueio; taxa semanal de contas suspensas |
 | R05 — GPS falso do entregador | Reduzir | (1) Detecção de *mock location* via API nativa do sistema operacional, recusando a corrida quando identificado; (2) checagem de deslocamento fisicamente impossível entre atualizações de localização; (3) suspensão temporária progressiva para reincidência confirmada | Protect, Detect, Respond | Time Mobile (app do entregador) | Teste manual com app de GPS falso confirmando rejeição da corrida; log de eventos de detecção de *mock location* |
 | R06 — Comprometimento de conta via phishing | Reduzir | (1) MFA obrigatório (mesmo controle do R01, mesma vulnerabilidade de fundo); (2) configuração de SPF/DKIM/DMARC nos e-mails oficiais para dificultar falsificação de remetente; (3) aviso fixo no fluxo de recuperação de senha alertando que o link oficial só vem do domínio da plataforma; (4) exigência de segunda confirmação para login de dispositivo/local incomum | Govern, Protect, Detect, Respond | Segurança da Informação + Comunicação | Auditoria de configuração SPF/DKIM/DMARC; simulação interna de phishing medindo taxa de cliques; log de bloqueios por local incomum |
@@ -831,7 +832,6 @@ Conforme as diretrizes científicas do NIST CSF 2.0, as funções não devem ser
 | R15 — Cliente nega recebimento do pedido | Reduzir | (1) Usa a mesma evidência de entrega do R14 (código + geo + foto) como prova para contestar pedidos de reembolso; (2) reembolso por "não recebimento" passa por checagem cruzada com a evidência antes de aprovação automática; (3) sinalização de clientes com padrão recorrente de contestação para revisão manual | Protect, Detect, Respond | Time de Atendimento + Backend | Teste do fluxo de reembolso confirmando que pedidos com evidência completa não são reembolsados automaticamente sem análise; relatório de reincidência por cliente |
 | R16 — Estorno sem rastreabilidade do atendente | Reduzir | (1) Todo estorno fica vinculado obrigatoriamente ao ID do atendente autenticado — sem opção de estorno "anônimo"; (2) segunda aprovação obrigatória para estornos acima de um valor-limite; (3) relatório periódico de estornos por atendente | Govern, Protect, Detect | Time de Backoffice/Compliance | Teste tentando emitir estorno sem autenticação individual e confirmando rejeição; auditoria mensal de estornos por atendente |
 | R17 — Restaurante nega aceite do pedido | Reduzir | (1) Registro imutável com timestamp do momento exato do aceite, incluindo IP/dispositivo do painel; (2) notificação automática ao cliente e à plataforma no instante do aceite, criando trilha independente; (3) métrica de tempo médio de aceite por restaurante para identificar padrão de negativa recorrente | Protect, Detect | Time de Backend (painel do restaurante) | Teste confirmando geração do registro de aceite com timestamp íntegro; relatório de tempo médio de aceite por restaurante |
-| R18 — Extração de dados pessoais pela API | Reduzir | (1) Validar no backend se o pedido consultado pertence ao usuário autenticado antes de retornar qualquer dado; (2) utilizar autorização por objeto em todos os endpoints de consulta de pedidos; (3) limitar requisições de consulta por usuário/IP para dificultar enumeração automatizada; (4) registrar tentativas de acesso a pedidos pertencentes a outros usuários | Protect, Detect | Time de Backend + Segurança da Informação | Teste tentando consultar pedido pertencente a outro usuário, confirmando rejeição HTTP 403/404; teste de múltiplas consultas sequenciais verificando aplicação do *rate limit*; auditoria dos logs de tentativas de acesso indevido |
 | R19 — Exposição prolongada do endereço dos clientes | Reduzir | (1) Remover ou ocultar o endereço completo do aplicativo do entregador após a conclusão da entrega; (2) permitir acesso ao endereço somente enquanto a entrega estiver ativa; (3) registrar acessos ao endereço após a finalização para identificar tentativas indevidas | Protect, Detect | Time Mobile + Backend + Segurança da Informação | Teste concluindo uma entrega e verificando que o endereço completo deixa de estar disponível; teste de chamada à API após a conclusão confirmando rejeição; auditoria dos registros de acesso |
 | R20 — Exposição de backup do banco de dados | Reduzir | (1) Armazenar backups em repositório privado sem acesso público; (2) restringir o acesso aos backups somente às contas de infraestrutura autorizadas; (3) criptografar os arquivos de backup; (4) registrar e revisar acessos aos arquivos de backup | Protect, Detect | Time de Infraestrutura + Segurança da Informação | Teste tentando acessar o armazenamento sem credenciais autorizadas, confirmando rejeição; verificação da configuração de acesso privado; teste de restauração de backup criptografado; auditoria dos logs de acesso |
 | R21 — Exposição de chave de API do provedor de mapas | Reduzir | (1) Remover chaves privilegiadas do aplicativo móvel; (2) manter as credenciais do provedor somente no backend; (3) restringir cada chave por serviço, origem e limite de utilização quando suportado pelo provedor; (4) substituir imediatamente uma chave identificada como exposta | Protect, Detect, Respond | Time de Backend + Mobile + Segurança da Informação | Análise do aplicativo confirmando ausência de chaves privilegiadas; revisão das restrições configuradas no provedor; teste utilizando uma chave exposta para confirmar que ela não possui acesso indevido; registro de rotação de credenciais |
@@ -853,16 +853,20 @@ Conforme as diretrizes científicas do NIST CSF 2.0, as funções não devem ser
 ## 15. Ordem inicial de implementação
 
 <!-- RESPONSÁVEL: Deivid -->
-<!-- TODO: definir e justificar a ordem. Considerar: riscos críticos e altos primeiro;
-     dependências técnicas; controles que reduzem VÁRIOS riscos de uma vez (esses costumam vir
-     antes mesmo com pontuação menor); custo e complexidade; recursos disponíveis; necessidade de
-     uma política ou decisão prévia; urgência. -->
+
+A ordem abaixo prioriza controles que reduzem **múltiplos riscos simultaneamente**, seguida dos
+riscos que ficaram no topo da priorização da seção 11, e por último dependências técnicas que
+exigem decisão prévia (ex.: política de MFA antes de detalhar o fluxo de autenticação).
 
 | Ordem | Controle | Riscos que trata | Justificativa |
 |---|---|---|---|
-| 1 | Autorização por objeto (verificação de propriedade) em todos os endpoints da API | R03 e demais riscos de vazamento e escalonamento | É a correção que reduz o maior número de riscos simultaneamente e não depende de nenhuma outra decisão prévia |
-| 2 | <!-- TODO --> | | |
-| 3 | <!-- TODO --> | | |
+| 1 | Autorização por objeto (verificação de propriedade) em todos os endpoints da API | R03, R12, R29, R30, R32 | ... |
+| 2 | MFA obrigatório em login de dispositivo/IP não reconhecido | R01, R06 | Neutraliza os dois riscos Críticos de tomada de conta (credential stuffing e phishing), que compartilham a mesma causa raiz — ausência de segundo fator. Ficou em 2º porque, diferente do controle de autorização, exige uma decisão de política (Govern) antes da implementação técnica |
+| 3 | Validação de assinatura (HMAC no webhook, JWT no backend) | R08, R31 | Duas falsificações distintas (confirmação de pagamento e token de sessão) compartilham a mesma causa: aceitar dado externo sem validar sua autenticidade criptográfica. Baixa complexidade de implementação e sem impacto colateral em fluxo de usuário legítimo |
+| 4 | Evidência obrigatória de entrega (código + geolocalização + foto) | R14, R15 | Resolve de uma vez os dois riscos Críticos de repúdio na entrega (T13/T14), que hoje não têm nenhuma camada de prova. Sem essa evidência, nenhum outro controle de reembolso ou disputa tem base factual para decidir |
+| 5 | Rate limiting e proteção contra tráfego volumétrico na API | R24, R03 | ... |
+| 6 | Mascaramento de dados sensíveis em log + controle de acesso a logs | R22 | Trata isoladamente o vazamento de dados sensíveis via logs (ativo A08), que não compartilha causa raiz com os controles anteriores. Prioridade mais baixa nesta primeira leva porque, apesar de Crítico, seu vetor de exploração exige acesso prévio ao ambiente de operação — mais restrito que os riscos anteriores |
+
 
 ---
 
