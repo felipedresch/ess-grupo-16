@@ -2,6 +2,10 @@
 
 **Prazo final:** 14/08/2026, 23:59 — **faltam 2 dias**
 **Última revisão deste backlog:** 12/08, conferida commit a commit contra o que está na `main`.
+
+> Este arquivo é a **única fonte de verdade** sobre status, responsáveis e prazos. Nenhum outro
+> documento do repositório repete essa informação, justamente para não divergir. Se você encontrar
+> status em outro lugar, avise no grupo para ser removido.
 **Regra:** cada pessoa faz commits **na própria conta** das tarefas atribuídas a ela. A avaliação
 é individual e o professor olha o histórico. Ver [CONTRIBUTING.md](../CONTRIBUTING.md).
 
@@ -35,8 +39,8 @@ trabalho. Não é preciso commit separado só para isso.
 | 09/08 (dom) | ✅ Casos de abuso, rastreabilidade e diagrama de abuso (Murillo) |
 | 10/08 (seg) | ✅ Registro de riscos e justificativas (Gabriel, Luis, Fernando) |
 | 11/08 (ter) | ✅ Priorização e NIST (Fernando); ✅ controles (Gabriel, Luis); PR das estratégias aberto (Deivid) |
-| 12/08 (qua) | ✅ **Etapa 5 entregue** (Murillo); ✅ pipeline DevSecOps (Felipe). **Pendentes: fechar a Etapa 1, a Etapa 2 e começar a Etapa 3** |
-| 13/08 (qui) | **Etapa 3** e **Etapa 4** completas; **Etapa 6** fechada; roteiro do vídeo pronto |
+| 12/08 (qua) | ✅ **Etapa 5 entregue** (Murillo); ✅ **Etapa 6 fechada** e Parte A da Etapa 7 (Felipe). **Pendentes: fechar a Etapa 1, a Etapa 2 e começar a Etapa 3** |
+| 13/08 (qui) | **Etapa 3** e **Etapa 4** completas; Etapas 1 e 2 fechadas; roteiro do vídeo pronto |
 | 14/08 (sex) | Gravação do vídeo; revisão final; entrega |
 
 > **Caminho crítico agora: a Etapa 3.** Ela está praticamente vazia e destravou em 11/08, quando
@@ -56,7 +60,7 @@ Situação em 12/08, com o que ainda falta para cada um.
 
 | Integrante | Já entregou | **Ainda falta** |
 |---|---|---|
-| **Felipe** | Estrutura do repositório, seções 1 e 2 da Etapa 1, metade da Etapa 6, Parte A da Etapa 7 com o diagrama do pipeline | E6.3 e E6.4 (desbloqueadas), E1.20 revisão, depois E2.17, E2.18 e o fechamento |
+| **Felipe** | Estrutura do repositório, seções 1 e 2 da Etapa 1, **Etapa 6 completa**, Parte A da Etapa 7 com o diagrama do pipeline | E1.20 revisão (espera o Luis fechar a 5.7 e a seção 7), E2.17 e E2.18 (esperam o Deivid), E7.4 roteiro do vídeo, e o fechamento F1, F5 e F6 |
 | **Deivid** | Ativos, pontos de interação e os dois diagramas da Etapa 1 | **E2.15 e E2.16 (desbloqueadas)**, corrigir o R18 no PR #3, E3.3 diagrama |
 | **Gabriel** | STRIDE S/T/R, riscos, justificativas e controles correspondentes | **E3.2** mapeamento CWE e **E4.1** prática de código, ambas atrás da E3.1 |
 | **Luis Fillipe** | STRIDE I/D/E, riscos, justificativas e controles correspondentes | **E1.15 e E1.19, atrasadas**, e depois E4.2 prática de código |
@@ -191,8 +195,8 @@ Arquivo: [`roteiros/etapa-6-deteccao-de-intrusoes.md`](../roteiros/etapa-6-detec
 |---|---|---|---|---|---|
 | E6.1 | Conceito de detecção e diferença entre prevenir e detectar | 1 e 2 | Felipe | 13/08 | 🟢 |
 | E6.2 | Eventos a registrar e o que não deve ir para o log | 3 e 3.1 | Felipe | 13/08 | 🟢 |
-| E6.3 | Três regras de detecção | 4 | Felipe | 13/08 | 🔴 desbloqueada |
-| E6.4 | Fluxo de resposta ao alerta e limitações | 5 e 6 | Felipe | 13/08 | 🔴 desbloqueada |
+| E6.3 | Três regras de detecção | 4 | Felipe | 13/08 | 🟢 R03, R01, R14 e R15 |
+| E6.4 | Fluxo de resposta ao alerta e limitações | 5 e 6 | Felipe | 13/08 | 🟢 |
 
 ---
 

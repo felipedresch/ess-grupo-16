@@ -20,13 +20,16 @@ Nos documentos, referencie a imagem com caminho relativo a partir de `docs/`:
 
 ## Diagramas do trabalho
 
-| Pasta | Arquivo | Conteúdo | Responsável | Status |
-|---|---|---|---|---|
-| `etapa-1/` | `diagrama-contexto` | Perfis de usuário, apps, API, banco e serviços externos | Deivid | ✅ pronto |
-| `etapa-1/` | `diagrama-fluxo-dados` | Caminho do pedido, com as fronteiras de confiança F1–F5 | Deivid | 🟡 ajustes pendentes |
-| `etapa-1/` | `casos-de-abuso` | Casos de abuso e sua relação com os atores (opcional) | Murillo | 🔴 |
-| `etapa-3/` | `arquitetura-segura` | Arquitetura com autenticação, autorização, logs e posição dos controles | Deivid | 🔴 |
-| `etapa-7/` | `pipeline-devsecops` | Os oito momentos do pipeline, condições de continuidade e de bloqueio | Felipe | 🟢 |
+| Pasta | Arquivo | Conteúdo | Onde é citado |
+|---|---|---|---|
+| `etapa-1/` | `diagrama-contexto` | Perfis de usuário, apps, API, banco e serviços externos | Etapa 1, seção 4.1 |
+| `etapa-1/` | `diagrama-fluxo-dados` | Caminho do pedido, com as fronteiras de confiança F1 a F5 | Etapa 1, seção 4.2 |
+| `etapa-1/` | `casos-de-abuso` | Casos de abuso e sua relação com os atores | Etapa 1, seção 6.2 (feito em Mermaid, dentro do documento) |
+| `etapa-3/` | `arquitetura-segura` | Arquitetura com autenticação, autorização, logs e posição dos controles | Etapa 3, seção 3 |
+| `etapa-7/` | `pipeline-devsecops` | Os oito momentos do pipeline, condições de continuidade e de bloqueio | Etapa 7, seção A.4 |
+
+> Status e responsável de cada diagrama ficam em [docs/backlog.md](../docs/backlog.md), que é a
+> única fonte de verdade sobre andamento das tarefas.
 
 ## Como fazer
 
