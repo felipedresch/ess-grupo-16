@@ -183,7 +183,7 @@ e `evidencias/etapa-5/`
 | E5.2 | Executar a sessão de verificação e salvar capturas em `evidencias/etapa-5/` | 2 e 3 | Murillo | 10/08 |  🟢 |
 | E5.3 | Analisar três achados, com correção proposta para cada | 4 | Murillo | 12/08 |  🟢 |
 | E5.4 | Registrar alertas descartados e falsos positivos | 4.2 | Murillo | 12/08 | 🟢 |
-| E5.5 | Relacionar os achados com os riscos do SaborExpress e registrar limitações | 5 e 6 | Murillo | 12/08 | 🟡 desbloqueada, priorização concluída |
+| E5.5 | Relacionar os achados com os riscos do SaborExpress e registrar limitações | 5 e 6 | Murillo | 12/08 | 🟢 |
 
 ---
 
