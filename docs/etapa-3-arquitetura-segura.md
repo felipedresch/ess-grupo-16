@@ -21,6 +21,14 @@
 
 ## 1. Requisitos de segurança
 
+### Tabela de Requisitos de Segurança do SaborExpress
+
+| ID | Risco de Origem (Etapa 2) | Requisito de Segurança | Critério de Verificação |
+| :--- | :--- | :--- | :--- |
+| **RS01** | **R01 — Tomada de contas de clientes** <br>*(Origem: T01 — Spoofing)* | **Autenticação Multifator (MFA) Adaptativa e Reautenticação Sensível:**<br>O sistema deverá exigir obrigatoriamente um segundo fator de autenticação (MFA via código SMS ou TOTP) sempre que uma tentativa de autenticação for realizada a partir de um dispositivo ou endereço IP não reconhecido pelo histórico do usuário. Adicionalmente, o backend deverá forçar a reautenticação estrita (senha ou MFA) imediatamente antes de processar qualquer alteração cadastral sensível (e-mail, telefone) ou modificação de meios de pagamento. | **1.** O login originado de um dispositivo ou IP inédito deve ser sumariamente bloqueado e recusado pela API enquanto o segundo fator correto não for fornecido.<br>**2.** Qualquer chamada de API para alteração de e-mail, telefone ou cartão de crédito deve retornar erro `HTTP 401 (Unauthorized)` se a reautenticação do usuário não tiver ocorrido com sucesso nos últimos 5 minutos anteriores ao envio do payload. |
+| **RS02** | **R03 — Vazamento de dados via IDOR** <br>*(Origem: T18 — Info Disclosure)* | **Autorização Contextual Baseada em Objeto e Rate Limiting na API:**<br>A API de pedidos do SaborExpress deve validar, no lado do servidor (backend), se o usuário autenticado na sessão possui permissão de propriedade direta sobre o recurso solicitado (ID do pedido) antes de retornar qualquer dado cadastral, endereço residencial ou histórico de consumo. O controle deve empregar chaves de acesso indiretas e não-previsíveis (UUIDv4) e aplicar um limite de taxa (*rate limiting*) volumétrico de requisições por token e endereço IP. | **1.** Requisições autenticadas de clientes comuns tentando ler, editar ou excluir dados de pedidos pertencentes a outros IDs de usuários devem ser rejeitadas no backend com códigos de retorno `HTTP 403 (Forbidden)` ou `HTTP 404 (Not Found)` para evitar varreduras.<br>**2.** Chamadas repetitivas de consulta de pedidos que ultrapassem o limite de 60 requisições por minuto por IP/Token devem ser bloqueadas temporariamente, retornando o código de erro padrão de throttling `HTTP 429 (Too Many Requests)`. |
+| **RS03** | **R02 — Manipulação do valor do pedido** <br>*(Origem: T07 — Tampering)* | **Validação e Recálculo Centralizado de Checkout no Servidor:**<br>O backend da aplicação deve realizar o recálculo compulsório e estrito do valor total de cada carrinho de compras no momento do checkout. Esse processo deve ignorar sumariamente quaisquer preços unitários, descontos ou valores totais enviados ou computados pela aplicação cliente (aplicativo móvel ou frontend web), utilizando exclusivamente como única fonte de verdade os preços vigentes dos itens armazenados de forma protegida no banco de dados corporativo. | **1.** Uma requisição de criação de pedido (checkout) contendo preços unitários alterados (abaixo dos valores definidos no catálogo do banco) deve resultar na cobrança automática do valor recalculado de forma correta pelo servidor ou na rejeição integral da transação com status `HTTP 400 (Bad Request)`.<br>**2.** Esse comportamento deve ser comprovado e auditado através de testes automatizados de injeção de parâmetros (alteração direta de payloads HTTP em proxy de interceptação), onde o valor transacionado final no gateway de pagamento deve corresponder exatamente ao catálogo oficial de preços do lojista. |
+
 <!-- RESPONSÁVEL: Fernando -->
 <!-- TODO(Fernando): selecionar TRÊS riscos classificados como críticos ou altos na Etapa 2 e
      derivar um requisito de cada. Nem mais nem menos que três — o enunciado pede exatamente
@@ -28,13 +36,13 @@
      Atenção: o requisito precisa ser VERIFICÁVEL. O teste é conseguir escrever, na última
      coluna, uma frase do tipo "a operação é recusada quando X" que alguém consiga executar.
      O enunciado rejeita explicitamente requisitos genéricos como "o sistema deverá ser seguro". -->
-
+<!--
 | ID | Risco de origem | Requisito de segurança | Critério de verificação |
 |---|---|---|---|
 | RS01 | R01 — Tomada de contas de clientes | O sistema deverá exigir um segundo fator de autenticação sempre que o login ocorrer a partir de um dispositivo não reconhecido, e deverá exigir reautenticação antes de alterar e-mail, telefone ou meio de pagamento | O login a partir de um dispositivo novo deve ser recusado enquanto o segundo fator não for informado; a alteração de meio de pagamento deve ser recusada quando a reautenticação não ocorrer nos últimos 5 minutos |
-| RS02 | <!-- TODO --> | | |
-| RS03 | <!-- TODO --> | | |
-
+| RS02 | <- TODO -> | | |
+| RS03 | <- TODO -> | | |
+-->
 <!-- TODO(Fernando): sugestão de riscos a usar em RS02 e RS03, se eles se confirmarem como
      críticos na priorização: R03 (extração em massa de dados pessoais pela API) → requisito de
      autorização por objeto no servidor; e o risco derivado de T29 (escalonamento de privilégio
