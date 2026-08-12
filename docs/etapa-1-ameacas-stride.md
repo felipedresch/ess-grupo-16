@@ -572,19 +572,24 @@ Continua criando contas até maximizar o número de pedidos com desconto.
 ### 6.1 Rastreabilidade entre casos de abuso e ameaças
 
 <!-- RESPONSÁVEL: Murillo -->
-<!-- TODO(Murillo): preencher conforme os CAs forem escritos. Esta tabela é o que demonstra ao
-     professor a "relação entre os casos de abuso e as ameaças" (critério de avaliação). -->
 
-| Caso de abuso | Ameaças relacionadas | Categorias STRIDE |
-|---|---|---|
-| CA01 | T02, T19 | Spoofing, Information Disclosure, Elevation of Privilege |
-| CA02 | T06, T13 | Spoofing, Repudiation |
-| CA03 | T07, T08 | Tampering |
-| CA04 | T09, T15 | Tampering, Repudiation |
-| CA05 | T18, T23 | Information Disclosure |
-| CA06 | T24, T27 | Denial of Service |
-| CA07 | T29, T31 | Elevation of Privilege |
-| CA08 | T12, T14 | Tampering, Repudiation |
+| Caso de abuso | Título | Ameaças relacionadas | Categorias STRIDE |
+|---|---|---|---|
+| CA01 | Cadastro de entregador com identidade falsa | T02, T19 | Spoofing, Information Disclosure, Elevation of Privilege |
+| CA02 | Liberação de pedido mediante pagamento falso | T06 | Spoofing |
+| CA03 | Manipulação do valor do pedido | T07 | Tampering |
+| CA04 | Acesso indevido aos pedidos de outros clientes | T18 | Information Disclosure |
+| CA05 | Obtenção indevida de privilégios | T30 | Elevation of Privilege |
+| CA06 | Negação fraudulenta de uma entrega | T13, T14 | Repudiation |
+| CA07 | Alteração indevida dos dados bancários de repasse | T09 | Tampering |
+| CA08 | Abuso de cupons por criação de contas | T08 | Tampering |
+
+**Cobertura das categorias.** Os oito casos de abuso alcançam cinco das seis categorias do STRIDE.
+Denial of Service não aparece porque os casos foram construídos em torno de um agente que busca
+proveito próprio, financeiro ou informacional, enquanto as ameaças de DoS identificadas (T24 a
+T28) visam degradar o serviço sem benefício direto para quem ataca. Elas continuam registradas e
+tratadas na seção 5.5 e viram riscos na Etapa 2.
+
 ---
 ### 6.2 Diagrama de casos de abuso
 ```mermaid
