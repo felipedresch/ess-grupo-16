@@ -132,6 +132,16 @@ O enunciado (item 18.3) exige que o diagrama mostre:
 | **Componente afetado** | API Administrativa (`P04`), Painel Administrativo de Backoffice (`A12`) e Banco de Dados Principal (`A10`). |
 | **Resultado esperado** | Tentativas de atendentes de suporte (`Role: Support`) de chamar rotas administrativas restritas (como alteração de comissão ou estornos acima do teto de alçada) por meio de ferramentas externas (ex: curl, Postman ou scripts) serão interceptadas e recusadas pelo backend com código `HTTP 403 Forbidden`, registrando um log de auditoria estruturado em nível `Critical`. |
 
+### D02 — Implantação de API Gateway Centralizado com Web Application Firewall (WAF) e Rate Limiting Ativo
+
+| Campo | Conteúdo |
+| :--- | :--- |
+| **Problema ou risco tratado** | **R24 — Indisponibilidade da API de pedidos por ataque volumétrico (DDoS)** (Origem: *T24 — Denial of Service*) e **R27 — Abuso do envio de SMS de verificação** (Origem: *T27 — Denial of Service*). Ambas são ameaças de alta criticidade e impacto financeiro direto. |
+| **Decisão tomada** | Adotar o padrão de design de arquitetura de microsserviços centrado em um **API Gateway** unificado como ponto único de entrada para todo o tráfego externo da plataforma. Acoplado a ele, implementa-se um **Web Application Firewall (WAF)** para inspeção profunda de cabeçalhos e payloads HTTP, associado a regras de **Rate Limiting** ativo por IP e por token. O controle utiliza o algoritmo de *Token Bucket* com limites diferenciados para rotas sensíveis: endpoints normais de consulta possuem teto de 100 req/min, enquanto endpoints altamente explorados por robôs, como `/auth/send-sms` e `/orders/checkout`, possuem limite estrito de 5 req/min por IP/Dispositivo. |
+| **Motivo** | Tratar negação de serviço e abuso de bots individualmente em cada aplicação ou microsserviço de backend introduz grande complexidade de engenharia e inconsistência de políticas. De acordo com as diretrizes de proteção do **NIST SP 800-95 (Guide to Secure Web Services)**, centralizar a triagem de requisições na borda da rede (camada de Gateway) permite mitigar ataques volumétricos e abusos de força bruta de maneira escalável antes que eles atinjam as APIs de negócio (`A09`) e o banco de dados principal (`A10`), preservando a CPU, a memória e a largura de banda operacional da plataforma. |
+| **Componente afetado** | Pontos de interação externos (`P01`, `P02`, `P03`), API de Pedidos (`A09`) e Banco de Dados Principal (`A10`). |
+| **Resultado esperado** | Requisições volumétricas maliciosas ou disparos de spam de SMS serão barrados de forma automatizada na borda de rede. O API Gateway rejeitará imediatamente o tráfego excedente retornando código `HTTP 429 Too Many Requests` com latência mínima, garantindo que o banco de dados e a API de Pedidos permaneçam 100% disponíveis para os clientes legítimos mesmo durante um ataque volumétrico ativo. |
+
 <!--
 ### D01 — Verificar autorização no servidor em todas as operações administrativas
 
@@ -142,26 +152,27 @@ O enunciado (item 18.3) exige que o diagrama mostre:
 | **Motivo** | Ocultar opções na interface não impede o acesso direto à API. O frontend é código que roda na máquina do usuário e pode ser modificado; a única verificação confiável é a do servidor |
 | **Componente afetado** | API administrativa (P04) e o painel de backoffice (A12) |
 | **Resultado esperado** | Requisições administrativas feitas por perfis sem permissão são recusadas com 403 e o evento é registrado em log de auditoria, mesmo quando a chamada não passa pela interface |
+
+### D02 — <- TODO(Fernando): título ->
+
+| Campo | Conteúdo |
+|---|---|
+| **Problema ou risco tratado** | |
+| **Decisão tomada** | |
+| **Motivo** | |
+| **Componente afetado** | |
+| **Resultado esperado** | |
+
+### D03 — <- TODO(Fernando): título ->
+
+| Campo | Conteúdo |
+|---|---|
+| **Problema ou risco tratado** | |
+| **Decisão tomada** | |
+| **Motivo** | |
+| **Componente afetado** | |
+| **Resultado esperado** | |
 -->
-### D02 — <!-- TODO(Fernando): título -->
-
-| Campo | Conteúdo |
-|---|---|
-| **Problema ou risco tratado** | |
-| **Decisão tomada** | |
-| **Motivo** | |
-| **Componente afetado** | |
-| **Resultado esperado** | |
-
-### D03 — <!-- TODO(Fernando): título -->
-
-| Campo | Conteúdo |
-|---|---|
-| **Problema ou risco tratado** | |
-| **Decisão tomada** | |
-| **Motivo** | |
-| **Componente afetado** | |
-| **Resultado esperado** | |
 
 <!-- TODO(Fernando): sugestões de decisões, caso ajudem —
      - Recalcular sempre o valor do pedido no servidor, ignorando o total enviado pelo app
