@@ -7,28 +7,22 @@ dos achados ficam em [docs/etapa-5-verificacao-vulnerabilidades.md](../../docs/e
 
 ---
 
-## Como preencher
-
-1. No ZAP, vá em *Report → Generate Report* e exporte em HTML ou Markdown.
-2. Se exportar em HTML, salve o arquivo nesta pasta como `relatorio-zap.html` e cole aqui um
-   resumo dos alertas (a tabela que o ZAP gera com nome, risco e quantidade).
-3. Se exportar em Markdown, cole o conteúdo direto abaixo.
-4. As capturas de tela vão em `capturas-de-tela/`.
-
-> O relatório precisa estar versionado no repositório — não basta o link ou o print na tela.
-
----
-
 ## Resumo dos alertas
 
-<!-- TODO(Murillo): colar aqui a tabela de alertas gerada pelo ZAP, sem edição. -->
-
 | Alerta | Risco | Ocorrências |
-|---|---|---|
-| | | |
+|---|---|---:|
+| Content Security Policy (CSP) Header Not Set | Medium | 5 |
+| Cross-Domain Misconfiguration | Medium | 5 |
+| HTTP Only Site | Medium | 1 |
+| Timestamp Disclosure - Unix | Low | 5 |
+| Modern Web Application | Informational | 5 |
+| User Agent Fuzzer | Informational | 5 |
 
 ---
 
 ## Relatório completo
 
-<!-- TODO(Murillo): colar aqui o relatório exportado, ou citar o arquivo salvo nesta pasta. -->
+O relatório completo foi exportado diretamente pelo OWASP ZAP em formato HTML
+e está versionado neste diretório.
+
+**Relatório completo:** [relatorio-zap-2026-08-12.html](relatorio-zap-2026-08-12.html)
