@@ -609,31 +609,35 @@ flowchart TB
 ```
 ## 7. Considerações finais da Etapa 1
 
-<!-- RESPONSÁVEL: Luis Fillipe (com revisão de Felipe) -->
-<!-- TODO(Luis): escrever após as seções 5 e 6 estarem completas. O texto deve responder
-     explicitamente aos quatro pontos abaixo, cada um com 1 ou 2 parágrafos. -->
-
 ### 7.1 Ameaças consideradas mais preocupantes
 
-<!-- TODO: quais e por quê. -->
+As ameaças consideradas mais preocupantes são aquelas relacionadas à **exposição de dados pessoais, elevação indevida de privilégios e indisponibilidade da plataforma**. A exposição de endereços, telefones e outras informações de clientes pode gerar consequências que ultrapassam o prejuízo financeiro, incluindo violação de privacidade, assédio e riscos à segurança física. Da mesma forma, uma elevação de privilégios pode permitir que um usuário execute operações destinadas a perfis administrativos ou acesse informações de outros usuários.
+
+As ameaças de **Denial of Service** também apresentam impacto significativo porque o SaborExpress depende da disponibilidade contínua da API de pedidos e dos serviços utilizados durante os períodos de maior demanda. Uma indisponibilidade pode interromper pedidos, prejudicar restaurantes e entregadores e causar perda de receita. Essas ameaças se destacam por poderem afetar simultaneamente diferentes participantes da plataforma.
 
 ### 7.2 Ativos mais importantes do sistema
 
-<!-- TODO: retomar a seção 3.2 e justificar a ordem de criticidade. -->
+Os ativos de maior criticidade são aqueles cujo comprometimento pode causar prejuízos financeiros, exposição de dados pessoais ou comprometimento amplo das operações. Destacam-se as **credenciais de acesso**, os **dados de pagamento**, os **endereços e telefones dos clientes**, os **registros financeiros**, a **API de pedidos**, o **banco de dados principal**, o **painel administrativo** e as **chaves de API dos serviços externos**.
+
+A criticidade desses ativos está relacionada principalmente à concentração de informações e às consequências de seu comprometimento. Enquanto a exposição de dados pessoais pode afetar diretamente a privacidade dos clientes, o comprometimento da API, do banco de dados ou do painel administrativo pode permitir alterações ou acessos em larga escala. Por isso, esses ativos exigem controles de segurança mais rigorosos.
 
 ### 7.3 Tipos de abuso de maior impacto
 
-<!-- TODO: quais casos de abuso causariam mais dano e por quê. -->
+Os casos de abuso de maior impacto são aqueles capazes de atingir vários usuários ou causar prejuízo direto à operação da plataforma. Entre eles estão a **extração de dados pessoais pela API**, a **utilização indevida de privilégios administrativos**, a **alteração de informações financeiras**, a **criação de pedidos falsos em massa** e os abusos capazes de provocar indisponibilidade dos serviços.
+
+Esses casos se destacam porque exploram funcionalidades legítimas do sistema para produzir consequências que não fazem parte do uso esperado. Um usuário pode possuir uma conta válida ou acesso legítimo a determinada funcionalidade e ainda assim utilizá-la de maneira abusiva, como um entregador que mantém acesso a endereços após uma entrega ou um funcionário que tenta executar operações acima de suas permissões.
 
 ### 7.4 Principais dificuldades encontradas pelo grupo
 
-<!-- TODO: dificuldades reais da análise. Exemplos do que costuma aparecer: separar ameaça de
-     vulnerabilidade; decidir se um comportamento de usuário legítimo conta como abuso; evitar
-     ameaças genéricas que valeriam para qualquer sistema; delimitar o escopo do sistema. -->
+Uma das principais dificuldades foi **diferenciar ameaça, vulnerabilidade e impacto**. A análise exigiu separar o comportamento ou evento que representa a ameaça da condição que permite sua ocorrência e das consequências que podem resultar da exploração. Também foi necessário evitar descrições excessivamente genéricas e relacionar cada ameaça a componentes, ativos e pontos de interação específicos do SaborExpress.
 
-### 7.5 Possíveis medidas de proteção (opcional nesta etapa)
+Outra dificuldade foi definir quais comportamentos poderiam ser considerados abusivos sem tratar como ataque qualquer utilização legítima do sistema. Como o SaborExpress possui diferentes perfis — clientes, restaurantes, entregadores e administradores — foi necessário considerar os diferentes níveis de acesso e os possíveis conflitos entre esses usuários. A delimitação do escopo também foi importante para manter a análise concentrada nas funcionalidades relevantes do sistema de delivery.
 
-<!-- TODO: indicações iniciais; o detalhamento é feito na Etapa 2. -->
+### 7.5 Possíveis medidas de proteção
+
+Como medidas iniciais, destacam-se a aplicação de **autorização no backend**, controles de acesso baseados em função e objeto, limitação de requisições, proteção dos endpoints expostos, controle adequado de informações apresentadas aos usuários e manutenção de registros de auditoria. Também são importantes mecanismos de proteção contra abuso, como limites para criação de pedidos, solicitações de SMS e uploads.
+
+Essas medidas representam apenas uma visão inicial das proteções necessárias. O detalhamento dos controles, responsáveis, funções do NIST CSF 2.0 e formas de verificação será desenvolvido na Etapa 2, de acordo com os riscos identificados.
 
 ---
 
