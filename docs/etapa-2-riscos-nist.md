@@ -190,10 +190,11 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 
 ### Distribuição Estatística dos Riscos Consolidados
 
-- **Riscos Críticos (Pontuação 12 a 16):** 10 riscos (R01, R03, R06, R14, R15, R19, R22, R24, R29).
-- **Riscos Altos (Pontuação 8 a 11):** 11 riscos (R04, R08, R09, R20, R21, R23, R25, R26, R27, R28, R30, R31, R32).
-- **Riscos Médios (Pontuação 4 a 7):** 10 riscos (R02, R05, R07, R10, R11, R12, R13, R16, R17).
+- **Riscos Críticos (Pontuação 12 a 16):** 9 riscos (R01, R03, R06, R14, R15, R19, R22, R24, R29).
+- **Riscos Altos (Pontuação 8 a 11):** 13 riscos (R04, R08, R09, R20, R21, R23, R25, R26, R27, R28, R30, R31, R32).
+- **Riscos Médios (Pontuação 4 a 7):** 9 riscos (R02, R05, R07, R10, R11, R12, R13, R16, R17).
 - **Riscos Baixos (Pontuação 1 a 3):** 0 riscos.
+- **Total:** 31 riscos ativos, correspondendo às 31 ameaças da Etapa 1 (o R18 foi consolidado no R03).
 
 ### Observa-se:
 A ausência de riscos de nível "Baixo" é justificada pelo modelo de negócio da aplicação (**delivery com intermediação financeira sob custódia**, transações em tempo real com cartões/Pix e processamento de dados pessoais residenciais protegidos pela LGPD). Toda e qualquer falha na superfície de ataque de um marketplace transacional gera, por padrão, impactos que iniciam no nível Moderado (2) ou Alto (3), validando cientificamente a sensibilidade do sistema modelado.
@@ -671,18 +672,18 @@ A tabela abaixo estabelece a ordem prioritária de tratamento de riscos, cruzand
 
 ## 13. Funções do NIST CSF 2.0 e mapeamento
 
-<!-- RESPONSÁVEL: Murillo -->
+<!-- RESPONSÁVEL: Fernando -->
 
 ### 13.1 As seis funções
 
-| Função | Finalidade | Como se aplica ao SaborExpress |
-|---|---|---|
-| **Govern(Governar)** | Responsável por estabelecer as diretrizes normativas de segurança e privacidade do SaborExpress, definindo os padrões de conformidade com a LGPD e políticas internas. <br>&nbsp; - *Resultado Esperado:* Que a segurança da informação seja um requisito obrigatório e formal de governança desde o desenvolvimento até o ciclo de entrega de software (DevSecOps). <br>&nbsp; - *Controle Proposto:* Instituição de uma política corporativa que condicione o lançamento de novos recursos à passagem por testes automáticos de segurança e que torne o uso de autenticação robusta obrigatório para toda a equipe administrativa e clientes em novos dispositivos. | <!-- TODO(Murillo) --> |
-| **Identify(Identificar)** | Mapeia o escopo tecnológico, identificando vulnerabilidades latentes, ativos críticos e dependências do ecossistema. <br>&nbsp; - *Resultado Esperado:* Visibilidade integral sobre quais APIs expõem dados sensíveis de clientes e onde estão armazenados os ativos importantes da plataforma. <br>&nbsp; - *Controle Proposto:* Manutenção automatizada de uma documentação viva de endpoints de API (utilizando Swagger/OpenAPI) e execução mensal de varreduras de conformidade de código e ativos expostos. | <!-- TODO(Murillo) --> |
-| **Protect(Proteger)** | Aplica salvaguardas tecnológicas para blindar o sistema contra possíveis explorações maliciosas. <br>&nbsp; - *Resultado Esperado:* Isolamento e autorização adequada para o acesso a recursos confidenciais das contas dos clientes e checkout de pedidos. <br>&nbsp; - *Controle Proposto:* Implementação de middlewares de autorização por propriedade de recurso (IDOR Mitigation) e restrição de taxas de requisição por IP e token (*rate limiting*). | <!-- TODO(Murillo) --> |
-| **Detect(Detectar)** | Garante a capacidade de reconhecer anomalias e tentativas de exploração em tempo oportuno. <br>&nbsp; - *Resultado Esperado:* Visualização de tráfego anômalo e de tentativas automatizadas de quebra de credenciais antes que ocorra a exfiltração de dados. <br>&nbsp; - *Controle Proposto:* Criação de alertas automáticos em logs centralizados no caso de disparo de erros HTTP 403 (Unauthorized) sucessivos por um único endereço IP. | <!-- TODO(Murillo) --> |
-| **Respond(Responder)** | Estabelece o fluxo de contenção imediata de incidentes operacionais detectados. <br>&nbsp; - *Resultado Esperado:* Isolamento do vetor de ataque ativo e interrupção do dano para evitar sua propagação lateral. <br>&nbsp; - *Controle Proposto:* Bloqueio temporário automatizado de credenciais e IPs sinalizados como atacantes ativos na camada de aplicação. | <!-- TODO(Murillo) --> |
-| **Recover(Recuperar)** | Garante a resiliência operacional para restabelecer os serviços do SaborExpress e as comunicações regulatórias devidas. <br>&nbsp; - *Resultado Esperado:* Restauração rápida da normalidade transacional pós-incidente e conformidade com as obrigações legais de aviso à ANPD. <br>&nbsp; - *Controle Proposto:* Mecanismo robusto de backup distribuído e rotina pré-configurada para envio automatizado de e-mails para reset forçado de senhas afetadas. | <!-- TODO(Murillo) --> |
+| Função | Finalidade, resultado esperado e controle proposto no SaborExpress |
+|---|---|
+| **Govern(Governar)** | Responsável por estabelecer as diretrizes normativas de segurança e privacidade do SaborExpress, definindo os padrões de conformidade com a LGPD e políticas internas. <br>&nbsp; - *Resultado Esperado:* Que a segurança da informação seja um requisito obrigatório e formal de governança desde o desenvolvimento até o ciclo de entrega de software (DevSecOps). <br>&nbsp; - *Controle Proposto:* Instituição de uma política corporativa que condicione o lançamento de novos recursos à passagem por testes automáticos de segurança e que torne o uso de autenticação robusta obrigatório para toda a equipe administrativa e clientes em novos dispositivos. |
+| **Identify(Identificar)** | Mapeia o escopo tecnológico, identificando vulnerabilidades latentes, ativos críticos e dependências do ecossistema. <br>&nbsp; - *Resultado Esperado:* Visibilidade integral sobre quais APIs expõem dados sensíveis de clientes e onde estão armazenados os ativos importantes da plataforma. <br>&nbsp; - *Controle Proposto:* Manutenção automatizada de uma documentação viva de endpoints de API (utilizando Swagger/OpenAPI) e execução mensal de varreduras de conformidade de código e ativos expostos. |
+| **Protect(Proteger)** | Aplica salvaguardas tecnológicas para blindar o sistema contra possíveis explorações maliciosas. <br>&nbsp; - *Resultado Esperado:* Isolamento e autorização adequada para o acesso a recursos confidenciais das contas dos clientes e checkout de pedidos. <br>&nbsp; - *Controle Proposto:* Implementação de middlewares de autorização por propriedade de recurso (IDOR Mitigation) e restrição de taxas de requisição por IP e token (*rate limiting*). |
+| **Detect(Detectar)** | Garante a capacidade de reconhecer anomalias e tentativas de exploração em tempo oportuno. <br>&nbsp; - *Resultado Esperado:* Visualização de tráfego anômalo e de tentativas automatizadas de quebra de credenciais antes que ocorra a exfiltração de dados. <br>&nbsp; - *Controle Proposto:* Criação de alertas automáticos em logs centralizados no caso de disparo de erros HTTP 403 (Unauthorized) sucessivos por um único endereço IP. |
+| **Respond(Responder)** | Estabelece o fluxo de contenção imediata de incidentes operacionais detectados. <br>&nbsp; - *Resultado Esperado:* Isolamento do vetor de ataque ativo e interrupção do dano para evitar sua propagação lateral. <br>&nbsp; - *Controle Proposto:* Bloqueio temporário automatizado de credenciais e IPs sinalizados como atacantes ativos na camada de aplicação. |
+| **Recover(Recuperar)** | Garante a resiliência operacional para restabelecer os serviços do SaborExpress e as comunicações regulatórias devidas. <br>&nbsp; - *Resultado Esperado:* Restauração rápida da normalidade transacional pós-incidente e conformidade com as obrigações legais de aviso à ANPD. <br>&nbsp; - *Controle Proposto:* Mecanismo robusto de backup distribuído e rotina pré-configurada para envio automatizado de e-mails para reset forçado de senhas afetadas. |
 
 > **Distinção exigida pelo enunciado — função ≠ resultado esperado ≠ controle:**
 > *Protect* é uma **função**; "proteger o acesso às contas de cliente" é um **resultado
@@ -699,9 +700,6 @@ Conforme as diretrizes científicas do NIST CSF 2.0, as funções não devem ser
 *   **Respond (RS)** refere-se à capacidade de conter incidentes ativos na infraestrutura ou no negócio, aplicando regras de contenção automática (ex: rate-limit dinâmico ou bloqueio temporário).
 *   **Recover (RC)** destina-se a processos de recuperação de estado e continuidade (ex: comunicação legal à ANPD, restauração de estados de dados íntegros, reversão de estornos de cartões).
 
-<!-- TODO(Murillo): analisar cada relação. NÃO marcar todas as funções automaticamente — o
-     enunciado adverte contra isso. Marque apenas quando houver um resultado de segurança
-     concreto a ser alcançado naquela função, e explique as escolhas menos óbvias na coluna final. -->
 
 #### Tabela de Mapeamento Completo de Riscos vs. Funções NIST CSF 2.0
 
