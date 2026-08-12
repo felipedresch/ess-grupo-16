@@ -95,7 +95,7 @@ Arquivo: [`docs/etapa-1-ameacas-stride.md`](etapa-1-ameacas-stride.md)
 | E1.12 | STRIDE — Information Disclosure (4 a 6 ameaças) | 5.4 | Luis Fillipe | 08/08 | 🟢 T18–T23 |
 | E1.13 | STRIDE — Denial of Service (3 a 5 ameaças) | 5.5 | Luis Fillipe | 08/08 | 🟢 T24–T28 |
 | E1.14 | STRIDE — Elevation of Privilege (3 a 5 ameaças) | 5.6 | Luis Fillipe | 08/08 | 🟢 T29–T32 |
-| E1.15 | Tabela de consolidação das ameaças: preencher a contagem por categoria e o total (os intervalos de ID já estão corretos) | 5.7 | Luis Fillipe | 09/08 | 🔴 |
+| E1.15 | Tabela de consolidação das ameaças: preencher a contagem por categoria e o total (os intervalos de ID já estão corretos) | 5.7 | Luis Fillipe | 09/08 | 🟡 |
 | E1.16 | Casos de abuso CA02 a CA08 | 6 | Murillo | 09/08 | 🟢 |
 | E1.17 | Rastreabilidade caso de abuso ↔ ameaça | 6.1 | Murillo | 09/08 | 🟢 |
 | E1.18 | Diagrama de casos de abuso (opcional) | 6 | Murillo | 09/08 | 🟢 |
@@ -113,17 +113,17 @@ Arquivo: [`docs/etapa-2-riscos-nist.md`](etapa-2-riscos-nist.md)
 | E2.1 | Justificar os critérios de probabilidade | 8.1 | Fernando | 08/08 | 🟢 |
 | E2.2 | Justificar os critérios de impacto | 8.2 | Fernando | 08/08 | 🟢 |
 | E2.3 | Converter as ameaças T01–T16 (S/T/R) em riscos | 9 | Gabriel | 10/08 | 🟢 desbloqueado |
-| E2.4 | Converter as ameaças T18–T32 (I/D/E) em riscos | 9 | Luis Fillipe | 10/08 | 🔴 desbloqueado |
+| E2.4 | Converter as ameaças T18–T32 (I/D/E) em riscos | 9 | Luis Fillipe | 10/08 | 🟢 desbloqueado |
 | E2.5 | Consolidar a tabela mestre, conferir cálculos e numeração | 9 | Fernando | 10/08 | 🟢 depende de E2.3 e E2.4 |
 | E2.6 | Justificativas dos riscos de S/T/R (5 pontos cada) | 10 | Gabriel | 10/08 | 🟢 |
-| E2.7 | Justificativas dos riscos de I/D/E (5 pontos cada) | 10 | Luis Fillipe | 10/08 | ⚫ |
+| E2.7 | Justificativas dos riscos de I/D/E (5 pontos cada) | 10 | Luis Fillipe | 10/08 | 🟢 |
 | E2.8 | Priorização com justificativa da ordem | 11 | Fernando | 10/08 | 🟢 depende de E2.5 |
 | E2.9 | Estratégia de tratamento por risco | 12 | Deivid | 11/08 | ⚫ |
 | E2.10 | Tabela de riscos aceitos | 12.1 | Deivid | 11/08 | ⚫ |
 | E2.11 | As 6 funções do NIST CSF aplicadas ao SaborExpress | 13.1 | Fernando | 10/08 | 🟢 |
 | E2.12 | Mapear cada risco para as funções do NIST | 13.2 | Fernando | 10/08 | 🟢 depende de E2.5 |
 | E2.13 | Controles concretos para os riscos de S/T/R | 14 | Gabriel | 11/08 | 🟢 |
-| E2.14 | Controles concretos para os riscos de I/D/E | 14 | Luis Fillipe | 11/08 | ⚫ |
+| E2.14 | Controles concretos para os riscos de I/D/E | 14 | Luis Fillipe | 11/08 | 🟡 |
 | E2.15 | Consolidar o plano: responsáveis e evidências | 14 | Deivid | 11/08 | ⚫ |
 | E2.16 | Ordem inicial de implementação | 15 | Deivid | 11/08 | ⚫ |
 | E2.17 | Estimativa de risco residual | 16 | Felipe | 11/08 | ⚫ |
