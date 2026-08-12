@@ -121,7 +121,7 @@ Arquivo: [`docs/etapa-2-riscos-nist.md`](etapa-2-riscos-nist.md)
 | E2.9 | Estratégia de tratamento por risco | 12 | Deivid | 11/08 | ⚫ |
 | E2.10 | Tabela de riscos aceitos | 12.1 | Deivid | 11/08 | ⚫ |
 | E2.11 | As 6 funções do NIST CSF aplicadas ao SaborExpress | 13.1 | Fernando | 10/08 | 🟢 |
-| E2.12 | Mapear cada risco para as funções do NIST | 13.2 | Fernando | 10/08 | ⚫ depende de E2.5 |
+| E2.12 | Mapear cada risco para as funções do NIST | 13.2 | Fernando | 10/08 | 🟢 depende de E2.5 |
 | E2.13 | Controles concretos para os riscos de S/T/R | 14 | Gabriel | 11/08 | 🟢 |
 | E2.14 | Controles concretos para os riscos de I/D/E | 14 | Luis Fillipe | 11/08 | ⚫ |
 | E2.15 | Consolidar o plano: responsáveis e evidências | 14 | Deivid | 11/08 | ⚫ |
