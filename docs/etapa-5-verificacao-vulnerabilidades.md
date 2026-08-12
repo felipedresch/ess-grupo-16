@@ -3,7 +3,7 @@
 **Sistema:** SaborExpress — plataforma de delivery de comida
 **Grupo:** 16 — Engenharia de Software Seguro
 **Continuidade de:** [Etapa 4 — Código Seguro](etapa-4-codigo-seguro.md)
-**Última atualização:** <!-- atualize a data ao editar --> 07/08/2026
+**Última atualização:** 11/08/2026
 
 <!-- RESPONSÁVEL: Murillo -->
 
@@ -24,96 +24,290 @@
 
 ## 1. Ambiente e ferramenta
 
-<!-- TODO(Murillo): preencher com os dados reais da sua execução — versões, data e hora. -->
 
 | Item | Valor |
 |---|---|
-| Sistema testado | OWASP Juice Shop <!-- TODO: versão --> |
+| Sistema testado | OWASP Juice Shop v20.2.0 |
 | Endereço | `http://localhost:3000` (execução local) |
-| Ferramenta | OWASP ZAP <!-- TODO: versão --> |
-| Tipo de varredura | <!-- TODO: Automated Scan / Spider + Passive Scan --> |
-| Data e hora da execução | <!-- TODO --> |
+| Ferramenta | OWASP ZAP 2.17.0 |
+| Tipo de varredura | Automated Scan |
+| Data e hora da execução | 11/08/2026 às 23:06:09 BRT |
 | Executado por | Murillo Dias Nunes |
 
-### Como montar o ambiente
 
-Rodar o Juice Shop com Docker é o caminho mais curto:
+O Juice Shop foi executado localmente com Docker:
 
 ```bash
 docker run --rm -p 3000:3000 bkimminich/juice-shop
 ```
 
-Depois abra `http://localhost:3000` no navegador para confirmar que subiu. O ZAP pode ser baixado
-em [zaproxy.org/download](https://www.zaproxy.org/download/). Na tela inicial do ZAP, use
-*Automated Scan*, informe `http://localhost:3000` e execute.
+Depois, a aplicação foi acessada pelo navegador em:
 
-> Se o Docker não estiver disponível, o Juice Shop também roda via `npm start` a partir do
-> repositório oficial. O professor mencionou que poderá disponibilizar um tutorial —
-> vale conferir antes de sofrer com instalação.
+```text
+http://localhost:3000
+```
+
+O funcionamento da aplicação foi confirmado antes da execução da verificação.
+
+O OWASP ZAP foi então utilizado para realizar um **Automated Scan** contra exclusivamente
+o endereço local da aplicação. A configuração utilizada incluiu a política de scan
+**Pentest**, o **Modern Spider**, o navegador **Chrome** e a opção **If Modern** para o
+tratamento de aplicações web modernas.
 
 ---
 
 ## 2. Configuração básica do teste
 
-<!-- TODO(Murillo): descrever em 3 a 5 linhas o que você configurou — URL alvo, se rodou spider,
-     se usou o scan ativo ou só o passivo, qual o escopo (só localhost:3000), e se autenticou na
-     aplicação ou testou sem login. Isso é o que permite alguém reproduzir a sua execução. -->
+A URL alvo utilizada durante a verificação foi:
+
+```text
+http://localhost:3000
+```
+
+correspondente à instância local do OWASP Juice Shop.
+
+Foi executado um **Automated Scan** no OWASP ZAP, utilizando a política **Pentest**.
+O crawling foi realizado com o **Modern Spider**, utilizando o navegador Chrome e a
+opção **If Modern** para o tratamento de aplicações web modernas.
+
+O escopo da verificação ficou restrito ao host local `localhost:3000`. Não foram
+realizados testes contra sistemas externos ou de terceiros. A aplicação foi testada
+sem autenticação nesta execução.
+
+Uma requisição registrada na sessão do ZAP confirma o acesso ao alvo local:
+
+```text
+Tue Aug 11 23:06:09 BRT 2026
+GET http://localhost:3000
+200 OK
+```
+
+Essa requisição confirma que, durante a sessão de verificação, o ZAP acessou a
+aplicação local e recebeu uma resposta HTTP `200 OK`.
 
 ---
 
 ## 3. Evidência da execução
+A execução do ZAP apresentou seis resultados. Três deles foram selecionados para
+análise detalhada, conforme solicitado pela atividade. Os demais foram registrados
+na seção 4.2 por serem informativos ou por apresentarem baixa confiança.
 
-<!-- TODO(Murillo): salvar as capturas de tela em evidencias/etapa-5/capturas-de-tela/ e o
-     relatório exportado pelo ZAP em evidencias/etapa-5/relatorio-da-verificacao.md
-     (ou o HTML exportado, se preferir). Depois referencie os arquivos aqui.
-     Capturas úteis: a tela do ZAP com a lista de alertas, e o detalhe de cada alerta analisado. -->
+A verificação realizada com o OWASP ZAP foi registrada por meio de capturas de tela e do
+relatório gerado pela ferramenta. As evidências permitem reproduzir e conferir a configuração
+utilizada, os resultados encontrados e os alertas analisados.
 
-> **Pendente.**
+### Print 01 — Configuração do ataque
 
-Sugestão de capturas:
+A primeira captura registra a configuração utilizada antes da execução do Automated Scan,
+incluindo a política de scan **Pentest**, o **Modern Spider**, o navegador **Chrome** e a opção
+**If Modern**.
 
-| Arquivo | O que mostra |
-|---|---|
-| `evidencias/etapa-5/capturas-de-tela/zap-resumo-alertas.png` | Lista geral dos alertas encontrados |
-| `evidencias/etapa-5/capturas-de-tela/zap-alerta-a01.png` | Detalhe do primeiro achado analisado |
-| `evidencias/etapa-5/capturas-de-tela/zap-alerta-a02.png` | Detalhe do segundo achado |
-| `evidencias/etapa-5/capturas-de-tela/zap-alerta-a03.png` | Detalhe do terceiro achado |
+![Print 01 — Configuração do ataque](../evidencias/etapa-5/capturas-de-tela/01-zap-automated-scan-configuracao.png)
 
----
+**Arquivo:**
+
+`evidencias/etapa-5/capturas-de-tela/01-zap-automated-scan-configuracao.png`
+
+### Print 02 — Cross-Domain Misconfiguration
+
+A segunda captura registra o alerta **Cross-Domain Misconfiguration** apresentado pelo ZAP.
+
+![Print 02 — Cross-Domain Misconfiguration](../evidencias/etapa-5/capturas-de-tela/03-zap-alerta-cross-domain-misconfiguration.png)
+
+**Arquivo:**
+
+`evidencias/etapa-5/capturas-de-tela/03-zap-alerta-cross-domain-misconfiguration.png`
+
+### Print 03 — Content Security Policy (CSP) Header Not Set
+
+A terceira captura registra o alerta **Content Security Policy (CSP) Header Not Set** apresentado
+pelo ZAP.
+
+![Print 03 — Content Security Policy (CSP) Header Not Set](../evidencias/etapa-5/capturas-de-tela/04-zap-alerta-csp-header-not-set.png)
+
+**Arquivo:**
+
+`evidencias/etapa-5/capturas-de-tela/04-zap-alerta-csp-header-not-set.png`
+
+### Print 04 — HTTP Only Site
+
+A quarta captura registra o alerta **HTTP Only Site** apresentado pelo ZAP.
+
+![Print 04 — HTTP Only Site](../evidencias/etapa-5/capturas-de-tela/05-zap-alerta-http-only-site.png)
+
+**Arquivo:**
+
+`evidencias/etapa-5/capturas-de-tela/05-zap-alerta-http-only-site.png`
+
+### Print 05 — Resumo geral dos alertas
+
+A quinta captura apresenta a tela geral de resultados do ZAP, contendo os **seis
+alertas/resultados** encontrados durante a execução.
+
+![Print 05 — Resumo geral dos alertas](../evidencias/etapa-5/capturas-de-tela/02-zap-alertas-geral.png)
+
+**Arquivo:**
+
+`evidencias/etapa-5/capturas-de-tela/02-zap-alertas-geral.png`
+
+### Relatório da execução
+
+Além das capturas de tela, o relatório gerado pelo OWASP ZAP deve ser mantido no diretório de
+evidências da Etapa 5. O relatório contém os resultados registrados pela ferramenta durante a
+verificação.
+
+**Relatório HTML:**
+
+`evidencias/etapa-5/relatorio-zap-2026-08-12.html`
+
+O relatório bruto da ferramenta complementa as capturas de tela, permitindo consultar os
+resultados da execução sem depender exclusivamente das imagens.
+
+![Resumo geral dos resultados da verificação](../evidencias/etapa-5/capturas-de-tela/02-zap-alertas-geral.png)
 
 ## 4. Análise dos achados
 
-<!-- TODO(Murillo): analisar TRÊS alertas. Escolha os mais relevantes, não necessariamente os
-     três primeiros da lista. A linha A01 é um exemplo de FORMATO — substitua pelo que o ZAP
-     realmente encontrar na sua execução, com o texto do alerta de verdade. -->
+A execução do OWASP ZAP identificou seis tipos de alertas no OWASP Juice Shop. A análise abaixo
+considera os resultados registrados no relatório exportado pelo ZAP, preservando os níveis de
+risco, confiança, ocorrências e identificações CWE/OWASP apresentadas pela ferramenta.
 
-| ID | Alerta ou achado | Evidência | Possível impacto | Relação com OWASP ou CWE | Correção proposta |
-|---|---|---|---|---|---|
-| A01 | <!-- ex.: "Content Security Policy (CSP) Header Not Set" --> | <!-- captura ou trecho do relatório --> | <!-- consequência concreta --> | <!-- ex.: CWE-693, A05:2021 --> | <!-- medida específica --> |
-| A02 | | | | | |
-| A03 | | | | | |
+Os três alertas classificados como **Medium** foram selecionados para análise detalhada. Os
+demais resultados permanecem registrados na seção 4.2, pois um deles possui risco **Low** e os
+outros dois possuem caráter **Informational**.
+
+| ID | Alerta ou achado | Risco | Confiança | Ocorrências | Relação com OWASP/CWE | Evidência | Correção proposta |
+|---|---|---|---|---:|---|---|---|
+| A01 | **Content Security Policy (CSP) Header Not Set** | Medium | High | 5 | **CWE-693**; **OWASP 2021 A05** | `evidencias/etapa-5/capturas-de-tela/04-zap-alerta-csp-header-not-set.png` e relatório do ZAP | Configurar o cabeçalho `Content-Security-Policy` com uma política restritiva e compatível com os recursos legítimos da aplicação. |
+| A02 | **Cross-Domain Misconfiguration** | Medium | Medium | 5 | **CWE-264**; **OWASP 2021 A01** | `evidencias/etapa-5/capturas-de-tela/03-zap-alerta-cross-domain-misconfiguration.png` e relatório do ZAP | Restringir as origens autorizadas e evitar configurações excessivamente permissivas de compartilhamento entre origens. |
+| A03 | **HTTP Only Site** | Medium | Medium | 1 | **CWE-311**; **OWASP 2021 A05**; **OWASP 2025 A04** | `evidencias/etapa-5/capturas-de-tela/05-zap-alerta-http-only-site.png` e relatório do ZAP | Disponibilizar a aplicação por HTTPS e redirecionar as requisições HTTP para HTTPS. |
 
 ### 4.1 Comentário sobre cada achado
 
-<!-- TODO(Murillo): 1 parágrafo por achado, explicando o que o alerta significa em linguagem
-     própria. O enunciado avalia a "interpretação dos alertas" — copiar a descrição do ZAP não
-     demonstra compreensão. Diga o que a ferramenta detectou, por que aquilo é um problema e o
-     que aconteceria se fosse explorado. -->
+#### A01 — Content Security Policy (CSP) Header Not Set
 
-**A01 —**
+O ZAP identificou a ausência do cabeçalho `Content-Security-Policy` nas respostas analisadas.
+O alerta foi classificado como **Medium**, com **High confidence**, e apresentou **5 ocorrências**.
 
-**A02 —**
+A CSP funciona como uma camada adicional de proteção no navegador, permitindo que a aplicação
+defina quais origens e tipos de conteúdo podem ser carregados ou executados. A ausência desse
+cabeçalho não significa, isoladamente, que exista uma exploração confirmada, mas representa a
+falta de uma camada de defesa que pode reduzir o impacto de determinados ataques relacionados
+ao conteúdo executado pelo navegador.
 
-**A03 —**
+O relatório relaciona o achado à **CWE-693** e ao **OWASP Top 10 2021 A05**.
 
-### 4.2 Alertas descartados e falsos positivos
+Como correção, deve ser configurado o cabeçalho `Content-Security-Policy` com uma política
+adequada aos recursos legítimos da aplicação, evitando permissões desnecessariamente amplas.
 
-<!-- TODO(Murillo): o enunciado dá crédito explícito por "reconhecer limitações e possíveis
-     falsos positivos". Liste aqui os alertas que você decidiu não analisar e por quê:
-     informativos, duplicados, ou prováveis falsos positivos. Mesmo que o ZAP traga mais de três
-     achados relevantes, vale registrar esse raciocínio. -->
+**Evidência:**
+
+![A01 — Content Security Policy (CSP) Header Not Set](../evidencias/etapa-5/capturas-de-tela/04-zap-alerta-csp-header-not-set.png)
 
 ---
+
+#### A02 — Cross-Domain Misconfiguration
+
+O ZAP identificou uma configuração de comunicação entre origens que merece atenção. O alerta
+foi classificado como **Medium**, com **Medium confidence**, e apresentou **5 ocorrências**.
+
+O relatório registra a presença de uma configuração permissiva de compartilhamento entre
+origens, incluindo o valor `Access-Control-Allow-Origin: *`.
+
+Uma configuração desse tipo pode permitir que recursos sejam acessados por origens mais amplas
+do que o necessário. Em uma aplicação real, isso pode aumentar a superfície de exposição dos
+recursos disponibilizados pela aplicação.
+
+O relatório relaciona o achado à **CWE-264** e ao **OWASP Top 10 2021 A01**.
+
+Como correção, as origens autorizadas devem ser definidas explicitamente de acordo com a
+necessidade da aplicação, evitando o uso de permissões mais amplas do que o necessário.
+
+**Evidência:**
+
+![A02 — Cross-Domain Misconfiguration](../evidencias/etapa-5/capturas-de-tela/03-zap-alerta-cross-domain-misconfiguration.png)
+
+---
+
+#### A03 — HTTP Only Site
+
+O ZAP identificou que o site estava sendo disponibilizado por **HTTP**, sem a proteção de
+transporte fornecida pelo HTTPS. O alerta foi classificado como **Medium**, com **Medium
+confidence**, e apresentou **1 ocorrência**.
+
+No contexto de uma aplicação real, a utilização de HTTP deixa a comunicação sem as garantias de
+confidencialidade e integridade fornecidas pelo HTTPS. Um intermediário capaz de observar o
+tráfego poderia, dependendo do cenário, ter acesso aos dados transmitidos ou interferir na
+comunicação.
+
+O relatório relaciona o achado à **CWE-311**, ao **OWASP Top 10 2021 A05** e ao **OWASP Top 10
+2025 A04**.
+
+A correção proposta é disponibilizar a aplicação utilizando HTTPS e redirecionar as requisições
+HTTP para HTTPS.
+
+Neste trabalho, é importante considerar a limitação do ambiente: o Juice Shop foi executado
+localmente em `http://localhost:3000`. Portanto, o alerta representa uma característica
+observada no ambiente de teste e não uma vulnerabilidade confirmada do SaborExpress.
+
+**Evidência:**
+
+![A03 — HTTP Only Site](../evidencias/etapa-5/capturas-de-tela/05-zap-alerta-http-only-site.png)
+
+---
+
+### 4.2 Alertas descartados e resultados não selecionados para análise detalhada
+
+Além dos três alertas analisados acima, o relatório do ZAP registrou outros três tipos de
+resultado. Eles não foram selecionados para a análise detalhada porque apresentam menor
+prioridade no contexto desta atividade.
+
+É importante diferenciar os resultados: **dois são classificados pelo ZAP como
+Informational**, enquanto **Timestamp Disclosure - Unix** é classificado como **Low** e possui
+**Low confidence**.
+
+| Resultado | Risco | Confiança | Ocorrências | Tratamento | Evidência |
+|---|---|---|---:|---|---|
+| **Timestamp Disclosure - Unix** | Low | Low | 5 | Não selecionado para análise detalhada devido ao baixo risco e à baixa confiança indicados pelo ZAP. | Print 06 |
+| **Modern Web Application** | Informational | Medium | 5 | Resultado informativo, mantido no relatório bruto e não tratado como vulnerabilidade. | Print 07 |
+| **User Agent Fuzzer** | Informational | Medium | 5 | Resultado informativo, mantido no relatório bruto e não tratado como vulnerabilidade. | Print 08 |
+
+Os três resultados também foram capturados na tela do ZAP, e não apenas registrados no relatório
+bruto. As capturas mostram a classificação de risco e o nível de confiança que a ferramenta
+atribuiu a cada um, que é a informação usada para justificar a decisão de não aprofundar a
+análise.
+
+**Print 06 — Timestamp Disclosure - Unix**
+
+![Print 06 — Timestamp Disclosure - Unix](../evidencias/etapa-5/capturas-de-tela/06-zap-alerta-timestamp-disclosure-unix-deterministic.png)
+
+**Arquivo:**
+
+`evidencias/etapa-5/capturas-de-tela/06-zap-alerta-timestamp-disclosure-unix-deterministic.png`
+
+**Print 07 — Modern Web Application**
+
+![Print 07 — Modern Web Application](../evidencias/etapa-5/capturas-de-tela/07-zap-alerta-modern-web-application-systemic.png)
+
+**Arquivo:**
+
+`evidencias/etapa-5/capturas-de-tela/07-zap-alerta-modern-web-application-systemic.png`
+
+**Print 08 — User Agent Fuzzer**
+
+![Print 08 — User Agent Fuzzer](../evidencias/etapa-5/capturas-de-tela/08-zap-alerta-user-agent-fuzzer-systemic.png)
+
+**Arquivo:**
+
+`evidencias/etapa-5/capturas-de-tela/08-zap-alerta-user-agent-fuzzer-systemic.png`
+
+Os resultados acima continuam disponíveis no relatório HTML exportado pelo ZAP. A decisão de
+não analisá-los em profundidade não significa que todos sejam falsos positivos. Em especial,
+os dois resultados **Informational** são registros informativos da ferramenta, enquanto
+**Timestamp Disclosure - Unix** foi apenas considerado de menor prioridade para esta análise.
+
+Dessa forma, todos os seis tipos de resultado encontrados na execução permanecem documentados:
+três foram analisados detalhadamente na seção 4.1 e três foram registrados nesta seção como
+resultados não selecionados para análise aprofundada.
 
 ## 5. Relação com a análise do SaborExpress
 

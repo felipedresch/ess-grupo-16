@@ -46,19 +46,22 @@ Essa combinação permite identificar ameaças concretas em **todas** as seis ca
 
 ## 2. Os sete entregáveis
 
-| Etapa | Documento | Conteúdo | Status |
-|---|---|---|---|
-| **1** | [docs/etapa-1-ameacas-stride.md](docs/etapa-1-ameacas-stride.md) | Descrição do sistema, ativos, modelagem STRIDE e casos de abuso | 🟡 Em andamento |
-| **2** | [docs/etapa-2-riscos-nist.md](docs/etapa-2-riscos-nist.md) | Análise, priorização e tratamento de riscos com o NIST CSF 2.0 | 🔴 Não iniciado |
-| **3** | [docs/etapa-3-arquitetura-segura.md](docs/etapa-3-arquitetura-segura.md) | Requisitos de segurança, vulnerabilidades catalogadas, diagrama e decisões | 🔴 Não iniciado |
-| **4** | [docs/etapa-4-codigo-seguro.md](docs/etapa-4-codigo-seguro.md) | Práticas de código seguro com testes definidos antes da implementação | 🔴 Não iniciado |
-| **5** | [docs/etapa-5-verificacao-vulnerabilidades.md](docs/etapa-5-verificacao-vulnerabilidades.md) | Verificação com OWASP ZAP e análise dos achados | 🔴 Não iniciado |
-| **6** | [roteiros/etapa-6-deteccao-de-intrusoes.md](roteiros/etapa-6-deteccao-de-intrusoes.md) | Roteiro de monitoramento e regras de detecção de intrusões | 🔴 Não iniciado |
-| **7** | [roteiros/etapa-7-devsecops-e-video-final.md](roteiros/etapa-7-devsecops-e-video-final.md) | Pipeline DevSecOps, roteiro e vídeo final | 🔴 Não iniciado |
+| Etapa | Documento | Conteúdo |
+|---|---|---|
+| **1** | [docs/etapa-1-ameacas-stride.md](docs/etapa-1-ameacas-stride.md) | Descrição do sistema, ativos, modelagem STRIDE e casos de abuso |
+| **2** | [docs/etapa-2-riscos-nist.md](docs/etapa-2-riscos-nist.md) | Análise, priorização e tratamento de riscos com o NIST CSF 2.0 |
+| **3** | [docs/etapa-3-arquitetura-segura.md](docs/etapa-3-arquitetura-segura.md) | Requisitos de segurança, vulnerabilidades catalogadas, diagrama e decisões |
+| **4** | [docs/etapa-4-codigo-seguro.md](docs/etapa-4-codigo-seguro.md) | Práticas de código seguro com testes definidos antes da implementação |
+| **5** | [docs/etapa-5-verificacao-vulnerabilidades.md](docs/etapa-5-verificacao-vulnerabilidades.md) | Verificação com OWASP ZAP e análise dos achados |
+| **6** | [roteiros/etapa-6-deteccao-de-intrusoes.md](roteiros/etapa-6-deteccao-de-intrusoes.md) | Roteiro de monitoramento e regras de detecção de intrusões |
+| **7** | [roteiros/etapa-7-devsecops-e-video-final.md](roteiros/etapa-7-devsecops-e-video-final.md) | Pipeline DevSecOps, roteiro e vídeo final |
 
-**Apoio:** [docs/backlog.md](docs/backlog.md) — divisão de tarefas; [CONTRIBUTING.md](CONTRIBUTING.md) — fluxo de trabalho e padrão de commits; [diagramas/README.md](diagramas/README.md) — convenções dos diagramas.
+> 📋 **O andamento de cada etapa fica em [docs/backlog.md](docs/backlog.md)**, que é a única fonte
+> de verdade sobre status, responsáveis e prazos. Este README não repete essa informação de
+> propósito: status mantido em dois lugares diverge, e o backlog é o que o grupo atualiza a cada
+> commit.
 
-Legenda: 🔴 não iniciado, 🟡 em andamento, 🟢 concluído
+**Apoio:** [CONTRIBUTING.md](CONTRIBUTING.md) — fluxo de trabalho e padrão de commits; [diagramas/README.md](diagramas/README.md) — convenções dos diagramas.
 
 > **Nota sobre a organização em arquivos separados:** o enunciado da Etapa 2 exige que o conteúdo da Etapa 1 **não seja substituído nem apagado**, e o item 3 pede que os sete entregáveis estejam claramente identificados. Um arquivo por etapa atende às duas exigências, preserva integralmente o conteúdo anterior e reduz conflitos de versionamento entre os seis integrantes. Os documentos são encadeados: cada etapa referencia os identificadores das anteriores — ameaças (`T##`), casos de abuso (`CA##`), riscos (`R##`), requisitos (`RS##`) e testes (`TS##`).
 

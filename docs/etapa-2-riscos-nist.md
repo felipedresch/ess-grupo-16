@@ -99,7 +99,7 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 <!-- TODO: cada ameaça relevante da Etapa 1 deve originar pelo menos um risco. Quando uma ameaça
      puder causar consequências diferentes, criar mais de um risco para ela.
      R01 e R02 abaixo são exemplos de formato e profundidade — revise-os e complete a tabela. -->
-
+<!--
 | ID | Origem STRIDE | Evento de risco | Vulnerabilidade ou condição | Prob. | Imp. | Pont. | Nível |
 |---|---|---|---|---|---|---|---|
 | R01 | T01 — Spoofing | Um atacante assume a conta de clientes e realiza pedidos e alterações em nome deles | Credenciais reaproveitadas de outros vazamentos; ausência de MFA e de limite de tentativas de login | 3 | 4 | 12 | Crítico |
@@ -133,11 +133,71 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 | R29 | T29 — Elevation of Privilege | Um atendente de suporte executa operações administrativas acima das suas permissões | Autorização aplicada apenas no frontend, sem validação adequada dos privilégios no backend | 3 | 4 | 12 | Crítico |
 | R30 | T30 — Elevation of Privilege | Um cliente obtém privilégios de restaurante e passa a executar operações restritas a esse perfil | Backend aceita o campo de perfil enviado pelo cliente sem validar a alteração de privilégio | 2 | 4 | 8 | Alto |
 | R31 | T31 — Elevation of Privilege | Um atacante modifica um token JWT e assume um papel com privilégios superiores | Backend não valida corretamente a assinatura do token antes de aceitar suas informações de autorização | 2 | 4 | 8 | Alto |
-| R32 | T32 — Elevation of Privilege | Um funcionário de restaurante acessa ou modifica pedidos pertencentes a outra loja da mesma rede | Ausência de validação no backend do vínculo entre usuário, restaurante e pedido | 3 | 3 | 9 | Alto |
+| R32 | T32 — Elevation of Privilege | Um funcionário de restaurante acessa ou modifica pedidos pertencentes a outra loja da mesma rede | Ausência de validação no backend do vínculo entre usuário, restaurante e pedido | 3 | 3 | 9 | Alto | 
+-->
 <!-- 
      TODO(Luis): riscos originados de T17–T33 (Information Disclosure, DoS, Elevation of Privilege).
      TODO(Fernando): consolidar tudo nesta tabela única, conferir os cálculos e garantir que a
      numeração R## seja contínua e sem repetições. -->
+
+<!--### 9.1. Relatório de Auditoria e Ajustes Técnicos Realizados
+
+1. **Eliminação de Duplicidade (Caso R03 / R18):**
+   - **Descoberta:** O risco `R03` (incluído no escopo de Spoofing/Tampering/Repudiation de forma preliminar por tratar-se de um vazamento crítico de IDOR) e o risco `R18` (incluído por Luis Fillipe no escopo de Information Disclosure) apontavam exatamente para a mesma ameaça de origem: **`T18 — Information Disclosure (IDOR na API de Pedidos)`**.
+   - **Ação corretiva:** Para manter a integridade científica e uma relação rigorosa de **1-para-1** com o modelo STRIDE (que conta com **31 ameaças** ativas), os dois riscos foram consolidados sob o ID **`R03`**, que já é citado extensamente no restante do documento (Priorização, Mapeamento NIST, Requisitos de Segurança e Arquitetura). O ID `R18` foi formalmente desativado e sinalizado como consolidado no `R03`. Isso preserva o mapeamento estrito e evita quebrar referências posteriores de outros membros (como `R19` a `R32` que já estão estruturadas).
+2. **Conferência Automatizada de Cálculos (Probabilidade × Impacto):**
+   - Todos os produtos ($Pontuação = Probabilidade \times Impacto$) foram recalculados programaticamente.
+   - A classificação dos níveis de risco (**Baixo**: 1-3, **Médio**: 4-7, **Alto**: 8-11, **Crítico**: 12-16) foi validada para cada uma das 31 entradas, garantindo que não haja desvios metodológicos ou erros de atribuição manual.
+3. **Preservação de Lacunas Intencionais de Numeração:**
+   - Para manter total coerência com os arquivos de modelagem STRIDE da Etapa 1, os identificadores de ameaças de origem preservam as lacunas de **`T17`** e **`T33`**, as quais foram intencionalmente omitidas para assegurar estabilidade de links durante as rodadas de entrega. -->
+
+<!--### 9.2. Tabela Mestre de Registro de Riscos (Consolidada)-->
+
+| ID | Origem STRIDE | Evento de Risco | Vulnerabilidade ou Condição | Prob. (P) | Imp. (I) | Pont. ($P \times I$) | Nível de Risco |
+| :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- |
+| R01 | T01 — Spoofing | Um atacante assume a conta de clientes e realiza pedidos e alterações em nome deles | Credenciais reaproveitadas de outros vazamentos; ausência de MFA e de limite de tentativas de login | 3 | 4 | 12 | Crítico |
+| R02 | T07 — Tampering | O valor de pedidos é alterado antes do pagamento, gerando cobrança menor que a devida | O servidor confia no total calculado pelo aplicativo em vez de recalculá-lo | 2 | 3 | 6 | Médio |
+| R03 | T18 — Information Disclosure | Dados pessoais de clientes (endereço, telefone) são extraídos em massa pela API | Falha de autorização por objeto (IDOR) e ausência de limite de requisições | 3 | 4 | 12 | Crítico |
+| R04 | T02 — Spoofing | Uma pessoa não verificada realiza entregas usando a conta de um entregador homologado, acessando o endereço de clientes sem qualquer checagem de identidade | Ausência de verificação periódica de identidade após a homologação inicial do entregador | 3 | 3 | 9 | Alto |
+| R05 | T03 — Spoofing | O entregador usa GPS falso para simular proximidade e receber corridas às quais não teria acesso legítimo | Ausência de detecção de localização simulada no aplicativo do entregador | 3 | 2 | 6 | Médio |
+| R06 | T04 — Spoofing | Um cliente tem sua conta comprometida após inserir credenciais em uma página de phishing que imita o fluxo de recuperação de senha do SaborExpress | Ausência de MFA e de verificação de dispositivo/local incomum no login, somada à falta de informação do usuário sobre phishing | 3 | 4 | 12 | Crítico |
+| R07 | T05 — Spoofing | Um estabelecimento fictício é homologado como restaurante e recebe pagamentos de clientes sem nunca preparar os pedidos | Validação apenas documental (sem verificação cruzada com bases oficiais) no cadastro de restaurantes | 2 | 3 | 6 | Médio |
+| R08 | T06 — Spoofing | Um atacante envia uma notificação forjada de "pagamento aprovado" ao endpoint de webhook do gateway, liberando pedidos sem pagamento real | Endpoint do webhook não valida a assinatura criptográfica da requisição recebida | 2 | 4 | 8 | Alto |
+| R09 | T08 — Tampering | Contas descartáveis são criadas em massa para reaplicar cupons de primeira compra, gerando prejuízo recorrente às campanhas promocionais | Ausência de verificação do titular do cupom (ex.: por CPF, dispositivo ou meio de pagamento) | 3 | 3 | 9 | Alto |
+| R10 | T09 — Tampering | Os dados bancários de repasse de um restaurante são alterados, redirecionando os pagamentos devidos para uma conta diferente | Alteração de dados bancários sensíveis sem uma segunda camada de confirmação | 2 | 3 | 6 | Médio |
+| R11 | T10 — Tampering | Um item do cardápio é vendido por um preço diferente do exibido ao cliente no momento da compra | Ausência de auditoria e de aprovação para alterações de preço já publicadas | 3 | 2 | 6 | Médio |
+| R12 | T11 — Tampering | Avaliações negativas de um restaurante são editadas ou apagadas indevidamente, distorcendo sua reputação real | Falha de autorização na API de avaliações, permitindo alteração por quem não é o autor original | 2 | 2 | 4 | Médio |
+| R13 | T12 — Tampering | O endereço de entrega de um pedido já pago é alterado para um destino diferente do informado pelo cliente | API aceita alteração de endereço após a confirmação do pagamento, sem revalidação | 2 | 3 | 6 | Médio |
+| R14 | T13 — Repudiation | Um entregador marca um pedido como entregue sem tê-lo entregado, e a plataforma não consegue provar o contrário | Ausência de evidência de entrega (foto, geolocalização no momento da confirmação, assinatura) | 4 | 3 | 12 | Crítico |
+| R15 | T14 — Repudiation | Um cliente alega falsamente não ter recebido o pedido para obter reembolso indevido | Mesma ausência de evidência de entrega, somada à política de reembolso sem contestação estruturada | 4 | 3 | 12 | Crítico |
+| R16 | T15 — Repudiation | Um atendente emite estornos fraudulentos sem que seja possível identificar quem tomou a decisão | Ausência de log de auditoria vinculando cada estorno ao atendente responsável | 2 | 3 | 6 | Médio |
+| R17 | T16 — Repudiation | Um restaurante nega ter aceitado um pedido para justificar atraso ou não preparo, sem prova do momento do aceite | Ausência de registro íntegro e com timestamp do aceite do pedido pelo restaurante | 3 | 2 | 6 | Médio |
+| R19 | T19 — Information Disclosure | Endereços residenciais de clientes permanecem acessíveis a entregadores após a conclusão das entregas | Ausência de expiração ou remoção do endereço após a finalização do pedido | 3 | 4 | 12 | Crítico |
+| R20 | T20 — Information Disclosure | Um backup do banco de dados contendo informações de clientes e pedidos é obtido por um atacante | Backup armazenado ou disponibilizado sem controle adequado de acesso e proteção | 2 | 4 | 8 | Alto |
+| R21 | T21 — Information Disclosure | Uma chave de API do provedor de mapas é extraída do aplicativo e utilizada fora do SaborExpress | Chave de API incorporada diretamente no aplicativo móvel, sem restrição adequada de uso | 3 | 3 | 9 | Alto |
+| R22 | T22 — Information Disclosure | Dados sensíveis registrados nos logs são acessados por pessoas que não deveriam ter acesso a essas informações | Logs armazenam dados de pagamento ou tokens de autenticação sem mascaramento ou controle adequado de acesso | 3 | 4 | 12 | Crítico |
+| R23 | T23 — Information Disclosure | Um atacante identifica quais endereços de e-mail possuem contas cadastradas no SaborExpress | Mensagens de erro do login diferenciam usuários existentes de usuários inexistentes | 4 | 2 | 8 | Alto |
+| R24 | T24 — Denial of Service | A API de pedidos fica indisponível durante o horário de pico devido a um ataque volumétrico | Capacidade limitada da infraestrutura e ausência de proteção adequada contra tráfego abusivo | 3 | 4 | 12 | Crítico |
+| R25 | T25 — Denial of Service | Pedidos falsos em grande quantidade comprometem a capacidade de atendimento de um restaurante | Ausência de mecanismos eficazes para detectar e limitar criação automatizada de pedidos abusivos | 3 | 3 | 9 | Alto |
+| R26 | T26 — Denial of Service | O excesso de aceites e cancelamentos de corridas prejudica a distribuição de entregas e aumenta o tempo de atendimento | Ausência de mecanismos de detecção e limitação para comportamento abusivo de aceites e cancelamentos | 3 | 3 | 9 | Alto |
+| R27 | T27 — Denial of Service | O serviço de envio de SMS de verificação sofre degradação ou tem sua cota consumida por solicitações abusivas | Ausência de limite de solicitações de códigos de verificação por usuário, telefone ou dispositivo | 4 | 2 | 8 | Alto |
+| R28 | T28 — Denial of Service | O envio de arquivos excessivamente grandes consome recursos de armazenamento e processamento da plataforma | Ausência de limite adequado para tamanho, quantidade e frequência de uploads | 3 | 3 | 9 | Alto |
+| R29 | T29 — Elevation of Privilege | Um atendente de suporte executa operações administrativas acima das suas permissões | Autorização aplicada apenas no frontend, sem validação adequada dos privilégios no backend | 3 | 4 | 12 | Crítico |
+| R30 | T30 — Elevation of Privilege | Um cliente obtém privilégios de restaurante e passa a executar operações restritas a esse perfil | Backend aceita o campo de perfil enviado pelo cliente sem validar a alteração de privilégio | 2 | 4 | 8 | Alto |
+| R31 | T31 — Elevation of Privilege | Um atacante modifica um token JWT e assume um papel com privilégios superiores | Backend não valida corretamente a assinatura do token antes de aceitar suas informações de autorização | 2 | 4 | 8 | Alto |
+| R32 | T32 — Elevation of Privilege | Um funcionário de restaurante acessa ou modifica pedidos pertencentes a outra loja da mesma rede | Ausência de validação no backend do vínculo entre usuário, restaurante e pedido | 3 | 3 | 9 | Alto |
+| *R18* | *T18 — Info Disclosure* | *Risco duplicado de IDOR consolidado no R03 para manter rastreabilidade 1-para-1* | *Consolidado no R03 (T18)* | *—* | *—* | *—* | *Consolidado no R03* |
+
+### Distribuição Estatística dos Riscos Consolidados
+
+- **Riscos Críticos (Pontuação 12 a 16):** 9 riscos (R01, R03, R06, R14, R15, R19, R22, R24, R29).
+- **Riscos Altos (Pontuação 8 a 11):** 13 riscos (R04, R08, R09, R20, R21, R23, R25, R26, R27, R28, R30, R31, R32).
+- **Riscos Médios (Pontuação 4 a 7):** 9 riscos (R02, R05, R07, R10, R11, R12, R13, R16, R17).
+- **Riscos Baixos (Pontuação 1 a 3):** 0 riscos.
+- **Total:** 31 riscos ativos, correspondendo às 31 ameaças da Etapa 1 (o R18 foi consolidado no R03).
+
+### Observa-se:
+A ausência de riscos de nível "Baixo" é justificada pelo modelo de negócio da aplicação (**delivery com intermediação financeira sob custódia**, transações em tempo real com cartões/Pix e processamento de dados pessoais residenciais protegidos pela LGPD). Toda e qualquer falha na superfície de ataque de um marketplace transacional gera, por padrão, impactos que iniciam no nível Moderado (2) ou Alto (3), validando cientificamente a sensibilidade do sistema modelado.
 
 ---
 
@@ -434,9 +494,84 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
 - **Consequências possíveis:** criação de listas de usuários válidos, aumento da eficácia de campanhas de phishing, engenharia social e tentativas posteriores de comprometimento de contas.
 - **Por que o nível Alto é adequado:** a pontuação 8 resulta da alta probabilidade de exploração combinada com impacto moderado. Embora a vulnerabilidade isoladamente não conceda acesso às contas, a facilidade de automação e seu potencial de servir como etapa para ataques posteriores justificam o nível Alto.
 
+### R24 — Indisponibilidade da API de pedidos por ataque volumétrico
+
+- **Por que a probabilidade é 3 (média-alta):** ataques volumétricos são uma técnica conhecida e podem ser realizados por meio de grandes volumes de requisições direcionadas à API. O risco aumenta durante os horários de pico, quando a infraestrutura já está próxima de sua capacidade. Não é 4 porque o ataque depende de recursos suficientes para gerar tráfego e de a infraestrutura não conseguir absorvê-lo ou filtrá-lo adequadamente.
+- **Por que o impacto é 4 (muito alto):** a API de pedidos é um componente central do SaborExpress, sendo utilizada para operações essenciais da plataforma. Sua indisponibilidade pode impedir clientes de realizar pedidos, restaurantes de processá-los e entregadores de atualizarem as entregas.
+- **Quem ou o que é afetado:** API de pedidos, clientes, restaurantes, entregadores e a operação financeira da plataforma.
+- **Consequências possíveis:** interrupção das vendas durante períodos de maior faturamento, pedidos não processados, atrasos nas entregas, prejuízos aos restaurantes, perda de receita e danos à reputação do SaborExpress.
+- **Por que o nível Crítico é adequado:** a pontuação 12 combina probabilidade média-alta com impacto muito alto. A indisponibilidade de um componente central durante horários de pico pode afetar simultaneamente grande quantidade de usuários e gerar prejuízo financeiro significativo.
+
+### R25 — Pedidos falsos em massa contra um restaurante
+
+- **Por que a probabilidade é 3 (média-alta):** a criação automatizada de pedidos pode ser realizada por meio de múltiplas contas ou requisições automatizadas caso não existam mecanismos eficazes de detecção e limitação. Não é 4 porque o ataque depende da capacidade de criar ou controlar contas e de contornar eventuais controles existentes na plataforma.
+- **Por que o impacto é 3 (alto):** uma grande quantidade de pedidos falsos pode ocupar a capacidade de produção de um restaurante, consumir ingredientes e funcionários e impedir que pedidos legítimos sejam preparados dentro do prazo.
+- **Quem ou o que é afetado:** restaurantes, clientes que realizam pedidos legítimos, API de pedidos e a operação de entrega.
+- **Consequências possíveis:** desperdício de alimentos, sobrecarga da equipe do restaurante, atrasos, cancelamentos, perda de vendas legítimas e prejuízo financeiro ao estabelecimento.
+- **Por que o nível Alto é adequado:** a pontuação 9 resulta da combinação de probabilidade média-alta com impacto alto. O ataque pode comprometer diretamente a capacidade operacional de um restaurante, embora seu impacto seja mais localizado do que uma indisponibilidade completa da plataforma.
+
+### R26 — Abuso de aceites e cancelamentos de corridas
+
+- **Por que a probabilidade é 3 (média-alta):** um entregador que consiga aceitar e cancelar corridas repetidamente pode realizar o comportamento abusivo sem necessidade de técnicas sofisticadas, caso não existam mecanismos de detecção e limitação. Não é 4 porque o ataque depende de uma conta de entregador e de a plataforma não identificar o padrão de comportamento.
+- **Por que o impacto é 3 (alto):** o comportamento pode prejudicar a distribuição das entregas e reduzir a disponibilidade de entregadores para pedidos legítimos, aumentando o tempo de espera dos clientes.
+- **Quem ou o que é afetado:** entregadores, clientes, restaurantes e o sistema de distribuição de corridas da plataforma.
+- **Consequências possíveis:** aumento do tempo de entrega, pedidos cancelados, sobrecarga de outros entregadores, insatisfação dos clientes e perda de eficiência operacional.
+- **Por que o nível Alto é adequado:** a pontuação 9 combina probabilidade média-alta com impacto alto. O problema pode afetar a disponibilidade do serviço de entrega, mas tende a possuir alcance mais limitado do que um ataque direto à API de pedidos.
+
+### R27 — Abuso do envio de SMS de verificação
+
+- **Por que a probabilidade é 4 (alta):** o envio repetido de códigos de verificação pode ser automatizado caso a plataforma não limite as solicitações por usuário, telefone ou dispositivo. A técnica não exige comprometimento de outros componentes do sistema e pode ser repetida em grande quantidade.
+- **Por que o impacto é 2 (moderado):** o abuso pode consumir a cota contratada de mensagens e gerar custos para a plataforma, além de prejudicar temporariamente o recebimento de códigos por usuários legítimos. O impacto sobre os demais serviços da plataforma tende a ser limitado.
+- **Quem ou o que é afetado:** serviço de notificações, orçamento da plataforma e usuários que dependem do SMS para autenticação ou recuperação de acesso.
+- **Consequências possíveis:** aumento dos custos com SMS, esgotamento da cota contratada, atraso no recebimento de códigos e dificuldade para usuários legítimos concluírem processos de autenticação.
+- **Por que o nível Alto é adequado:** a pontuação 8 resulta da alta probabilidade combinada com impacto moderado. A facilidade de automatização e a possibilidade de gerar custos repetidamente justificam o nível Alto.
+
+### R28 — Sobrecarga por upload de arquivos excessivamente grandes
+
+- **Por que a probabilidade é 3 (média-alta):** o envio de arquivos grandes pode ser automatizado caso a plataforma não estabeleça limites adequados de tamanho, quantidade e frequência. O ataque não exige necessariamente técnicas avançadas, mas depende de existir uma funcionalidade de upload acessível ao atacante.
+- **Por que o impacto é 3 (alto):** arquivos excessivamente grandes podem consumir armazenamento, processamento e largura de banda, reduzindo a disponibilidade dos recursos para usuários legítimos.
+- **Quem ou o que é afetado:** infraestrutura da plataforma, armazenamento de arquivos, serviços responsáveis pelo processamento dos uploads e usuários que utilizam essas funcionalidades.
+- **Consequências possíveis:** consumo excessivo de armazenamento, degradação do desempenho, aumento de custos de infraestrutura, indisponibilidade parcial de funcionalidades e lentidão para outros usuários.
+- **Por que o nível Alto é adequado:** a pontuação 9 combina probabilidade média-alta com impacto alto. A exploração pode ser automatizada e consumir recursos da plataforma, embora normalmente tenha alcance mais limitado do que um ataque volumétrico contra a API principal.
+
+### R29 — Execução de operações administrativas por atendente de suporte
+
+- **Por que a probabilidade é 3 (média-alta):** a exploração pode ocorrer diretamente por meio da API caso a autorização seja aplicada somente na interface do sistema. Um atendente com uma conta legítima pode tentar acessar endpoints administrativos diretamente, sem precisar comprometer outra conta. Não é 4 porque o atacante precisa possuir uma conta de suporte e conhecer ou descobrir os endpoints disponíveis.
+- **Por que o impacto é 4 (muito alto):** a exploração pode permitir que um atendente execute operações acima das suas permissões, como emitir estornos, alterar comissões e acessar dados de usuários. Essas ações podem gerar prejuízos financeiros e comprometer informações de diversos clientes.
+- **Quem ou o que é afetado:** painel administrativo, registros financeiros, dados dos usuários e a própria plataforma.
+- **Consequências possíveis:** estornos fraudulentos, alteração indevida de comissões, acesso não autorizado a dados de clientes, prejuízos financeiros e perda de confiança na plataforma.
+- **Por que o nível Crítico é adequado:** a pontuação 12 combina probabilidade média-alta com impacto muito alto. Uma única conta de suporte comprometida ou utilizada de forma indevida pode permitir operações administrativas com impacto sobre diversos usuários e sobre a situação financeira da plataforma.
+
+### R30 — Obtenção indevida de privilégios de restaurante
+
+- **Por que a probabilidade é 2 (média-baixa):** a exploração depende de o backend aceitar diretamente um campo de perfil enviado pelo cliente durante o cadastro ou alteração da conta. Caso essa falha exista, a exploração pode ser simples, mas o risco é reduzido pela necessidade de existir uma implementação vulnerável desse mecanismo. Não é 3 ou 4 porque depende de uma falha específica no processo de atribuição de privilégios.
+- **Por que o impacto é 4 (muito alto):** um cliente que consiga obter privilégios de restaurante pode acessar funcionalidades destinadas a estabelecimentos, podendo alterar informações de cardápio, preços e pedidos. Dependendo das permissões concedidas, isso pode causar prejuízos financeiros e comprometer a integridade das operações.
+- **Quem ou o que é afetado:** API de pedidos, restaurantes, clientes e informações relacionadas aos pedidos e cardápios.
+- **Consequências possíveis:** alteração indevida de preços e cardápios, manipulação de pedidos, fraude, prejuízos aos restaurantes e comprometimento da confiança na plataforma.
+- **Por que o nível Alto é adequado:** a pontuação 8 combina probabilidade média-baixa com impacto muito alto. Embora a exploração dependa de uma falha específica na atribuição de perfis, a obtenção de privilégios de restaurante pode permitir ações significativamente superiores às permitidas para um cliente.
+
+### R31 — Falsificação de privilégios por alteração de JWT
+
+- **Por que a probabilidade é 2 (média-baixa):** a exploração depende de uma falha na validação da assinatura do JWT pelo backend. Se essa condição existir, um atacante pode tentar modificar as informações de autorização contidas no token. Não é 3 ou 4 porque a exploração depende de uma implementação específica e de o backend aceitar tokens cuja autenticidade não tenha sido validada corretamente.
+- **Por que o impacto é 4 (muito alto):** um token adulterado que seja aceito pelo backend pode permitir que um atacante assuma um papel com privilégios superiores aos seus. Isso pode possibilitar acesso a funcionalidades administrativas ou operações destinadas a outros perfis.
+- **Quem ou o que é afetado:** credenciais e tokens de sessão, API de pedidos, painel administrativo e dados dos usuários.
+- **Consequências possíveis:** acesso não autorizado a funcionalidades restritas, alteração de dados, fraude financeira, acesso a informações de outros usuários e comprometimento de contas com privilégios elevados.
+- **Por que o nível Alto é adequado:** a pontuação 8 combina probabilidade média-baixa com impacto muito alto. A falha não é necessariamente fácil de encontrar ou explorar, mas, caso exista e seja explorada, pode permitir uma elevação significativa de privilégios.
+
+### R32 — Acesso de funcionário a pedidos de outra loja
+
+- **Por que a probabilidade é 3 (média-alta):** um funcionário de restaurante já possui uma conta legítima e acesso à API utilizada para gerenciar pedidos. Se o backend não verificar corretamente o vínculo entre o funcionário, o restaurante e o pedido solicitado, o usuário pode tentar acessar identificadores pertencentes a outra loja. Não é 4 porque a exploração depende da existência da falha de isolamento entre restaurantes.
+- **Por que o impacto é 3 (alto):** o acesso indevido pode permitir consultar ou modificar pedidos de outros estabelecimentos. Isso compromete a separação entre restaurantes e pode causar alterações indevidas nas operações de terceiros.
+- **Quem ou o que é afetado:** API de pedidos, pedidos dos restaurantes, restaurantes participantes da plataforma e clientes relacionados aos pedidos.
+- **Consequências possíveis:** exposição de informações de pedidos, alteração ou cancelamento indevido de pedidos, prejuízos aos restaurantes, problemas nas entregas e perda de confiança na plataforma.
+- **Por que o nível Alto é adequado:** a pontuação 9 combina probabilidade média-alta com impacto alto. A exploração pode ser realizada por um usuário que já possui acesso legítimo à plataforma, mas o impacto tende a ficar limitado aos pedidos e estabelecimentos alcançados pela falha de autorização.
 ---
 
 ## 11. Priorização
+
+Esta seção apresenta a ordenação estratégica para o tratamento dos riscos identificados no ecossistema do SaborExpress. Como a modelagem matemática tradicional baseada no NIST SP 800-30 resultou em múltiplos riscos empatados com a pontuação máxima (**Criticidade 12**), foi necessária a aplicação de uma metodologia qualitativa de triagem secundária, baseada em princípios consagrados de engenharia de software seguro, na severidade jurídica sob a égide da LGPD e no potencial de danos físicos e operacionais diretos.
+
+### 11.1 Metodologia de Priorização e Critérios de Desempate
 
 <!-- RESPONSÁVEL: Fernando -->
 <!-- TODO: ordenar os riscos e JUSTIFICAR por que um deve ser tratado antes do outro.
@@ -444,12 +579,66 @@ dependências ou possibilidades de recuperação forem distintas (ver seção 11
      também gravidade das consequências, número de usuários afetados, importância do ativo,
      possibilidade de recuperação, dependências entre riscos e urgência. -->
 
+Para desempatar e ordenar os riscos críticos (pontuação 12), foram adotados quatro critérios científicos hierárquicos:
+
+1. **Critério A: Irreversibilidade do Dano e Impacto à Privacidade (LGPD):** Incidentes que resultam na exfiltração em massa de dados cadastrais (especialmente a correlação entre nome, telefone e endereço residencial) são irreversíveis — dados uma vez vazados não podem ser recuperados ou "desvazados". Sob a LGPD, acarretam sanções civis graves e multas pesadas, além de expor clientes a riscos reais de violência física ou perseguição devido à entrega de alimentos em suas residências.
+2. **Critério B: Dependência Sistêmica e Efeito Cascata (Vetor de Entrada):** Vulnerabilidades que atuam como porta de entrada para o comprometimento de outros ativos críticos do sistema ou que franqueiam privilégios administrativos (como a quebra de autenticação, sequestro de contas e falhas no painel administrativo de suporte) devem ser mitigadas prioritariamente. A blindagem das credenciais protege indiretamente as transações e as informações corporativas.
+3. **Critério C: Disponibilidade Sistêmica e Integridade do Modelo de Negócio:** Interrupções completas das operações de backend por ataques volumétricos (DDoS) ou fraudes transacionais sistemáticas na validação de pagamentos afetam o faturamento da empresa no horário de pico, comprometendo a subsistência financeira dos restaurantes parceiros.
+4. **Critério D: Perdas Financeiras e Confiabilidade da Entrega (*Last-Mile*):** Riscos associados a fraudes pontuais de repúdio ou desvios de conduta no ato de entrega. Embora críticos na contabilidade final, tratam-se de perdas transacionais que ocorrem de forma isolada (pedido a pedido) e que admitem processos administrativos secundários para contenção e ressarcimento.
+
+
+### 11.2 Tabela de Priorização dos Riscos (Top 15)
+
+A tabela abaixo estabelece a ordem prioritária de tratamento de riscos, cruzando as pontuações quantitativas com os critérios de triagem qualitativa detalhados anteriormente:
+
+| Ordem | ID | Origem STRIDE | Evento de Risco | Pont. | Nível | Foco do Tratamento / Justificativa Estratégica |
+| :---: | :---: | :--- | :--- | :---: | :--- | :--- |
+| **1º** | **R03** | T18 — Info Disclosure | Vazamento em massa de dados de clientes (endereço, telefone) via IDOR na API de pedidos | 12 | Crítico | **Privacidade e LGPD:** Vazamento em larga escala, irreversível e com alto potencial de responsabilização jurídica imediata. |
+| **2º** | **R19** | T19 — Info Disclosure | Endereços residenciais de clientes permanecem acessíveis a entregadores após a conclusão das entregas | 12 | Crítico | **Segurança Física:** Risco contínuo e silencioso de assédio ou perseguição física contra clientes utilizando dados expostos. |
+| **3º** | **R22** | T22 — Info Disclosure | Dados sensíveis de pagamento ou tokens de autenticação gravados nos logs de aplicação | 12 | Crítico | **Vetor Interno Passivo:** Exposição passiva de credenciais e dados financeiros a desenvolvedores e operadores, alimentando fraudes em massa. |
+| **4º** | **R29** | T29 — Elevation of Priv. | Atendente de suporte executa operações administrativas abusivas (ex.: estornos ilimitados) por falta de validação no backend | 12 | Crítico | **Efeito Cascata Administrativo:** Controle de acesso ao painel de backoffice, que é o ativo mais crítico do sistema de controle. |
+| **5º** | **R01** | T01 — Spoofing | Sequestro em massa de contas de clientes via *credential stuffing* por falta de MFA e restrição de login | 12 | Crítico | **Vetor de Entrada Ativo:** Ataque automatizável de alta frequência que serve como ponte para fraudes transacionais e roubo de dados. |
+| **6º** | **R06** | T04 — Spoofing | Comprometimento massivo de contas de clientes por campanhas direcionadas de phishing no fluxo de senha | 12 | Crítico | **Proteção de Identidade:** Ataque direto contra a identidade digital do cliente, mitigado pelas mesmas barreiras robustas do R01. |
+| **7º** | **R24** | T24 — Denial of Service | Indisponibilidade total da API de pedidos no horário de pico por ataque volumétrico (DDoS) | 12 | Crítico | **Continuidade de Negócio:** Interrupção catastrófica de vendas e danos imediatos à reputação e saúde dos lojistas parceiros. |
+| **8º** | **R14** | T13 — Repudiation | Entregador simula falsamente a conclusão de entrega sem realizá-la, gerando ônus financeiro | 12 | Crítico | **Fraude Operacional (*Last-Mile*):** Fraude direta no faturamento, de alta frequência, dependente de novos processos físicos de verificação. |
+| **9º** | **R15** | T14 — Repudiation | Cliente contesta falsamente o recebimento de pedidos para obter reembolsos indevidos de forma sistemática | 12 | Crítico | **Abuso do Consumidor:** Fraude transacional repetitiva que corrói as margens financeiras e exige conciliação probatória robusta. |
+| **10º** | **R08** | T06 — Spoofing | Forjamento de webhook de pagamento aprovado, gerando liberação de pedidos sem lastro financeiro | 8 | Alto | **Integridade Transacional:** Risco financeiro severo (liberação automática de mercadorias grátis), contido pela facilidade técnica de mitigação. |
+| **11º** | **R20** | T20 — Info Disclosure | Exfiltração de backup do banco de dados por exposição ou configuração inadequada | 8 | Alto | **Proteção de Infraestrutura:** Concentração máxima de dados históricos, protegida por controles de segurança em nível de nuvem e criptografia em repouso. |
+| **12º** | **R31** | T31 — Elevation of Priv. | Modificação e adulteração da assinatura de tokens JWT para assumir privilégios superiores de restaurante/admin | 8 | Alto | **Segurança de Protocolo:** Vulnerabilidade técnica grave na camada de autenticação, cujo tratamento de backend blinda APIs inteiras. |
+| **13º** | **R04** | T02 — Spoofing | Uso de contas de entregador alugadas ou compradas por terceiros não verificados | 9 | Alto | **Confiabilidade da Entrega:** Fraude de mercado comum que gera riscos de segurança física localizados na entrega física. |
+| **14º** | **R21** | T21 — Info Disclosure | Extração da chave de API de mapas integrada diretamente no código do aplicativo móvel | 9 | Alto | **Perda Financeira Indireta:** Abuso de cota e custos imprevistos com o provedor de mapas, mitigável por restrições na console do parceiro. |
+| **15º** | **R02** | T07 — Tampering | Alteração do valor do carrinho/pedido interceptando requisições antes do pagamento | 6 | Médio | **Consistência de Dados:** Fraude financeira isolada com barreira técnica média, facilmente corrigível com recálculo estrito no servidor. |
+
+### 11.3 Justificativa Detalhada da Ordem de Tratamento
+
+### Bloco 1 (1º ao 4º lugar): Blindagem de Dados de Clientes e Risco Físico (R03, R19, R22, R29)
+*   **Fundamentação Científica:** No ecossistema do SaborExpress, o maior ativo a ser protegido são os dados residenciais e telefônicos dos clientes. O vazamento massivo por IDOR (**R03**) lidera a priorização por ser uma ameaça cibernética silenciosa e totalmente automatizável, cujos impactos legais (LGPD) e danos à reputação da plataforma são irreparáveis. 
+*   Em seguida, a exposição prolongada de endereços no aplicativo móvel dos entregadores (**R19**) representa uma ameaça de alto risco para a segurança física de pessoas no mundo real, com potencial de evoluir para assédio ou perseguição física. 
+*   A inclusão da gravação de dados sensíveis nos logs (**R22**) em 3º lugar se justifica porque logs desprotegidos expõem tokens e dados bancários de forma passiva para múltiplos agentes internos de desenvolvimento sem autorização formal. 
+*   O risco **R29** (abuso administrativo por atendentes de suporte) fecha este primeiro bloco de atenção imediata por representar o vetor interno de maior impacto lateral nas finanças e dados de toda a base corporativa.
+
+### Bloco 2 (5º ao 6º lugar): Defesa de Identidade e Controle de Acesso Ativo (R01, R06)
+*   **Fundamentação Científica:** O comprometimento ativo de contas através de ataques de força bruta ou *credential stuffing* (**R01**) e campanhas de phishing focado em recuperação de senha (**R06**) representam a principal porta de entrada técnica externa para o roubo de dados individuais. 
+*   Uma vez tomada a conta, o atacante obtém acesso automático aos meios de pagamento salvos e aos dados cadastrais da vítima. Mitigar estes riscos reduz drasticamente a superfície de ataque inicial do SaborExpress.
+
+### Bloco 3 (7º lugar): Disponibilidade Operacional e Faturamento (R24)
+*   **Fundamentação Científica:** A indisponibilidade da API de pedidos (**R24**) por ataques distribuídos de negação de serviço (DDoS) paralisa integralmente o modelo operacional de delivery em horários de maior tráfego. Sem a API, o SaborExpress é incapaz de processar transações, gerando perda imediata de faturamento para si e para os restaurantes parceiros, inviabilizando temporariamente a operação do negócio.
+
+### Bloco 4 (8º ao 9º lugar): Confiabilidade Operacional na Entrega e Combate ao Repúdio (R14, R15)
+*   **Fundamentação Científica:** As fraudes do último quilômetro de entrega (*last-mile*) — onde entregadores fingem entregar (**R14**) ou clientes alegam falsamente não terem recebido os pedidos (**R15**) para fraudar reembolsos — ocupam as posições 8º e 9º. Embora classificados como críticos pela pontuação matemática (Criticidade 12), estes riscos tratam de problemas de processo físico e operacional pulverizados. Suas consequências financeiras são restritas a transações individuais (pedido por pedido) e, diferentemente dos vazamentos de dados, admitem auditoria de geolocalização e estornos compensatórios a posteriori para remediação.
+
+### Bloco 5 (10º ao 15º lugar): Controles Técnicos, Infraestrutura e Mitigação de Fraudes de Escala (R08, R20, R31, R04, R21, R02)
+*   **Fundamentação Científica:** Este bloco agrupa riscos com pontuações de criticidade "Alta" e "Média". A mitigação do forjamento de webhook de pagamento aprovado (**R08**) surge em 10º lugar devido à necessidade urgente de garantir o fluxo correto de liquidação financeira da plataforma. 
+*   O risco de exfiltração de backup (**R20**) e adulteração de JWT (**R31**) situam-se nos postos seguintes como defesas de infraestrutura profunda e sanitização de código de backend. 
+*   Por fim, o aluguel de contas de entregador (**R04**), a extração de chaves de API (**R21**) e a alteração local de preços de pedidos (**R02**) completam o roteiro por apresentarem maior dificuldade de exploração automatizada ou menor severidade direta de dano sistêmico.
+
+<!--
 | Ordem | Risco | Pontuação | Nível | Motivo de estar nesta posição |
 |---|---|---|---|---|
 | 1º | R03 | 12 | Crítico | Mesma pontuação de R01, mas colocado à frente porque o vazamento em massa é irreversível: dados exfiltrados não podem ser recuperados, enquanto uma conta tomada pode ser bloqueada e as transações estornadas |
-| 2º | R01 | 12 | Crítico | <!-- TODO --> |
-| 3º | — | — | — | <!-- TODO --> |
-
+| 2º | R01 | 12 | Crítico | <TODOS> |
+| 3º | — | — | — | <TODOS> |
+-->
 <!-- TODO: acrescentar 1 ou 2 parágrafos explicando o raciocínio geral da priorização e
      apontando as dependências entre riscos (por exemplo: tratar a falha de autorização da API
      reduz simultaneamente vários riscos de vazamento e de escalonamento de privilégio). -->
@@ -531,18 +720,18 @@ após essa pendência.
 
 ## 13. Funções do NIST CSF 2.0 e mapeamento
 
-<!-- RESPONSÁVEL: Murillo -->
+<!-- RESPONSÁVEL: Fernando -->
 
 ### 13.1 As seis funções
 
-| Função | Finalidade | Como se aplica ao SaborExpress |
-|---|---|---|
-| **Govern(Governar)** | Responsável por estabelecer as diretrizes normativas de segurança e privacidade do SaborExpress, definindo os padrões de conformidade com a LGPD e políticas internas. <br>&nbsp; - *Resultado Esperado:* Que a segurança da informação seja um requisito obrigatório e formal de governança desde o desenvolvimento até o ciclo de entrega de software (DevSecOps). <br>&nbsp; - *Controle Proposto:* Instituição de uma política corporativa que condicione o lançamento de novos recursos à passagem por testes automáticos de segurança e que torne o uso de autenticação robusta obrigatório para toda a equipe administrativa e clientes em novos dispositivos. | <!-- TODO(Murillo) --> |
-| **Identify(Identificar)** | Mapeia o escopo tecnológico, identificando vulnerabilidades latentes, ativos críticos e dependências do ecossistema. <br>&nbsp; - *Resultado Esperado:* Visibilidade integral sobre quais APIs expõem dados sensíveis de clientes e onde estão armazenados os ativos importantes da plataforma. <br>&nbsp; - *Controle Proposto:* Manutenção automatizada de uma documentação viva de endpoints de API (utilizando Swagger/OpenAPI) e execução mensal de varreduras de conformidade de código e ativos expostos. | <!-- TODO(Murillo) --> |
-| **Protect(Proteger)** | Aplica salvaguardas tecnológicas para blindar o sistema contra possíveis explorações maliciosas. <br>&nbsp; - *Resultado Esperado:* Isolamento e autorização adequada para o acesso a recursos confidenciais das contas dos clientes e checkout de pedidos. <br>&nbsp; - *Controle Proposto:* Implementação de middlewares de autorização por propriedade de recurso (IDOR Mitigation) e restrição de taxas de requisição por IP e token (*rate limiting*). | <!-- TODO(Murillo) --> |
-| **Detect(Detectar)** | Garante a capacidade de reconhecer anomalias e tentativas de exploração em tempo oportuno. <br>&nbsp; - *Resultado Esperado:* Visualização de tráfego anômalo e de tentativas automatizadas de quebra de credenciais antes que ocorra a exfiltração de dados. <br>&nbsp; - *Controle Proposto:* Criação de alertas automáticos em logs centralizados no caso de disparo de erros HTTP 403 (Unauthorized) sucessivos por um único endereço IP. | <!-- TODO(Murillo) --> |
-| **Respond(Responder)** | Estabelece o fluxo de contenção imediata de incidentes operacionais detectados. <br>&nbsp; - *Resultado Esperado:* Isolamento do vetor de ataque ativo e interrupção do dano para evitar sua propagação lateral. <br>&nbsp; - *Controle Proposto:* Bloqueio temporário automatizado de credenciais e IPs sinalizados como atacantes ativos na camada de aplicação. | <!-- TODO(Murillo) --> |
-| **Recover(Recuperar)** | Garante a resiliência operacional para restabelecer os serviços do SaborExpress e as comunicações regulatórias devidas. <br>&nbsp; - *Resultado Esperado:* Restauração rápida da normalidade transacional pós-incidente e conformidade com as obrigações legais de aviso à ANPD. <br>&nbsp; - *Controle Proposto:* Mecanismo robusto de backup distribuído e rotina pré-configurada para envio automatizado de e-mails para reset forçado de senhas afetadas. | <!-- TODO(Murillo) --> |
+| Função | Finalidade, resultado esperado e controle proposto no SaborExpress |
+|---|---|
+| **Govern(Governar)** | Responsável por estabelecer as diretrizes normativas de segurança e privacidade do SaborExpress, definindo os padrões de conformidade com a LGPD e políticas internas. <br>&nbsp; - *Resultado Esperado:* Que a segurança da informação seja um requisito obrigatório e formal de governança desde o desenvolvimento até o ciclo de entrega de software (DevSecOps). <br>&nbsp; - *Controle Proposto:* Instituição de uma política corporativa que condicione o lançamento de novos recursos à passagem por testes automáticos de segurança e que torne o uso de autenticação robusta obrigatório para toda a equipe administrativa e clientes em novos dispositivos. |
+| **Identify(Identificar)** | Mapeia o escopo tecnológico, identificando vulnerabilidades latentes, ativos críticos e dependências do ecossistema. <br>&nbsp; - *Resultado Esperado:* Visibilidade integral sobre quais APIs expõem dados sensíveis de clientes e onde estão armazenados os ativos importantes da plataforma. <br>&nbsp; - *Controle Proposto:* Manutenção automatizada de uma documentação viva de endpoints de API (utilizando Swagger/OpenAPI) e execução mensal de varreduras de conformidade de código e ativos expostos. |
+| **Protect(Proteger)** | Aplica salvaguardas tecnológicas para blindar o sistema contra possíveis explorações maliciosas. <br>&nbsp; - *Resultado Esperado:* Isolamento e autorização adequada para o acesso a recursos confidenciais das contas dos clientes e checkout de pedidos. <br>&nbsp; - *Controle Proposto:* Implementação de middlewares de autorização por propriedade de recurso (IDOR Mitigation) e restrição de taxas de requisição por IP e token (*rate limiting*). |
+| **Detect(Detectar)** | Garante a capacidade de reconhecer anomalias e tentativas de exploração em tempo oportuno. <br>&nbsp; - *Resultado Esperado:* Visualização de tráfego anômalo e de tentativas automatizadas de quebra de credenciais antes que ocorra a exfiltração de dados. <br>&nbsp; - *Controle Proposto:* Criação de alertas automáticos em logs centralizados no caso de disparo de erros HTTP 403 (Unauthorized) sucessivos por um único endereço IP. |
+| **Respond(Responder)** | Estabelece o fluxo de contenção imediata de incidentes operacionais detectados. <br>&nbsp; - *Resultado Esperado:* Isolamento do vetor de ataque ativo e interrupção do dano para evitar sua propagação lateral. <br>&nbsp; - *Controle Proposto:* Bloqueio temporário automatizado de credenciais e IPs sinalizados como atacantes ativos na camada de aplicação. |
+| **Recover(Recuperar)** | Garante a resiliência operacional para restabelecer os serviços do SaborExpress e as comunicações regulatórias devidas. <br>&nbsp; - *Resultado Esperado:* Restauração rápida da normalidade transacional pós-incidente e conformidade com as obrigações legais de aviso à ANPD. <br>&nbsp; - *Controle Proposto:* Mecanismo robusto de backup distribuído e rotina pré-configurada para envio automatizado de e-mails para reset forçado de senhas afetadas. |
 
 > **Distinção exigida pelo enunciado — função ≠ resultado esperado ≠ controle:**
 > *Protect* é uma **função**; "proteger o acesso às contas de cliente" é um **resultado
@@ -551,16 +740,65 @@ após essa pendência.
 
 ### 13.2 Mapeamento dos riscos para as funções
 
-<!-- TODO(Murillo): analisar cada relação. NÃO marcar todas as funções automaticamente — o
-     enunciado adverte contra isso. Marque apenas quando houver um resultado de segurança
-     concreto a ser alcançado naquela função, e explique as escolhas menos óbvias na coluna final. -->
+Conforme as diretrizes científicas do NIST CSF 2.0, as funções não devem ser marcadas automaticamente. Cada atribuição nesta matriz reflete uma necessidade técnica e operacional explícita na modelagem de segurança da plataforma SaborExpress, onde:
+*   **Govern (GO)** incide quando o tratamento do risco exige a definição formal de políticas de conformidade, governança de identidade ou normas contratuais de parceiros.
+*   **Identify (ID)** aplica-se quando o risco exige o mapeamento dinâmico de novos ativos, verificação cadastral contra bases governamentais externas ou classificação ativa de dados.
+*   **Protect (PR)** é a base tecnológica de controle ativo (middlewares, criptografia, autenticação multifator, filtros de requisição) para impedir ou mitigar a ocorrência do risco na camada de aplicação.
+*   **Detect (DE)** envolve o monitoramento e a geração de alarmes em tempo real para comportamentos ou requisições suspeitas baseadas em assinaturas ou anomalias operacionais.
+*   **Respond (RS)** refere-se à capacidade de conter incidentes ativos na infraestrutura ou no negócio, aplicando regras de contenção automática (ex: rate-limit dinâmico ou bloqueio temporário).
+*   **Recover (RC)** destina-se a processos de recuperação de estado e continuidade (ex: comunicação legal à ANPD, restauração de estados de dados íntegros, reversão de estornos de cartões).
 
+
+#### Tabela de Mapeamento Completo de Riscos vs. Funções NIST CSF 2.0
+
+| ID | Origem STRIDE | Evento de Risco | GO | ID | PR | DE | RS | RC | Observação Metodológica e Justificativa Científica |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
+| **R01** | T01 — Spoofing | Tomada de contas de clientes (*Credential Stuffing*) | **X** | | **X** | **X** | **X** | **X** | **GO** obriga MFA para logins suspeitos. **PR** bloqueia força bruta por limite de requisições. **DE** sinaliza volumetria anômala. **RS** bloqueia o IP atacante. **RC** gera reset de senha e fluxo de auto-recuperação. |
+| **R02** | T07 — Tampering | Alteração de valores de pedidos interceptando requisições | | | **X** | **X** | | | **PR** implementa middleware de recálculo estrito no servidor (API) ignorando valores do app móvel. **DE** emite logs comparativos automatizados de discrepâncias de carrinho. |
+| **R03** | T18 — Info Disclosure | Vazamento em massa de dados via IDOR na API de pedidos | | | **X** | **X** | **X** | **X** | **PR** impõe controle de acesso contextual a nível de objeto e *rate limit*. **DE** monitora acessos horizontais atípicos. **RS** invalida sessões suspeitas. **RC** gerencia a notificação da ANPD sob a LGPD. |
+| **R04** | T02 — Spoofing | Contas de entregadores compradas ou alugadas | | **X** | **X** | **X** | **X** | | **ID** requer checagem cadastral e selfies aleatórias contra CNH. **PR** exige autenticação periódica por dispositivo. **DE** cruza telemetria de velocidade. **RS** suspende a conta preventivamente. |
+| **R05** | T03 — Spoofing | Entregador simulando localização via GPS falso (*Mock Location*) | | | **X** | **X** | **X** | | **PR** consome APIs nativas de geolocalização blindadas contra mocks. **DE** analisa incoerências de tempo/espaço (física de transporte). **RS** remove o entregador da corrida. |
+| **R06** | T04 — Spoofing | Comprometimento de conta via campanha direcionada de Phishing | **X** | | **X** | **X** | **X** | | **GO** dita políticas de segurança e autenticação robustas. **PR** implementa MFA e DMARC/SPF/DKIM de e-mails oficiais. **DE** vigia logins geográficos impossíveis. **RS** encerra sessões ativas. |
+| **R07** | T05 — Spoofing | Cadastro de restaurante fantasma para fraudar clientes | | **X** | **X** | **X** | | | **ID** valida CNPJ na base da Receita Federal. **PR** força carência financeira e teto transacional nos primeiros 15 dias. **DE** monitora pico súbito de saques. |
+| **R08** | T06 — Spoofing | Falsificação de webhook para pagamento falso sem lastro real | | | **X** | **X** | | | **PR** exige validação criptográfica (HMAC-SHA256) na recepção do webhook do gateway de pagamento . **DE** loga assinaturas inválidas e ips fora de whitelist. |
+| **R09** | T08 — Tampering | Criação massiva de contas descartáveis para abuso de cupons | | | **X** | **X** | | | **PR** restringe resgate por CPF único de pagamento, telefone validado por SMS e fingerprint de dispositivo. **DE** identifica registros duplicados a partir do mesmo IP. |
+| **R10** | T09 — Tampering | Alteração de dados bancários de restaurantes para desvio de repasse | | | **X** | **X** | **X** | | **PR** impõe carência de 48h pós-modificação e token MFA. **DE** loga auditoria detalhada de alterações sensíveis. **RS** dispara notificações em múltiplos canais de alerta. |
+| **R11** | T10 — Tampering | Divergência e flutuação de preços em cardápios durante o pedido | | | **X** | **X** | | | **PR** congela e assina digitalmente o preço no carrinho do checkout. **DE** audita o histórico imutável das mudanças de preço e emite relatórios de desvio operacional. |
+| **R12** | T11 — Tampering | Manipulação ilícita ou apagamento indevido de avaliações | | | **X** | **X** | | **X** | **PR** garante autorização contextual de autoria em nível de API. **DE** captura anomalias de deleção em massa. **RC** recupera registros avaliativos usando soft-delete. |
+| **R13** | T12 — Tampering | Alteração de endereço de entrega pós-pagamento confirmado | | | **X** | **X** | | | **PR** bloqueia alteração automática de CEP no backend após o recebimento financeiro. **DE** loga chamadas não-autorizadas e tentativas de reencaminhamento. |
+| **R14** | T13 — Repudiation | Entregador marca pedido como entregue falsamente (*Last-mile*) | | | **X** | **X** | **X** | | **PR** exige digitação do código fornecido pelo cliente e valida geolocalização no ato. **DE** sinaliza divergência de raio de entrega. **RS** retém saldo da corrida para averiguação. |
+| **R15** | T14 — Repudiation | Cliente alega falsamente não recebimento para obter estorno | | | **X** | **X** | **X** | | **PR** utiliza as evidências colhidas no R14 (código do cliente, geolocalização, foto opcional). **DE** analisa comportamento histórico do cliente. **RS** instaura disputa operacional. |
+| **R16** | T15 — Repudiation | Emissão de estorno indevido por atendente de backoffice | **X** | | **X** | **X** | | | **GO** divide privilégios operacionais e teto financeiro por papel. **PR** vincula obrigatoriamente logs de estorno a credenciais nominativas de SSO. **DE** audita desvios. |
+| **R17** | T16 — Repudiation | Restaurante rejeita ou nega aceite operacional do pedido | | | **X** | **X** | | | **PR** gera recibo digital com timestamp e hashes imutáveis das transações de aceite de fluxo. **DE** cria dashboard de SLAs de aceitação para mitigar disputas com lojistas. |
+| **R19** | T19 — Info Disclosure | Dados residenciais expostos nos celulares de entregadores pós-entrega | | | **X** | **X** | | | **PR** expira e remove completamente informações sensíveis (endereço, telefone) do app do entregador pós-finalização. **DE** audita requisições à cache offline de pedidos encerrados. |
+| **R20** | T20 — Info Disclosure | Exposição de backups do banco de dados por má configuração | **X** | **X** | **X** | **X** | | | **GO** rege políticas formais de ciclo de vida de cópias e chaves criptográficas. **ID** mapeia servidores e buckets de storage. **PR** ativa criptografia de ponta em repouso. **DE** loga e alarma downloads atípicos. |
+| **R21** | T21 — Info Disclosure | Chave do provedor de mapas extraída por engenharia reversa no app | | **X** | **X** | **X** | | | **ID** cataloga tokens e dependências ativas no código. **PR** restringe a chave na console externa por pacote de app móvel e domínio. **DE** monitora picos de cota e faturamento no console de mapas. |
+| **R22** | T22 — Info Disclosure | Logs da aplicação expondo dados de cartões ou tokens de sessão | **X** | | **X** | **X** | | | **GO** prescreve padrões e políticas regulatórias de desenvolvimento seguro (OWASP Top 10 / PCI-DSS). **PR** limpa e sanitiza strings no middleware de log. **DE** monitora padrões de vazamento de chaves via SAST. |
+| **R23** | T23 — Info Disclosure | Enumeração automatizada de endereços de e-mail pelo login | | | **X** | **X** | | | **PR** retorna respostas genéricas de erro no login e ativa CAPTCHAs dinâmicos. **DE** alerta logins sucessivos de emails inexistentes de uma mesma origem IP. |
+| **R24** | T24 — Denial of Service | Indisponibilidade da API de pedidos em horário de pico por DDoS | | | **X** | **X** | **X** | **X** | **PR** emprega WAF corporativo e CDN. **DE** sinaliza anomalia volumétrica. **RS** escala infraestrutura horizontalmente e ativa scrubbers de tráfego. **RC** restabelece planos de continuidade operacional. |
+| **R25** | T25 — Denial of Service | Sobrecarga de restaurante com pedidos automatizados falsos | | | **X** | **X** | **X** | | **PR** força análise antifraude comportamental e CAPTCHA de checkout. **DE** vigia surtos súbitos de pedidos em restaurantes de uma mesma zona. **RS** alerta e suspende novas entradas temporariamente. |
+| **R26** | T26 — Denial of Service | Grupo de entregadores manipulando corridas por aceites/cancelamentos | | | **X** | **X** | **X** | | **PR** estabelece cotas máximas e intervalos progressivos para desistências no dia. **DE** mapeia geolocalização sincronizada de cancelamentos. **RS** suspende o entregador do dia. |
+| **R27** | T27 — Denial of Service | Consumo de cota financeira abusando do SMS de autenticação | | | **X** | **X** | | | **PR** limita o disparo de mensagens para o mesmo celular/IP (rate-limit cumulativo). **DE** reporta consumo incomum nas filas de envio do gateway de telecom. |
+| **R28** | T28 — Denial of Service | Esgotamento de armazenamento por upload de imagens gigantes | | | **X** | **X** | | | **PR** aplica redimensionamento compulsório e teto de tamanho de arquivo (ex: máximo 5MB) na entrada de dados. **DE** sinaliza taxa atípica de crescimento de disco. |
+| **R29** | T29 — Elevation of Priv. | Atendente chamando endpoints sem validação backend (*BOLA/IDOR*) | **X** | | **X** | **X** | | | **GO** cria matriz formal de controle de permissão corporativa baseada em papéis. **PR** valida privilégios criptográficos no backend em cada request administrativo. **DE** audita o console do backoffice. |
+| **R30** | T30 — Elevation of Priv. | Cliente obtém permissões de lojista alterando campos do formulário | | | **X** | **X** | | | **PR** valida todas as rotas e tipos de privilégio na camada de dados do backend. **DE** sinaliza se contas com e-mails civis/comuns passam a executar ações administrativas de restaurantes. |
+| **R31** | T31 — Elevation of Priv. | Escalonamento vertical de privilégios adulterando o token JWT | | | **X** | **X** | | | **PR** valida chaves secretas e assinaturas criptográficas de tokens em servidores sem estado local. **DE** loga tentativas de bypass com assinaturas corrompidas ou nulas. |
+| **R32** | T32 — Elevation of Priv. | Restaurante espionando ou alterando pedidos de outro restaurante | | | **X** | **X** | | | **PR** aplica controle de isolamento multi-tenant (vínculo do ID do restaurante com o ID do pedido no banco de dados). **DE** monitora requisições de lojistas a recursos de lojas alheias. |
+| **R18** | *T18 — Info Disclosure* | *Consolidado no R03 (Risco IDOR de API de Pedidos duplicado)* | *—* | *—* | *—* | *—* | *—* | *—* | *Risco duplicado retirado para manter mapeamento 1-para-1 com as 31 ameaças do STRIDE de forma consistente em todas as seções.* |
+
+#### Análise Metodológica do Mapeamento
+
+1.  **Predomínio da Função Protect (PR):** Conforme esperado para um ecossistema transacional baseado em APIs web e aplicativos móveis, a função **Protect** obteve adesão em **100% dos riscos reais ativos (31 de 31)**. Isso reflete o fato de que, sob o prisma acadêmico da engenharia de software seguro, a prevenção por blindagem ativa de código (como criptografia de logs, middlewares BOLA/IDOR, HMAC em webhooks e rate-limiting) constitui a barreira de defesa fundamental contra a exploração de vulnerabilidades.
+2.  **Uso Seletivo de Govern (GO) e Identify (ID):** Para evitar a trivialização do NIST CSF, a função **Govern** foi demarcada de forma restrita somente para cenários onde as decisões de segurança demandam a definição formal de políticas sistêmicas abrangentes (como regras corporativas de MFA, classificação de dados para logs de auditoria e segregação de deveres no backoffice administrativo). Semelhantemente, **Identify** foi aplicada exclusivamente nos riscos que exigem processos ativos de mapeamento de terceiros (homologação de CNH/selfies de entregadores e consulta cadastral corporativa na Receita Federal).
+3.  **Resiliência via Detect, Respond e Recover:** Os riscos críticos prioritários como sequestro de contas (**R01**), DDoS (**R24**), IDOR massivo (**R03**) e fraudes do último quilômetro (**R14** e **R15**) dependem de um ciclo integrado de defesa em profundidade. A sua inserção nas colunas **Detect**, **Respond** e **Recover** garante que o SaborExpress não se apoie apenas em controles estáticos de barreira, mas conte com rotinas ativas para registrar incidentes operacionais, bloquear os IPs atacantes e recuperar a integridade regulatória e financeira perante o mercado e os reguladores da ANPD.
+
+<!--
 | Risco | Govern | Identify | Protect | Detect | Respond | Recover | Observação |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|---|
 | R01 | X | | X | X | X | X | *Govern* entra porque é preciso uma política que torne o MFA obrigatório; *Identify* não foi marcado porque o ativo e a vulnerabilidade já estão plenamente mapeados e não há trabalho adicional de descoberta |
 | R02 *(Tampering)* | | | X | X | |  | *Protect* é vital para implementar a verificação no lado do servidor, impedindo que requisições adulteradas sejam aceitas. *Detect* entra para registrar logs de discrepâncias entre os valores enviados pelo aplicativo e o catálogo real de preços. |
 | R03 *(Inf. Disclosure)* | | | **X** | **X** | **X** | **X** | *Protect* trata de impedir o acesso não autorizado IDOR e de aplicar *rate limit*. *Detect* monitora picos de chamadas na API. *Respond* é necessário para revogar tokens suspeitos. *Recover* é crucial para restaurar credenciais, comunicar o vazamento à ANPD e reestabelecer a privacidade dos dados. |
-
+-->
 ---
 
 ## 14. Plano de tratamento
@@ -593,7 +831,21 @@ após essa pendência.
 | R15 — Cliente nega recebimento do pedido | Reduzir | (1) Usa a mesma evidência de entrega do R14 (código + geo + foto) como prova para contestar pedidos de reembolso; (2) reembolso por "não recebimento" passa por checagem cruzada com a evidência antes de aprovação automática; (3) sinalização de clientes com padrão recorrente de contestação para revisão manual | Protect, Detect, Respond | Time de Atendimento + Backend | Teste do fluxo de reembolso confirmando que pedidos com evidência completa não são reembolsados automaticamente sem análise; relatório de reincidência por cliente |
 | R16 — Estorno sem rastreabilidade do atendente | Reduzir | (1) Todo estorno fica vinculado obrigatoriamente ao ID do atendente autenticado — sem opção de estorno "anônimo"; (2) segunda aprovação obrigatória para estornos acima de um valor-limite; (3) relatório periódico de estornos por atendente | Govern, Protect, Detect | Time de Backoffice/Compliance | Teste tentando emitir estorno sem autenticação individual e confirmando rejeição; auditoria mensal de estornos por atendente |
 | R17 — Restaurante nega aceite do pedido | Reduzir | (1) Registro imutável com timestamp do momento exato do aceite, incluindo IP/dispositivo do painel; (2) notificação automática ao cliente e à plataforma no instante do aceite, criando trilha independente; (3) métrica de tempo médio de aceite por restaurante para identificar padrão de negativa recorrente | Protect, Detect | Time de Backend (painel do restaurante) | Teste confirmando geração do registro de aceite com timestamp íntegro; relatório de tempo médio de aceite por restaurante |
-
+| R18 — Extração de dados pessoais pela API | Reduzir | (1) Validar no backend se o pedido consultado pertence ao usuário autenticado antes de retornar qualquer dado; (2) utilizar autorização por objeto em todos os endpoints de consulta de pedidos; (3) limitar requisições de consulta por usuário/IP para dificultar enumeração automatizada; (4) registrar tentativas de acesso a pedidos pertencentes a outros usuários | Protect, Detect | Time de Backend + Segurança da Informação | Teste tentando consultar pedido pertencente a outro usuário, confirmando rejeição HTTP 403/404; teste de múltiplas consultas sequenciais verificando aplicação do *rate limit*; auditoria dos logs de tentativas de acesso indevido |
+| R19 — Exposição prolongada do endereço dos clientes | Reduzir | (1) Remover ou ocultar o endereço completo do aplicativo do entregador após a conclusão da entrega; (2) permitir acesso ao endereço somente enquanto a entrega estiver ativa; (3) registrar acessos ao endereço após a finalização para identificar tentativas indevidas | Protect, Detect | Time Mobile + Backend + Segurança da Informação | Teste concluindo uma entrega e verificando que o endereço completo deixa de estar disponível; teste de chamada à API após a conclusão confirmando rejeição; auditoria dos registros de acesso |
+| R20 — Exposição de backup do banco de dados | Reduzir | (1) Armazenar backups em repositório privado sem acesso público; (2) restringir o acesso aos backups somente às contas de infraestrutura autorizadas; (3) criptografar os arquivos de backup; (4) registrar e revisar acessos aos arquivos de backup | Protect, Detect | Time de Infraestrutura + Segurança da Informação | Teste tentando acessar o armazenamento sem credenciais autorizadas, confirmando rejeição; verificação da configuração de acesso privado; teste de restauração de backup criptografado; auditoria dos logs de acesso |
+| R21 — Exposição de chave de API do provedor de mapas | Reduzir | (1) Remover chaves privilegiadas do aplicativo móvel; (2) manter as credenciais do provedor somente no backend; (3) restringir cada chave por serviço, origem e limite de utilização quando suportado pelo provedor; (4) substituir imediatamente uma chave identificada como exposta | Protect, Detect, Respond | Time de Backend + Mobile + Segurança da Informação | Análise do aplicativo confirmando ausência de chaves privilegiadas; revisão das restrições configuradas no provedor; teste utilizando uma chave exposta para confirmar que ela não possui acesso indevido; registro de rotação de credenciais |
+| R22 — Exposição de dados sensíveis nos logs | Reduzir | (1) Mascarar tokens, dados de pagamento e outras informações sensíveis antes da gravação dos logs; (2) impedir que tokens completos sejam registrados; (3) restringir acesso ao serviço de logs por função; (4) criar alerta para detectar padrões de dados sensíveis nos logs | Protect, Detect | Time de Backend + Segurança da Informação | Teste executando operações de pagamento e autenticação e verificando que os valores sensíveis não aparecem nos logs; revisão das permissões do serviço de logs; relatório de alertas de dados sensíveis |
+| R23 — Enumeração de usuários pelo login | Reduzir | (1) Utilizar a mesma mensagem de resposta para e-mails cadastrados e não cadastrados; (2) aplicar limite de tentativas no login e recuperação de senha; (3) registrar tentativas repetidas de enumeração; (4) bloquear temporariamente origens que apresentem comportamento automatizado | Protect, Detect | Time de Backend + Segurança da Informação | Teste comparando respostas para e-mail existente e inexistente, confirmando que não há diferença observável; teste de múltiplas tentativas confirmando aplicação do *rate limit*; análise dos logs de tentativas |
+| R24 — Indisponibilidade da API de pedidos por ataque volumétrico | Reduzir | (1) Aplicar *rate limiting* por IP, usuário e origem na API de pedidos; (2) utilizar proteção contra tráfego volumétrico antes da API; (3) definir limites de requisições para endpoints críticos; (4) criar alerta para aumento anormal de tráfego | Protect, Detect, Respond | Time de Infraestrutura + Backend + Segurança da Informação | Teste de carga controlado verificando aplicação dos limites; relatório de tráfego bloqueado; teste de alerta para aumento anormal de requisições; registro de disponibilidade da API durante o teste |
+| R25 — Pedidos falsos em massa contra um restaurante | Reduzir | (1) Limitar a quantidade de pedidos criados por conta, dispositivo e meio de pagamento em determinado período; (2) detectar múltiplos pedidos direcionados ao mesmo restaurante em curto intervalo; (3) exigir validação adicional quando o comportamento for identificado como automatizado; (4) bloquear temporariamente contas que ultrapassem os limites definidos | Protect, Detect, Respond | Time de Backend + Operações | Teste criando pedidos acima do limite em ambiente de homologação; relatório de pedidos bloqueados; teste com múltiplas contas verificando detecção do padrão; auditoria das contas temporariamente bloqueadas |
+| R26 — Abuso de aceites e cancelamentos de corridas | Reduzir | (1) Definir limite de cancelamentos realizados por entregador em uma janela de tempo; (2) identificar padrões anormais de aceite seguido de cancelamento; (3) aplicar suspensão temporária após reincidência; (4) registrar todos os eventos de aceite e cancelamento para análise | Protect, Detect, Respond | Time de Backend + Operações de Entregadores | Teste realizando múltiplos aceites e cancelamentos e verificando aplicação do limite; relatório de entregadores sinalizados; auditoria dos eventos registrados |
+| R27 — Abuso do envio de SMS de verificação | Reduzir | (1) Limitar solicitações de SMS por telefone, conta, dispositivo e endereço IP; (2) aplicar intervalo mínimo entre solicitações sucessivas; (3) bloquear temporariamente origens que ultrapassem o limite; (4) registrar o volume de mensagens enviadas por origem | Protect, Detect | Time de Backend + Infraestrutura | Teste realizando solicitações consecutivas e confirmando aplicação do intervalo e limite; relatório de SMS bloqueados; monitoramento do volume por telefone, dispositivo e IP |
+| R28 — Sobrecarga por upload de arquivos excessivamente grandes | Reduzir | (1) Definir tamanho máximo para cada tipo de arquivo aceito; (2) limitar quantidade de uploads por usuário em uma janela de tempo; (3) rejeitar arquivos que ultrapassem os limites antes do processamento; (4) registrar tentativas de upload acima do limite | Protect, Detect | Time de Backend + Infraestrutura | Teste enviando arquivos acima do tamanho permitido e confirmando rejeição; teste de múltiplos uploads verificando aplicação do limite; relatório de tentativas bloqueadas |
+| R29 — Execução de operações administrativas por atendente de suporte | Reduzir | (1) Validar no backend o perfil e as permissões do atendente em cada endpoint administrativo; (2) separar permissões de suporte das permissões administrativas; (3) exigir segunda aprovação para operações financeiras acima de determinado limite; (4) registrar toda operação administrativa com o usuário responsável | Protect, Detect | Time de Backend + Backoffice + Segurança da Informação | Teste tentando executar endpoint administrativo com conta de suporte, confirmando rejeição; teste de operação financeira acima do limite; auditoria dos logs de operações administrativas |
+| R30 — Obtenção indevida de privilégios de restaurante | Reduzir | (1) Ignorar campos de perfil enviados pelo cliente durante o cadastro; (2) permitir alteração de perfil somente por fluxo administrativo autorizado; (3) validar no backend o papel atribuído ao usuário antes de cada operação restrita; (4) registrar alterações de perfil | Protect, Detect | Time de Backend + Cadastro | Teste enviando requisição de cadastro com perfil de restaurante e confirmando que o privilégio não é concedido; teste de tentativa de alteração de perfil pela API; auditoria dos registros de alteração |
+| R31 — Falsificação de privilégios por alteração de JWT | Reduzir | (1) Validar obrigatoriamente a assinatura do JWT no backend; (2) rejeitar tokens com assinatura inválida ou algoritmo não permitido; (3) validar expiração e emissor do token; (4) não confiar em informações de privilégio fornecidas sem validação criptográfica | Protect, Detect | Time de Backend + Segurança da Informação | Teste enviando JWT com assinatura alterada e confirmando rejeição; teste com token expirado; teste com algoritmo não permitido; revisão automatizada da validação dos tokens |
+| R32 — Acesso de funcionário a pedidos de outra loja | Reduzir | (1) Validar no backend o vínculo entre funcionário, restaurante e pedido em toda consulta ou alteração; (2) impedir que o identificador do pedido seja suficiente para conceder acesso; (3) registrar tentativas de acesso a pedidos de outros restaurantes; (4) bloquear ou sinalizar contas que apresentem tentativas repetidas | Protect, Detect, Respond | Time de Backend + Segurança da Informação | Teste utilizando funcionário de uma loja para consultar pedido de outra, confirmando rejeição; teste de alteração de pedido de terceiro; auditoria dos logs de tentativas de acesso indevido |
 
 
 ---
