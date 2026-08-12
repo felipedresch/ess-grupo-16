@@ -117,7 +117,7 @@ Arquivo: [`docs/etapa-2-riscos-nist.md`](etapa-2-riscos-nist.md)
 | E2.5 | Consolidar a tabela mestre, conferir cálculos e numeração | 9 | Fernando | 10/08 | 🟢 depende de E2.3 e E2.4 |
 | E2.6 | Justificativas dos riscos de S/T/R (5 pontos cada) | 10 | Gabriel | 10/08 | 🟢 |
 | E2.7 | Justificativas dos riscos de I/D/E (5 pontos cada) | 10 | Luis Fillipe | 10/08 | ⚫ |
-| E2.8 | Priorização com justificativa da ordem | 11 | Fernando | 10/08 | ⚫ depende de E2.5 |
+| E2.8 | Priorização com justificativa da ordem | 11 | Fernando | 10/08 | 🟢 depende de E2.5 |
 | E2.9 | Estratégia de tratamento por risco | 12 | Deivid | 11/08 | ⚫ |
 | E2.10 | Tabela de riscos aceitos | 12.1 | Deivid | 11/08 | ⚫ |
 | E2.11 | As 6 funções do NIST CSF aplicadas ao SaborExpress | 13.1 | Fernando | 10/08 | 🟢 |
