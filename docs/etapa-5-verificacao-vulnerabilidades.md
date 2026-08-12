@@ -282,22 +282,74 @@ resultados não selecionados para análise aprofundada.
 
 ## 5. Relação com a análise do SaborExpress
 
-<!-- TODO(Murillo): 1 ou 2 parágrafos ligando o que a ferramenta encontrou no Juice Shop com os
-     riscos que o grupo levantou nas Etapas 1 e 2. Esse é o ponto que o professor avalia como
-     "relação com riscos e vulnerabilidades estudados".
-     Perguntas que ajudam: algum alerta corresponde a uma ameaça T## que o grupo já tinha
-     previsto? Algum achado revela um tipo de problema que o grupo NÃO tinha considerado e que
-     valeria acrescentar? Os controles propostos na Etapa 2 impediriam esses achados? -->
+Os resultados obtidos durante a verificação do OWASP Juice Shop foram utilizados como
+referência prática para relacionar problemas de segurança observados em uma aplicação web com
+as ameaças e os riscos identificados anteriormente para o SaborExpress.
+
+O alerta **Content Security Policy (CSP) Header Not Set** demonstra a importância de controles
+relacionados à proteção do conteúdo executado no navegador. No contexto do SaborExpress, a
+ausência de uma política CSP poderia representar uma camada de proteção adicional não
+implementada, especialmente em cenários envolvendo conteúdo ou scripts não autorizados.
+
+O alerta **Cross-Domain Misconfiguration** possui relação com o controle de acesso entre
+origens. O relatório do ZAP identificou uma configuração permissiva de
+`Access-Control-Allow-Origin: *`. Para o SaborExpress, esse tipo de configuração deve ser
+evitado quando não for necessário, pois os recursos da aplicação devem ser disponibilizados
+somente para as origens que realmente precisam acessá-los. Esse resultado se relaciona aos
+riscos associados ao acesso indevido a recursos da aplicação.
+
+O alerta **HTTP Only Site** está relacionado diretamente à proteção da comunicação entre
+cliente e servidor. Como o Juice Shop foi executado em `http://localhost:3000`, o ZAP identificou
+que a aplicação estava sendo acessada sem HTTPS. Para o SaborExpress, uma situação equivalente
+poderia expor informações transmitidas entre o usuário e a plataforma, como credenciais,
+dados de pedidos e outras informações sensíveis. Por isso, o uso de HTTPS deve fazer parte dos
+controles de segurança previstos para o sistema.
+
+Os resultados encontrados não devem ser considerados vulnerabilidades confirmadas do
+SaborExpress, pois o SaborExpress não foi implementado e a verificação foi realizada
+exclusivamente contra o OWASP Juice Shop em ambiente local autorizado. O objetivo da atividade
+foi utilizar uma aplicação de treinamento para obter evidências práticas e relacioná-las aos
+riscos levantados nas etapas anteriores.
+
+A verificação também reforçou que uma ferramenta automatizada como o OWASP ZAP não substitui a
+análise de ameaças realizada nas Etapas 1 e 2. Alguns riscos relacionados à lógica de negócio,
+às permissões e ao comportamento específico do SaborExpress podem não ser identificados por
+uma varredura automatizada. Dessa forma, os resultados do ZAP devem ser utilizados como uma
+camada complementar à modelagem de ameaças e à análise de riscos realizada pelo grupo.
 
 ---
 
 ## 6. Limitações desta verificação
 
-<!-- TODO(Murillo): registrar honestamente. Exemplos que valem: a aplicação testada não é o
-     SaborExpress, então os achados não são do sistema analisado; foi uma única sessão de
-     varredura automatizada; o scan automatizado não encontra falhas de lógica de negócio (como
-     a manipulação de preço do pedido), que são justamente algumas das ameaças mais graves que o
-     grupo identificou; não houve teste autenticado. -->
+A principal limitação desta verificação é que o sistema testado não é o **SaborExpress**, mas
+sim o **OWASP Juice Shop**, utilizado como aplicação de treinamento conforme previsto na
+atividade. Dessa forma, os resultados encontrados pelo OWASP ZAP não podem ser considerados
+vulnerabilidades confirmadas do SaborExpress.
+
+A verificação também foi realizada em uma única sessão de **Automated Scan**, com o alvo
+restrito à aplicação executada localmente em `http://localhost:3000`. Portanto, os resultados
+representam somente o comportamento observado durante essa execução e não constituem uma
+avaliação completa de segurança da aplicação.
+
+Outro limite importante é que a varredura automatizada não cobre necessariamente todas as
+vulnerabilidades relacionadas à lógica de negócio. Problemas que dependem de uma sequência
+específica de ações, regras de negócio, manipulação de valores ou abuso de funcionalidades
+podem não ser identificados pelo ZAP durante uma varredura automatizada.
+
+Além disso, esta execução foi realizada sem autenticação na aplicação. Portanto, recursos que
+exigem login, permissões específicas ou acesso a funcionalidades disponíveis somente para
+determinados perfis não foram avaliados da mesma forma que seriam em um teste autenticado.
+
+Os alertas classificados como **Informational** e o alerta de **Low risk** também demonstram
+uma limitação da interpretação automática: a presença de um alerta no ZAP não significa
+automaticamente que exista uma vulnerabilidade crítica ou explorável. Os resultados precisam
+ser analisados considerando risco, confiança, contexto e impacto.
+
+Por fim, os resultados obtidos no Juice Shop devem ser utilizados como **evidência prática e
+complementar** à modelagem de ameaças e à análise de riscos realizadas nas Etapas 1 e 2. Uma
+avaliação completa do SaborExpress exigiria a implementação do sistema e testes adicionais,
+incluindo testes autenticados, análise manual da lógica de negócio e verificação dos controles
+de segurança definidos pelo grupo.
 
 ---
 
