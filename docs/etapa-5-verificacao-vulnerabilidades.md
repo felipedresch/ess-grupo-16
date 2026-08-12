@@ -102,7 +102,7 @@ A primeira captura registra a configuração utilizada antes da execução do Au
 incluindo a política de scan **Pentest**, o **Modern Spider**, o navegador **Chrome** e a opção
 **If Modern**.
 
-![Print 01 — Configuração do ataque](../evidencias/etapa-5/capturas-de-tela/01-zap-configuracao-ataque.png)
+![Print 01 — Configuração do ataque](evidencias/etapa-5/capturas-de-tela/01-zap-automated-scan-configuracao.png)
 
 **Arquivo:**
 
