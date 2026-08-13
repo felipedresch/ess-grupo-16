@@ -150,7 +150,7 @@ Arquivo: [`docs/etapa-3-arquitetura-segura.md`](etapa-3-arquitetura-segura.md)
 | # | Tarefa | Seção | Responsável | Prazo | Status |
 |---|---|---|---|---|---|
 | E3.1 | Três requisitos de segurança derivados dos riscos prioritários | 1 | Fernando | 12/08 | 🟢 **desbloqueada desde 11/08, prioridade máxima** |
-| E3.2 | Três mapeamentos de vulnerabilidade (CWE / OWASP) | 2 | Gabriel | 12/08 | ⚫ depende de E3.1 |
+| E3.2 | Três mapeamentos de vulnerabilidade (CWE / OWASP) | 2 | Gabriel | 12/08 | 🟢 |
 | E3.3 | Diagrama da arquitetura segura (imagem + arquivo-fonte em `diagramas/etapa-3/`) | 3 | Deivid | 13/08 | ⚫ depende de E2.15. **Candidata a passar para o Murillo**, que já fechou a Etapa 5 |
 | E3.4 | Três decisões de arquitetura justificadas | 4 | Fernando | 12/08 | 🟢 depende de E3.1, do próprio Fernando |
 

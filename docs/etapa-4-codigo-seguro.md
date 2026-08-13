@@ -19,18 +19,13 @@ documento — teste primeiro, pseudocódigo depois.
 
 ## Prática 1 — Controle de autorização no servidor
 
-<!-- RESPONSÁVEL: Gabriel -->
-<!-- Esta prática está preenchida como MODELO de profundidade. Gabriel: revise, ajuste os IDs de
-     risco e requisito conforme o que de fato foi fechado nas Etapas 2 e 3, e complete o que
-     faltar. -->
-
 ### 1.1 Risco e requisito relacionados
 
 | Campo | Conteúdo |
 |---|---|
-| Risco | R03 — extração em massa de dados pessoais pela API <!-- TODO(Gabriel): confirmar o ID --> |
-| Requisito | RS02 <!-- TODO(Gabriel): confirmar o ID --> |
-| Decisão de arquitetura | D01 — verificar autorização no servidor |
+| Risco | R03 — extração em massa de dados pessoais pela API |
+| Requisito | RS02 |
+| Decisão de arquitetura | D03 — Isolamento Lógico Multi-Tenant com Middleware de Autorização Contextual |
 | Referência OWASP | [Authorization Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html); OWASP API Security Top 10, API1:2023 — *Broken Object Level Authorization* |
 
 ### 1.2 Testes definidos **antes** da implementação
