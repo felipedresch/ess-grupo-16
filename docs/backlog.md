@@ -59,7 +59,7 @@ Situação em 13/08, com o que ainda falta para cada um.
 
 | Integrante | Já entregou | **Ainda falta** |
 |---|---|---|
-| **Felipe** | Estrutura do repositório, seções 1 e 2 da Etapa 1, **Etapa 6**, Etapa 7 Parte A e **roteiro do vídeo**, **Etapa 2 fechada** | E1.20 revisão, edição do vídeo, e o fechamento F1, F5 e F6 |
+| **Felipe** | Estrutura do repositório, **Etapas 1, 2 e 6 fechadas**, Etapa 7 Parte A e roteiro do vídeo | Edição do vídeo e o fechamento F1, F5 e F6 |
 | **Deivid** | Ativos, pontos de interação e diagramas da Etapa 1, estratégias e plano de tratamento da Etapa 2 | **E3.3, o diagrama da arquitetura segura. Último item da Etapa 3** |
 | **Gabriel** | STRIDE S/T/R, riscos e controles, mapeamento CWE da Etapa 3 e prática 1 da Etapa 4 | Nada pendente além da gravação |
 | **Luis Fillipe** | STRIDE I/D/E, riscos e controles, consolidação e considerações finais da Etapa 1 | **E4.2, a prática 2 de código. Último item da Etapa 4** |
@@ -111,7 +111,7 @@ Arquivo: [`docs/etapa-1-ameacas-stride.md`](etapa-1-ameacas-stride.md)
 | E1.17 | Rastreabilidade caso de abuso ↔ ameaça | 6.1 | Murillo | 09/08 | 🟢 |
 | E1.18 | Diagrama de casos de abuso (opcional) | 6 | Murillo | 09/08 | 🟢 |
 | E1.19 | Considerações finais da Etapa 1 | 7 | Luis Fillipe | 12/08 | 🟢 |
-| E1.20 | Revisão de coerência da Etapa 1 | — | Felipe | 13/08 | 🔴 desbloqueada |
+| E1.20 | Revisão de coerência da Etapa 1 | — | Felipe | 13/08 | 🟢 **Etapa 1 fechada e auditada** |
 
 ---
 

@@ -2,11 +2,10 @@
 
 **Sistema:** SaborExpress — plataforma de delivery de comida
 **Grupo:** 16 — Engenharia de Software Seguro
-**Última atualização:** <!-- atualize a data ao editar --> 08/08/2026
+**Última atualização:** 13/08/2026
 
-> **Como usar este documento:** cada seção tem um responsável marcado em comentário HTML.
-> Blocos marcados com `<!-- TODO -->` ainda precisam ser preenchidos. A divisão completa das
-> tarefas está em [backlog.md](backlog.md).
+> **Etapa concluída.** Todas as seções foram escritas e revisadas. O andamento das tarefas e os
+> responsáveis por cada seção estão em [backlog.md](backlog.md).
 
 ---
 
@@ -323,7 +322,6 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 ### 5.7 Consolidação
 
 <!-- RESPONSÁVEL: Luis Fillipe -->
-<!-- TODO(Luis): após as tabelas acima estarem completas, preencher esta contagem. -->
 
 | Categoria | Nº de ameaças | Intervalo de IDs |
 |---|---|---|
@@ -350,9 +348,6 @@ casos de abuso (seção 6) e os riscos da Etapa 2 apontam para esses IDs.
 ## 6. Casos de abuso
 
 <!-- RESPONSÁVEL: Murillo -->
-<!-- TODO(Murillo): meta de 6 a 8 casos de abuso, cobrindo os quatro perfis de usuário
-     (cliente, restaurante, entregador e insider/administrador) e todas as categorias STRIDE.
-     CA01 abaixo está completo e serve de modelo. -->
 
 Cada caso de abuso descreve como uma pessoa mal-intencionada — externa **ou** um usuário legítimo —
 poderia usar o SaborExpress para causar dano.
@@ -387,8 +382,6 @@ aquisitivo); responsabilização da plataforma sob a LGPD; dano grave à reputa�
 Privilege — o atacante obtém, sem direito, as permissões de um perfil verificado.
 
 ---
-
-<!-- TODO(Murillo): título -->
 
 ### CA02 — Liberação de pedido mediante pagamento falso
 
@@ -558,16 +551,6 @@ Continua criando contas até maximizar o número de pedidos com desconto.
 
 **Ameaças STRIDE relacionadas:** T08 (Tampering).
 
-<!-- TODO(Murillo): duplicar o bloco acima para CA03..CA08.
-     Sugestões de temas, um por perfil e por categoria STRIDE ainda não coberta:
-     - Cliente que manipula o valor do pedido antes do pagamento (T07 — Tampering).
-     - Cliente que abusa da política de reembolso alegando não recebimento (T13 — Repudiation).
-     - Restaurante que fraude o próprio faturamento ou cria pedidos fantasma (Tampering).
-     - Entregador que marca entrega sem entregar (T13 — Repudiation).
-     - Atacante externo que enumera pedidos via IDOR (T18 — Information Disclosure).
-     - Concorrente que derruba a plataforma no horário de pico (T24 — DoS).
-     - Atendente do suporte que emite estornos para contas próprias (T29 — Elevation of Privilege).
-     - Fábrica de contas falsas para abuso de cupom de primeira compra (T08 — Tampering). -->
 
 ### 6.1 Rastreabilidade entre casos de abuso e ameaças
 
@@ -611,27 +594,27 @@ flowchart TB
 
 ### 7.1 Ameaças consideradas mais preocupantes
 
-As ameaças consideradas mais preocupantes são aquelas relacionadas à **exposição de dados pessoais, elevação indevida de privilégios e indisponibilidade da plataforma**. A exposição de endereços, telefones e outras informações de clientes pode gerar consequências que ultrapassam o prejuízo financeiro, incluindo violação de privacidade, assédio e riscos à segurança física. Da mesma forma, uma elevação de privilégios pode permitir que um usuário execute operações destinadas a perfis administrativos ou acesse informações de outros usuários.
+As ameaças consideradas mais preocupantes são aquelas relacionadas à **exposição de dados pessoais, elevação indevida de privilégios e indisponibilidade da plataforma**. A exposição de endereços, telefones e outras informações de clientes (T18, T19 e T20) pode gerar consequências que ultrapassam o prejuízo financeiro, incluindo violação de privacidade, assédio e riscos à segurança física. Da mesma forma, uma elevação de privilégios (T29 a T32) pode permitir que um usuário execute operações destinadas a perfis administrativos ou acesse informações de outros usuários.
 
-As ameaças de **Denial of Service** também apresentam impacto significativo porque o SaborExpress depende da disponibilidade contínua da API de pedidos e dos serviços utilizados durante os períodos de maior demanda. Uma indisponibilidade pode interromper pedidos, prejudicar restaurantes e entregadores e causar perda de receita. Essas ameaças se destacam por poderem afetar simultaneamente diferentes participantes da plataforma.
+As ameaças de **Denial of Service** (T24 a T28) também apresentam impacto significativo porque o SaborExpress depende da disponibilidade contínua da API de pedidos e dos serviços utilizados durante os períodos de maior demanda. Uma indisponibilidade pode interromper pedidos, prejudicar restaurantes e entregadores e causar perda de receita. Essas ameaças se destacam por poderem afetar simultaneamente diferentes participantes da plataforma.
 
 ### 7.2 Ativos mais importantes do sistema
 
-Os ativos de maior criticidade são aqueles cujo comprometimento pode causar prejuízos financeiros, exposição de dados pessoais ou comprometimento amplo das operações. Destacam-se as **credenciais de acesso**, os **dados de pagamento**, os **endereços e telefones dos clientes**, os **registros financeiros**, a **API de pedidos**, o **banco de dados principal**, o **painel administrativo** e as **chaves de API dos serviços externos**.
+Os ativos de maior criticidade são aqueles cujo comprometimento pode causar prejuízos financeiros, exposição de dados pessoais ou comprometimento amplo das operações. Destacam-se as **credenciais de acesso** (A01), os **dados de pagamento** (A02), os **endereços e telefones dos clientes** (A03), os **registros financeiros** (A05), a **API de pedidos** (A09), o **banco de dados principal** (A10), o **painel administrativo** (A12) e as **chaves de API dos serviços externos** (A13).
 
 A criticidade desses ativos está relacionada principalmente à concentração de informações e às consequências de seu comprometimento. Enquanto a exposição de dados pessoais pode afetar diretamente a privacidade dos clientes, o comprometimento da API, do banco de dados ou do painel administrativo pode permitir alterações ou acessos em larga escala. Por isso, esses ativos exigem controles de segurança mais rigorosos.
 
 ### 7.3 Tipos de abuso de maior impacto
 
-Os casos de abuso de maior impacto são aqueles capazes de atingir vários usuários ou causar prejuízo direto à operação da plataforma. Entre eles estão a **extração de dados pessoais pela API**, a **utilização indevida de privilégios administrativos**, a **alteração de informações financeiras**, a **criação de pedidos falsos em massa** e os abusos capazes de provocar indisponibilidade dos serviços.
+Os casos de abuso de maior impacto são aqueles capazes de atingir vários usuários ou causar prejuízo direto à operação da plataforma. Entre eles estão a **extração de dados pessoais pela API** (CA04), a **utilização indevida de privilégios administrativos** (CA05), a **alteração de informações financeiras** (CA07) e a **negação fraudulenta de entregas** (CA06). Somam-se a esses os abusos capazes de provocar indisponibilidade dos serviços, como a criação de pedidos falsos em massa contra um restaurante (T25), que foi registrada como ameaça mas não gerou caso de abuso próprio.
 
-Esses casos se destacam porque exploram funcionalidades legítimas do sistema para produzir consequências que não fazem parte do uso esperado. Um usuário pode possuir uma conta válida ou acesso legítimo a determinada funcionalidade e ainda assim utilizá-la de maneira abusiva, como um entregador que mantém acesso a endereços após uma entrega ou um funcionário que tenta executar operações acima de suas permissões.
+Esses casos se destacam porque exploram funcionalidades legítimas do sistema para produzir consequências que não fazem parte do uso esperado. Um usuário pode possuir uma conta válida ou acesso legítimo a determinada funcionalidade e ainda assim utilizá-la de maneira abusiva, como um entregador que mantém acesso a endereços após uma entrega (T19) ou um funcionário que tenta executar operações acima de suas permissões (T29).
 
 ### 7.4 Principais dificuldades encontradas pelo grupo
 
 Uma das principais dificuldades foi **diferenciar ameaça, vulnerabilidade e impacto**. A análise exigiu separar o comportamento ou evento que representa a ameaça da condição que permite sua ocorrência e das consequências que podem resultar da exploração. Também foi necessário evitar descrições excessivamente genéricas e relacionar cada ameaça a componentes, ativos e pontos de interação específicos do SaborExpress.
 
-Outra dificuldade foi definir quais comportamentos poderiam ser considerados abusivos sem tratar como ataque qualquer utilização legítima do sistema. Como o SaborExpress possui diferentes perfis — clientes, restaurantes, entregadores e administradores — foi necessário considerar os diferentes níveis de acesso e os possíveis conflitos entre esses usuários. A delimitação do escopo também foi importante para manter a análise concentrada nas funcionalidades relevantes do sistema de delivery.
+Outra dificuldade foi definir quais comportamentos poderiam ser considerados abusivos sem tratar como ataque qualquer utilização legítima do sistema. Como o SaborExpress possui diferentes perfis, entre clientes, restaurantes, entregadores e administradores, foi necessário considerar os diferentes níveis de acesso e os possíveis conflitos entre esses usuários. A delimitação do escopo também foi importante para manter a análise concentrada nas funcionalidades relevantes do sistema de delivery.
 
 ### 7.5 Possíveis medidas de proteção
 
