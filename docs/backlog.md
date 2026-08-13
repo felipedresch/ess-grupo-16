@@ -59,7 +59,7 @@ Situação em 13/08, com o que ainda falta para cada um.
 
 | Integrante | Já entregou | **Ainda falta** |
 |---|---|---|
-| **Felipe** | Estrutura do repositório, seções 1 e 2 da Etapa 1, **Etapa 6 completa**, Parte A da Etapa 7 com o diagrama, **Etapa 2 fechada (seções 16 e 17)** | E1.20 revisão, E7.4 roteiro do vídeo, e o fechamento F1, F5 e F6 |
+| **Felipe** | Estrutura do repositório, seções 1 e 2 da Etapa 1, **Etapa 6**, Etapa 7 Parte A e **roteiro do vídeo**, **Etapa 2 fechada** | E1.20 revisão, edição do vídeo, e o fechamento F1, F5 e F6 |
 | **Deivid** | Ativos, pontos de interação e diagramas da Etapa 1, estratégias e plano de tratamento da Etapa 2 | **E3.3, o diagrama da arquitetura segura. Último item da Etapa 3** |
 | **Gabriel** | STRIDE S/T/R, riscos e controles, mapeamento CWE da Etapa 3 e prática 1 da Etapa 4 | Nada pendente além da gravação |
 | **Luis Fillipe** | STRIDE I/D/E, riscos e controles, consolidação e considerações finais da Etapa 1 | **E4.2, a prática 2 de código. Último item da Etapa 4** |
@@ -207,9 +207,9 @@ Arquivo: [`roteiros/etapa-7-devsecops-e-video-final.md`](../roteiros/etapa-7-dev
 |---|---|---|---|---|---|
 | E7.1 | Explicação de DevSecOps e revisão da tabela do pipeline | A.1 e A.2 | Felipe | 13/08 | 🟢 |
 | E7.2 | Justificar as condições que interrompem o pipeline | A.3 | Felipe | 13/08 | 🟢 |
-| E7.3 | Fechar a divisão de falas do vídeo com o grupo | B.1 | Todos | 12/08 | 🔴 |
-| E7.4 | Escrever o roteiro detalhado do vídeo | B.2 | Felipe | 14/08 | ⚫ depende das Etapas 3–6 |
-| E7.5 | Gravar o vídeo (5 a 8 min, todos participam) | B | Todos | 14/08 | ⚫ depende de E7.4 |
+| E7.3 | Fechar a divisão de falas do vídeo com o grupo | B.1 | Todos | 13/08 | 🟢 divisão e roteiro publicados em B.1 e B.2 |
+| E7.4 | Escrever o roteiro detalhado do vídeo | B.2 | Felipe | 13/08 | 🟡 sete blocos escritos; faltam 2 falas dependentes de E3.3 e E4.2 |
+| E7.5 | Gravar o vídeo (5 a 8 min, todos participam) | B | Todos | **13/08 à noite** | 🔴 **marcar horário hoje**, é a única tarefa que depende da agenda dos seis |
 | E7.6 | Publicar o vídeo e registrar o link | B.4 | Felipe | 14/08 | ⚫ depende de E7.5 |
 
 ---
