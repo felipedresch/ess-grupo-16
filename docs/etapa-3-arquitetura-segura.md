@@ -104,9 +104,19 @@ O enunciado (item 18.3) exige que o diagrama mostre:
 > cada controle entra. O que diferencia este diagrama do anterior é justamente mostrar **onde os
 > controles ficam**, e não apenas quem fala com quem.
 
-```
 ![Arquitetura segura](../diagramas/etapa-3/arquitetura-segura.png)
-```
+
+O diagrama mostra o fluxo completo desde os quatro perfis de usuário até o banco de dados,
+passando pelos três elementos exigidos pelo enunciado além do diagrama da Etapa 1:
+
+- **Serviço de autenticação** (RS01): valida MFA e reconhecimento de dispositivo antes de emitir o JWT
+- **Autorização** (D01/D03): middleware de autorização contextual, validando RBAC/ABAC e propriedade
+  do objeto antes de liberar acesso à API
+- **Logs/monitoramento**: recebe tanto os eventos operacionais da API quanto os acessos negados
+  pelo middleware de autorização
+
+As três decisões de arquitetura (D01, D02, D03) e os três requisitos de segurança (RS01, RS02,
+RS03) estão marcados diretamente sobre as setas onde cada um atua.
 
 ---
 
