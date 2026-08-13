@@ -3,7 +3,7 @@
 **Sistema:** SaborExpress — plataforma de delivery de comida
 **Grupo:** 16 — Engenharia de Software Seguro
 **Continuidade de:** [Etapa 6 — Detecção de Intrusões](etapa-6-deteccao-de-intrusoes.md)
-**Última atualização:** <!-- atualize a data ao editar --> 08/08/2026
+**Última atualização:** 13/08/2026
 
 <!-- RESPONSÁVEL: Felipe (pipeline e roteiro); Todos (gravação) -->
 
@@ -270,7 +270,8 @@ execução perfeita de cada etapa.
 
 ### Arquitetura e decisões — Deivid (3:00 a 4:00)
 
-**Na tela:** o diagrama da arquitetura segura da Etapa 3.
+**Na tela:** o diagrama da arquitetura segura da Etapa 3, aberto e com zoom suficiente para ler os
+rótulos das setas.
 
 > Na Etapa 3 os riscos viraram requisitos de segurança e decisões de arquitetura.
 >
@@ -284,12 +285,20 @@ execução perfeita de cada etapa.
 > usuário. E o RS03 à CWE-602, que é confiar no cliente para aplicar regra que deveria estar no
 > servidor.
 >
-> Nesse diagrama dá para ver onde cada controle entra: autenticação e limite de requisição na
-> borda, autorização junto dos serviços, e o registro alimentando o monitoramento.
+> Neste diagrama a requisição entra pelos quatro perfis de usuário, passa pelas três interfaces e
+> chega no gateway com WAF e limite de requisições, que é a decisão D02. Só depois disso ela chega
+> no serviço de autenticação, que valida o MFA quando o dispositivo não é reconhecido e emite o
+> token. Aí ela passa pelo middleware de autorização, que é onde as decisões D01 e D03 atuam
+> verificando o perfil e a propriedade do objeto, e só então alcança a API de pedidos e o banco.
 >
-> A decisão que resume o raciocínio das três é a validação estrita no lado do servidor. Esconder
-> um botão na interface não impede ninguém de chamar a API direto, então a única verificação que
-> vale é a que acontece no backend.
+> O detalhe que a gente fez questão de mostrar são os rótulos sobre as setas. Cada requisito e cada
+> decisão está marcado exatamente no ponto do fluxo em que ele age, e não só listado numa legenda.
+> Dá para ver onde o valor do pedido é recalculado, onde a assinatura do webhook é conferida e por
+> onde os acessos negados chegam no log de auditoria.
+>
+> E a ideia que resume as três decisões é a validação estrita no lado do servidor. Esconder um
+> botão na interface não impede ninguém de chamar a API direto, então a única verificação que vale
+> é a que acontece no backend.
 
 ---
 
@@ -311,7 +320,15 @@ execução perfeita de cada etapa.
 > ele consegue mapear a base inteira mesmo sem conseguir ler nada. Respondendo 404 nos dois casos,
 > "não existe" e "não é seu" ficam indistinguíveis.
 >
-> <!-- Luis: acrescente aqui 2 ou 3 frases sobre a prática 2, quando ela estiver escrita. -->
+> A segunda prática é autenticação multifator adaptativa, e ela trata o risco que ficou como a
+> tomada de contas de clientes. Adaptativa quer dizer que o segundo fator não é pedido toda vez,
+> só quando o login vem de um dispositivo ou endereço que o sistema não reconhece. Isso evita
+> transformar segurança em incômodo diário, que é o que faz usuário procurar jeito de burlar.
+>
+> E aqui aparece a mesma ideia da primeira prática, em outro lugar. Quando o e-mail não existe e
+> quando a senha está errada, o sistema responde exatamente a mesma coisa. Se ele respondesse
+> diferente, daria para descobrir quais e-mails têm conta na plataforma só testando, que é uma das
+> ameaças que a gente tinha levantado lá na Etapa 1.
 
 **Murillo:**
 
@@ -394,10 +411,6 @@ execução perfeita de cada etapa.
 
 ---
 
-### Pendências deste roteiro
-
-- [ ] Bloco do Deivid: confirmar a fala depois que o diagrama da Etapa 3 estiver pronto.
-- [ ] Bloco do Luis: acrescentar as frases sobre a prática 2 da Etapa 4.
 
 ## B.3 Orientações de gravação
 
