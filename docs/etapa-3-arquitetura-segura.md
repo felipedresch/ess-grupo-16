@@ -74,8 +74,8 @@
 | Risco | Requisito | Vulnerabilidade ou categoria | Referência utilizada | Relação com o SaborExpress |
 |---|---|---|---|---|
 | R01 | RS01 | Autenticação imprópria / falha no gerenciamento de sessão | CWE-287 (*Improper Authentication*) e OWASP Top 10 A07:2021 — *Identification and Authentication Failures* | Sem segundo fator e sem limite de tentativas, uma lista de credenciais vazadas de outros serviços permite entrar em contas de clientes e usar o cartão salvo |
-| R03 | RS02 | <!-- TODO: sugestão — CWE-639 (*Authorization Bypass Through User-Controlled Key*) e OWASP API Security Top 10 API1:2023 (BOLA) --> | | |
-| — | RS03 | <!-- TODO: sugestão — CWE-602 (*Client-Side Enforcement of Server-Side Security*) e OWASP Top 10 A01:2021 — *Broken Access Control* --> | | |
+| R03 | RS02 | Autorização inadequada por objeto (*Broken Object Level Authorization*) | CWE-639 (*Authorization Bypass Through User-Controlled Key*) e OWASP API Security Top 10 API1:2023 — *Broken Object Level Authorization* | A API de pedidos não verifica se o solicitante é o dono do recurso antes de retornar os dados — basta trocar o ID na requisição para ler pedidos, endereços e telefones de qualquer outro cliente |
+| R02 | RS03 | Confiança indevida em dados calculados no lado do cliente | CWE-602 (*Client-Side Enforcement of Server-Side Security*) e OWASP Top 10 A01:2021 — *Broken Access Control* | O servidor aceita o valor total do pedido enviado pelo aplicativo em vez de recalculá-lo a partir do catálogo — um proxy de interceptação permite alterar o preço antes do checkout |
 
 **Links dos catálogos:** [CWE](https://cwe.mitre.org/), [OWASP Top 10](https://owasp.org/Top10/),
 [OWASP API Security Top 10](https://owasp.org/API-Security/),
