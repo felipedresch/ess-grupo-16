@@ -89,26 +89,46 @@ o identificador. Tentativas ficam registradas e podem disparar alerta quando rep
 
 | Campo | Conteúdo |
 |---|---|
-| Risco | |
-| Requisito | |
-| Decisão de arquitetura | |
-| Referência OWASP | |
+| Risco |R01 — Tomada de contas de clientes |
+| Requisito | RS01  |
+| Decisão de arquitetura | D01 — Controle de Acesso Híbrido (RBAC/ABAC) com Validação Server-Side Estrita para Operações Administrativas |
+| Referência OWASP | Authentication Cheat Sheet;OWASP Top 10 A07:2021 — Identification and Authentication Failure |
 
 ### 2.2 Testes definidos **antes** da implementação
 
 | Teste | Entrada ou ação | Resultado esperado |
 |---|---|---|
-| TS03 | <!-- caso malicioso, inválido ou não autorizado --> | |
-| TS04 | <!-- caso de uso válido --> | |
+| TS03 | Cliente tenta realizar login a partir de um dispositivo ou IP não reconhecido sem fornecer o segundo fator | A autenticação é recusada e o sistema exige o MFA correto antes de criar a sessão |
+| TS04 | Cliente realiza login a partir de um dispositivo conhecido | A requisição é permitida |
 
 ### 2.3 Implementação, pseudocódigo ou descrição
 
 ```
+função autenticar(requisicao):
+    usuario = localizarUsuario(requisicao.email)
+
+    se usuario não existe:
+        retornar 401
+
+    se senhaInvalida(requisicao.senha, usuario):
+        registrarLog("falha de autenticação", usuario.id)
+        retornar 401
+
+    se dispositivoOuIpNaoReconhecido(usuario, requisicao):
+        se MFAInvalido(requisicao.codigoMFA):
+            registrarLog("MFA inválido", usuario.id)
+            retornar 401
+
+    criarSessao(usuario)
+    registrarLog("login realizado", usuario.id)
+
+    retornar 200
+
 <!-- TODO(Luis) -->
 ```
 
 ### 2.4 Resultado esperado
-
+O sistema deve impedir a criação de uma sessão quando o login for realizado a partir de um dispositivo ou IP não reconhecido e o segundo fator não for validado.
 <!-- TODO(Luis) -->
 
 ---
