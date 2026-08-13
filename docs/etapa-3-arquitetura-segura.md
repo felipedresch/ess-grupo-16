@@ -65,11 +65,6 @@
 ## 2. Vulnerabilidades catalogadas
 
 <!-- RESPONSÁVEL: Gabriel -->
-<!-- TODO(Gabriel): para cada um dos três requisitos acima, encontrar UMA vulnerabilidade
-     correspondente em catálogo reconhecido e preencher a linha. Três mapeamentos bastam.
-     Catálogos aceitos pelo enunciado: CWE, OWASP Top 10, OWASP ASVS, OWASP Cheat Sheet Series.
-     Cite o identificador exato (ex.: "CWE-287", "A01:2021") e confira o número no site antes
-     de commitar — identificador errado é pior do que identificador ausente. -->
 
 | Risco | Requisito | Vulnerabilidade ou categoria | Referência utilizada | Relação com o SaborExpress |
 |---|---|---|---|---|
