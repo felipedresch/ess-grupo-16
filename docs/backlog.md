@@ -162,7 +162,7 @@ Arquivo: [`docs/etapa-4-codigo-seguro.md`](etapa-4-codigo-seguro.md)
 | # | Tarefa | Seção | Responsável | Prazo | Status |
 |---|---|---|---|---|---|
 | E4.1 | Prática 1: revisar o modelo, confirmar IDs e completar | Prática 1 | Gabriel | 13/08 | 🟢 aponta para R03, RS02 e D03 |
-| E4.2 | Prática 2: escolher a prática, escrever os 2 testes **antes** e o pseudocódigo | Prática 2 | Luis Fillipe | **13/08** | 🔴 **desbloqueada, último item da Etapa 4** |
+| E4.2 | Prática 2: escolher a prática, escrever os 2 testes **antes** e o pseudocódigo | Prática 2 | Luis Fillipe | **13/08** | 🟡 **desbloqueada, último item da Etapa 4** |
 
 > Lembrete: os testes vêm antes da implementação no documento. O enunciado avalia isso
 > explicitamente.
