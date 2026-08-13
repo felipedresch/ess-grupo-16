@@ -1,7 +1,7 @@
 # Backlog do Grupo 16 — divisão de tarefas e acompanhamento
 
-**Prazo final:** 14/08/2026, 23:59 — **faltam 2 dias**
-**Última revisão deste backlog:** 12/08, conferida commit a commit contra o que está na `main`.
+**Prazo final:** 14/08/2026, 23:59 — **falta 1 dia**
+**Última revisão deste backlog:** 13/08, conferida commit a commit contra o que está na `main`.
 
 > Este arquivo é a **única fonte de verdade** sobre status, responsáveis e prazos. Nenhum outro
 > documento do repositório repete essa informação, justamente para não divergir. Se você encontrar
@@ -39,33 +39,32 @@ trabalho. Não é preciso commit separado só para isso.
 | 09/08 (dom) | ✅ Casos de abuso, rastreabilidade e diagrama de abuso (Murillo) |
 | 10/08 (seg) | ✅ Registro de riscos e justificativas (Gabriel, Luis, Fernando) |
 | 11/08 (ter) | ✅ Priorização e NIST (Fernando); ✅ controles (Gabriel, Luis); PR das estratégias aberto (Deivid) |
-| 12/08 (qua) | ✅ **Etapa 5 entregue** (Murillo); ✅ **Etapa 6 fechada** e Parte A da Etapa 7 (Felipe). **Pendentes: fechar a Etapa 1, a Etapa 2 e começar a Etapa 3** |
-| 13/08 (qui) | **Etapa 3** e **Etapa 4** completas; Etapas 1 e 2 fechadas; roteiro do vídeo pronto |
+| 12/08 (qua) | ✅ **Etapa 5** (Murillo); ✅ **Etapa 6** e Parte A da Etapa 7 (Felipe); ✅ **Etapa 1 fechada** (Luis); ✅ estratégias e plano (Deivid) |
+| 13/08 (qui) | ✅ requisitos, CWE e decisões da Etapa 3 (Fernando, Gabriel); ✅ **Etapa 2 fechada** (Felipe). **Faltam: diagrama da Etapa 3, prática 2 da Etapa 4, roteiro e gravação** |
 | 14/08 (sex) | Gravação do vídeo; revisão final; entrega |
 
-> **Caminho crítico agora: a Etapa 3.** Ela está praticamente vazia e destravou em 11/08, quando
-> a priorização foi concluída. Dela dependem a Etapa 4 inteira (Gabriel e Luis) e o roteiro do
-> vídeo. Os requisitos e as decisões (Fernando) precisam sair primeiro, porque o mapeamento CWE
-> do Gabriel e as duas práticas de código dependem deles.
+> **Caminho crítico agora: o vídeo.** Ele exige os seis integrantes gravando e depende do roteiro,
+> que por sua vez depende das etapas fechadas. É a única tarefa que não comprime, porque envolve
+> agenda de gente. A gravação precisa ser marcada hoje.
 >
-> **Segundo ponto de atenção: fechar a Etapa 1.** Faltam só a contagem da seção 5.7 e as
-> considerações finais, as duas com o Luis. É o que impede a etapa mais antiga de ser dada por
-> concluída.
+> **Só faltam dois itens de conteúdo em todo o trabalho:** o diagrama da arquitetura segura
+> (Deivid, E3.3) e a segunda prática de código (Luis, E4.2). Nenhum dos dois trava o outro, e os
+> dois cabem em uma hora cada.
 
 ---
 
 ## Resumo por pessoa
 
-Situação em 12/08, com o que ainda falta para cada um.
+Situação em 13/08, com o que ainda falta para cada um.
 
 | Integrante | Já entregou | **Ainda falta** |
 |---|---|---|
-| **Felipe** | Estrutura do repositório, seções 1 e 2 da Etapa 1, **Etapa 6 completa**, Parte A da Etapa 7 com o diagrama do pipeline | E1.20 revisão (espera o Luis fechar a 5.7 e a seção 7), E2.17 e E2.18 (esperam o Deivid), E7.4 roteiro do vídeo, e o fechamento F1, F5 e F6 |
-| **Deivid** | Ativos, pontos de interação e os dois diagramas da Etapa 1 | **E2.15 e E2.16 (desbloqueadas)**, corrigir o R18 no PR #3, E3.3 diagrama |
-| **Gabriel** | STRIDE S/T/R, riscos, justificativas e controles correspondentes | **E3.2** mapeamento CWE e **E4.1** prática de código, ambas atrás da E3.1 |
-| **Luis Fillipe** | STRIDE I/D/E, riscos, justificativas e controles correspondentes | **E1.15 e E1.19, atrasadas**, e depois E4.2 prática de código |
-| **Murillo** | Casos de abuso, rastreabilidade, diagrama de abuso e a **Etapa 5 completa** | E5.5, e é o candidato natural para assumir o diagrama da Etapa 3 |
-| **Fernando** | Critérios, consolidação do registro, priorização e o NIST completo | **E3.1 e E3.4, prioridade máxima**, porque destravam Gabriel e Luis |
+| **Felipe** | Estrutura do repositório, seções 1 e 2 da Etapa 1, **Etapa 6 completa**, Parte A da Etapa 7 com o diagrama, **Etapa 2 fechada (seções 16 e 17)** | E1.20 revisão, E7.4 roteiro do vídeo, e o fechamento F1, F5 e F6 |
+| **Deivid** | Ativos, pontos de interação e diagramas da Etapa 1, estratégias e plano de tratamento da Etapa 2 | **E3.3, o diagrama da arquitetura segura. Último item da Etapa 3** |
+| **Gabriel** | STRIDE S/T/R, riscos e controles, mapeamento CWE da Etapa 3 e prática 1 da Etapa 4 | Nada pendente além da gravação |
+| **Luis Fillipe** | STRIDE I/D/E, riscos e controles, consolidação e considerações finais da Etapa 1 | **E4.2, a prática 2 de código. Último item da Etapa 4** |
+| **Murillo** | Casos de abuso, rastreabilidade, diagrama de abuso e a **Etapa 5 completa** | Nada pendente além da gravação. Pode assumir o diagrama da Etapa 3 se o Deivid não conseguir |
+| **Fernando** | Critérios, registro, priorização, NIST completo, requisitos e decisões da Etapa 3 | Nada pendente além da gravação |
 
 A divisão é em **fatias verticais**: quem escreve uma ameaça na Etapa 1 é quem a converte em
 risco na Etapa 2 e propõe o requisito ou a prática de código nas Etapas 3 e 4. Isso garante a
@@ -107,11 +106,11 @@ Arquivo: [`docs/etapa-1-ameacas-stride.md`](etapa-1-ameacas-stride.md)
 | E1.12 | STRIDE — Information Disclosure (4 a 6 ameaças) | 5.4 | Luis Fillipe | 08/08 | 🟢 T18–T23 |
 | E1.13 | STRIDE — Denial of Service (3 a 5 ameaças) | 5.5 | Luis Fillipe | 08/08 | 🟢 T24–T28 |
 | E1.14 | STRIDE — Elevation of Privilege (3 a 5 ameaças) | 5.6 | Luis Fillipe | 08/08 | 🟢 T29–T32 |
-| E1.15 | Tabela de consolidação das ameaças: preencher a contagem por categoria e o total (os intervalos de ID já estão corretos) | 5.7 | Luis Fillipe | **12/08** | 08	🟢 **atrasada**, são seis números e travam a E1.19 |
+| E1.15 | Tabela de consolidação das ameaças: preencher a contagem por categoria e o total (os intervalos de ID já estão corretos) | 5.7 | Luis Fillipe | 12/08 | 🟢 |
 | E1.16 | Casos de abuso CA02 a CA08 | 6 | Murillo | 09/08 | 🟢 |
 | E1.17 | Rastreabilidade caso de abuso ↔ ameaça | 6.1 | Murillo | 09/08 | 🟢 |
 | E1.18 | Diagrama de casos de abuso (opcional) | 6 | Murillo | 09/08 | 🟢 |
-| E1.19 | Considerações finais da Etapa 1 | 7 | Luis Fillipe | **12/08** | 🟢 **atrasada**, depende só da E1.15, que é do próprio Luis |
+| E1.19 | Considerações finais da Etapa 1 | 7 | Luis Fillipe | 12/08 | 🟢 |
 | E1.20 | Revisão de coerência da Etapa 1 | — | Felipe | 13/08 | 🔴 desbloqueada |
 
 ---
@@ -138,8 +137,8 @@ Arquivo: [`docs/etapa-2-riscos-nist.md`](etapa-2-riscos-nist.md)
 | E2.14 | Controles concretos para os riscos de I/D/E | 14 | Luis Fillipe | 11/08 | 🟢 seção 14 cobre R01 a R32 |
 | E2.15 | Consolidar o plano: responsáveis e evidências | 14 | Deivid | **12/08** | 🟢 desbloqueada, E2.13 e E2.14 concluídas |
 | E2.16 | Ordem inicial de implementação | 15 | Deivid | **12/08** | 🟢 desbloqueada |
-| E2.17 | Estimativa de risco residual | 16 | Felipe | 13/08 | ⚫ depende de E2.15 |
-| E2.18 | Considerações finais da Etapa 2 | 17 | Felipe | 13/08 | ⚫ depende de E2.16 |
+| E2.17 | Estimativa de risco residual | 16 | Felipe | 13/08 | 🟢 31 riscos, com critério e limitações declaradas |
+| E2.18 | Considerações finais da Etapa 2 | 17 | Felipe | 13/08 | 🟢 |
 
 ---
 
@@ -151,7 +150,7 @@ Arquivo: [`docs/etapa-3-arquitetura-segura.md`](etapa-3-arquitetura-segura.md)
 |---|---|---|---|---|---|
 | E3.1 | Três requisitos de segurança derivados dos riscos prioritários | 1 | Fernando | 12/08 | 🟢 **desbloqueada desde 11/08, prioridade máxima** |
 | E3.2 | Três mapeamentos de vulnerabilidade (CWE / OWASP) | 2 | Gabriel | 12/08 | 🟢 |
-| E3.3 | Diagrama da arquitetura segura (imagem + arquivo-fonte em `diagramas/etapa-3/`) | 3 | Deivid | 13/08 | ⚫ depende de E2.15. **Candidata a passar para o Murillo**, que já fechou a Etapa 5 |
+| E3.3 | Diagrama da arquitetura segura (imagem + arquivo-fonte em `diagramas/etapa-3/`) | 3 | Deivid | **13/08** | 🔴 **desbloqueada, último item da Etapa 3**. O professor autorizou diagrama simples |
 | E3.4 | Três decisões de arquitetura justificadas | 4 | Fernando | 12/08 | 🟢 depende de E3.1, do próprio Fernando |
 
 ---
@@ -162,8 +161,8 @@ Arquivo: [`docs/etapa-4-codigo-seguro.md`](etapa-4-codigo-seguro.md)
 
 | # | Tarefa | Seção | Responsável | Prazo | Status |
 |---|---|---|---|---|---|
-| E4.1 | Prática 1: revisar o modelo, confirmar IDs e completar | Prática 1 | Gabriel | 13/08 | ⚫ depende de E3.1 |
-| E4.2 | Prática 2: escolher a prática, escrever os 2 testes **antes** e o pseudocódigo | Prática 2 | Luis Fillipe | 13/08 | ⚫ depende de E3.1 |
+| E4.1 | Prática 1: revisar o modelo, confirmar IDs e completar | Prática 1 | Gabriel | 13/08 | 🟢 aponta para R03, RS02 e D03 |
+| E4.2 | Prática 2: escolher a prática, escrever os 2 testes **antes** e o pseudocódigo | Prática 2 | Luis Fillipe | **13/08** | 🔴 **desbloqueada, último item da Etapa 4** |
 
 > Lembrete: os testes vêm antes da implementação no documento. O enunciado avalia isso
 > explicitamente.

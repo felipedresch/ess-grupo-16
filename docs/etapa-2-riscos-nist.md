@@ -3,7 +3,7 @@
 **Sistema:** SaborExpress — plataforma de delivery de comida
 **Grupo:** 16 — Engenharia de Software Seguro
 **Continuidade de:** [Etapa 1 — Casos de Abuso e Modelagem de Ameaças](etapa-1-ameacas-stride.md)
-**Última atualização:** <!-- atualize a data ao editar --> 09/08/2026
+**Última atualização:** <!-- atualize a data ao editar --> 13/08/2026
 
 > Esta etapa **não substitui** a Etapa 1: ela transforma as ameaças `T##` e os casos de abuso
 > `CA##` já identificados em riscos avaliáveis, priorizáveis e tratáveis. O sistema, os ativos,
@@ -873,51 +873,277 @@ exigem decisão prévia (ex.: política de MFA antes de detalhar o fluxo de aute
 ## 16. Estimativa de risco residual
 
 <!-- RESPONSÁVEL: Felipe -->
-<!-- TODO: preencher após a seção 14. Atenção: é uma ESTIMATIVA. O grupo não pode afirmar que o
-     risco foi reduzido só porque um controle foi proposto — a redução só se confirma após
-     implementação, testes e obtenção de evidências. Registrar isso explicitamente. -->
+
+### 16.1 Critério usado na estimativa
+
+O risco residual foi recalculado com a mesma fórmula da seção 8, aplicando novos valores de
+probabilidade e de impacto sobre o cenário em que os controles da seção 14 estariam implantados e
+funcionando. O grupo adotou três regras para não atribuir reduções por intuição.
+
+**A probabilidade cai dois pontos** quando o controle elimina o vetor técnico e pode ser
+verificado por um teste automatizado que aprova ou reprova. É o caso da autorização por objeto no
+servidor, da validação de assinatura do webhook, da conferência da assinatura do token, do
+recálculo do valor no servidor, da sanitização dos logs e dos limites de tamanho de arquivo. São
+correções determinísticas: implementadas corretamente, o ataque deixa de funcionar.
+
+**A probabilidade cai um ponto** quando o controle reduz a chance sem eliminar a causa, seja
+porque depende do comportamento de uma pessoa, de um terceiro ou de detecção posterior. É o caso
+da reverificação de identidade do entregador, das heurísticas antifraude, da mitigação de tráfego
+volumétrico e da evidência de entrega.
+
+**O impacto cai um ponto** apenas quando o controle reduz o alcance do dano, e não somente a chance
+de ele ocorrer. Expirar o endereço no aplicativo do entregador depois da entrega, remover o dado
+sensível do log antes de gravá-lo e exigir reautenticação para operações sensíveis são exemplos:
+mesmo que o ataque aconteça, há menos a perder.
+
+Nenhum risco foi levado a zero. Um controle bem implementado reduz a probabilidade, mas não
+elimina a possibilidade de falha, de configuração incorreta ou de uma técnica de ataque ainda
+desconhecida.
+
+### 16.2 Tabela de risco residual estimado
 
 | Risco | Nível inicial | Nível residual esperado | Condição para aceitar o residual |
 |---|---|---|---|
-| R01 | Crítico (12) | Médio (6) | MFA ativo para 100% dos logins de dispositivo novo, *rate limit* verificado em teste e taxa de tomada de conta monitorada mensalmente abaixo do limiar definido pela governança |
-| R02 | <!-- TODO --> | | |
-| R03 | <!-- TODO --> | | |
+| R01 | Crítico (12) | Médio (6) | MFA exigido em 100% dos logins de dispositivo novo, *rate limit* aprovado em teste e reautenticação obrigatória para troca de e-mail, telefone e meio de pagamento |
+| R02 | Médio (6) | Baixo (3) | Teste automatizado comprovando que o total enviado pelo aplicativo é ignorado e recalculado no servidor em todo pedido |
+| R03 | Crítico (12) | Médio (4) | Verificação de propriedade do objeto aprovada em teste para todos os endpoints que retornam pedido, e regra de detecção da Etapa 6 ativa |
+| R04 | Alto (9) | Médio (6) | Reverificação de identidade por selfie comparada ao documento executada em ciclo definido, com taxa de reprovação acompanhada |
+| R05 | Médio (6) | Médio (4) | Detecção de localização simulada ativa no aplicativo, com registro das corridas recusadas por incoerência de deslocamento |
+| **R06** | **Crítico (12)** | **Alto (9)** | **Não desce de Alto.** Ver a justificativa em 16.3 |
+| R07 | Médio (6) | Baixo (3) | Consulta automatizada do CNPJ em base oficial no cadastro, com bloqueio de saque durante a carência inicial |
+| R08 | Alto (8) | Médio (4) | Validação de assinatura HMAC aprovada em teste, e webhook recusado quando a assinatura não confere |
+| R09 | Alto (9) | Médio (4) | Cupom de primeira compra vinculado a CPF, telefone verificado e identificação do dispositivo, com relatório mensal de contas bloqueadas |
+| R10 | Médio (6) | Baixo (3) | Carência de 48 horas e segundo fator obrigatórios na troca de dados bancários, com notificação em canal alternativo |
+| R11 | Médio (6) | Baixo (2) | Preço congelado e assinado no momento do checkout, comprovado por teste de divergência |
+| R12 | Médio (4) | Baixo (2) | Autorização por autoria verificada em teste e exclusão lógica preservando o histórico |
+| R13 | Médio (6) | Baixo (3) | Alteração de endereço bloqueada no servidor após a confirmação do pagamento, comprovada por teste |
+| R14 | Crítico (12) | Médio (6) | Código de confirmação e geolocalização registrados em 100% das entregas, com alerta ativo para confirmações fora do raio |
+| R15 | Crítico (12) | Médio (6) | Mesma evidência do R14 disponível na abertura de disputa, com histórico de contestações por cliente |
+| R16 | Médio (6) | Baixo (3) | Todo estorno vinculado à credencial nominal do atendente, com teto de alçada aplicado no servidor |
+| R17 | Médio (6) | Baixo (2) | Recibo de aceite com data, hora e registro íntegro, disponível na disputa com o restaurante |
+| R19 | Crítico (12) | Médio (4) | Endereço e telefone removidos do aplicativo do entregador na conclusão da entrega, verificado inclusive no armazenamento local |
+| R20 | Alto (8) | Médio (4) | Backups cifrados em repouso, acesso restrito e nominal, e alerta de download atípico em operação |
+| R21 | Alto (9) | Médio (4) | Chave restrita por pacote do aplicativo e por domínio no console do provedor, com alerta de consumo fora do padrão |
+| R22 | Crítico (12) | Baixo (3) | Sanitização aplicada no middleware de log, comprovada por teste que tenta gravar cartão e token e verifica a máscara |
+| R23 | Alto (8) | Médio (4) | Mensagem de erro de login padronizada, comprovada por teste com e-mail existente e inexistente |
+| R24 | Crítico (12) | Médio (6) | Proteção de borda contratada e testada, com plano de escala horizontal exercitado antes de um horário de pico |
+| R25 | Alto (9) | Médio (4) | Análise antifraude no checkout ativa, com limiar de pedidos por restaurante monitorado |
+| R26 | Alto (9) | Médio (4) | Cota diária de cancelamentos por entregador aplicada no servidor, com relatório de reincidência |
+| R27 | Alto (8) | Médio (4) | Limite cumulativo de envio por telefone e por IP aplicado, com acompanhamento do custo mensal de mensagens |
+| R28 | Alto (9) | Baixo (2) | Teto de tamanho e redimensionamento obrigatório na entrada, comprovados por teste com arquivo acima do limite |
+| R29 | Crítico (12) | Médio (4) | Verificação de perfil e de alçada no servidor em toda operação administrativa, aprovada em teste que chama o endpoint diretamente |
+| R30 | Alto (8) | Médio (4) | Campo de perfil ignorado quando enviado pelo cliente, comprovado por teste de cadastro adulterado |
+| R31 | Alto (8) | Médio (4) | Assinatura do token validada em toda requisição, com teste de token adulterado e de algoritmo nulo |
+| R32 | Alto (9) | Baixo (3) | Vínculo entre usuário, restaurante e pedido validado no banco, comprovado por teste entre lojas da mesma rede |
 
-> **Limitação declarada:** os níveis residuais acima são estimativas baseadas na expectativa de
-> eficácia dos controles propostos. Nenhum controle foi implementado ou testado no âmbito deste
-> trabalho, e a redução efetiva só poderá ser confirmada mediante evidências.
+**Distribuição estimada após o tratamento**
+
+| Nível | Antes | Depois |
+|---|---:|---:|
+| Crítico | 9 | 0 |
+| Alto | 13 | 1 |
+| Médio | 9 | 19 |
+| Baixo | 0 | 11 |
+| **Total** | **31** | **31** |
+
+### 16.3 Por que o R06 não desce de Alto
+
+O R06 trata do comprometimento de contas por campanhas de phishing. Ele é o único risco que
+permanece no nível Alto na estimativa, e a razão é que os controles propostos não atacam a causa.
+
+O phishing acontece fora da plataforma. O SaborExpress pode autenticar o próprio domínio de e-mail
+e pode exigir segundo fator, mas não controla o que o cliente faz quando recebe uma mensagem
+convincente. Existem, além disso, kits de phishing que retransmitem o segundo fator em tempo real,
+o que reduz a eficácia do principal controle previsto. A probabilidade continua alta porque
+depende do comportamento de milhares de pessoas, e não de uma configuração que a equipe possa
+verificar por teste.
+
+O grupo considera mais honesto registrar um risco que permanece Alto do que apresentar uma tabela
+em que todos os riscos convenientemente caem para níveis confortáveis.
+
+### 16.4 Limitações desta estimativa
+
+Estes números são **expectativa, não resultado**. Nenhum controle foi implementado, configurado ou
+testado no âmbito deste trabalho. A redução só poderá ser afirmada depois da implantação, da
+execução dos testes previstos na coluna de condições e da coleta das evidências indicadas na
+seção 14.
+
+Três ressalvas específicas merecem registro. A primeira é que a estimativa assume o controle
+funcionando como projetado, o que ignora erro de implementação e configuração incorreta, que são
+justamente as causas mais comuns de falha. A segunda é que a redução de probabilidade foi
+atribuída por regra, e não medida, porque o grupo não dispõe de dados históricos de incidentes. A
+terceira é que a coluna de condições descreve o que precisaria ser verdade para o residual ser
+aceito, e enquanto essas condições não forem comprovadas o risco permanece no nível inicial.
 
 ---
 
 ## 17. Considerações finais da Etapa 2
 
 <!-- RESPONSÁVEL: Felipe -->
-<!-- TODO: escrever ao final, cobrindo explicitamente os oito pontos abaixo. -->
 
 ### 17.1 Riscos considerados mais importantes
-<!-- TODO -->
+
+Dos 31 riscos registrados, nove foram classificados como críticos. Entre eles, três se destacam
+por concentrarem a maior parte do dano possível.
+
+O **R03**, extração em massa de dados pessoais pela API, ficou em primeiro lugar na priorização.
+Ele reúne as três características que o grupo considera mais graves: atinge muitos usuários de uma
+vez, é irreversível, porque dado exfiltrado não volta atrás, e envolve a informação que combina
+endereço residencial com telefone e rotina de consumo, cuja exposição habilita dano físico e não
+apenas digital.
+
+O **R19** e o **R22** compartilham a mesma natureza. No R19 o endereço do cliente permanece
+acessível ao entregador depois da entrega concluída, e no R22 dados de pagamento e tokens acabam
+gravados em log. Nos dois casos o vazamento não exige um ataque sofisticado, porque a informação já
+está exposta a quem tem acesso legítimo ao ambiente.
+
+Fora dos vazamentos, o **R29** preocupa por combinar privilégio com dinheiro, já que um atendente
+com acesso indevido a operações administrativas pode emitir estornos e alterar comissões. E o par
+**R14** e **R15**, as duas faces da fraude de entrega, é o que tem maior probabilidade de todo o
+registro, com valor 4, por ser cometido por usuários legítimos usando permissões que eles de fato
+possuem.
 
 ### 17.2 Razões que determinaram a priorização
-<!-- TODO -->
+
+A pontuação foi o ponto de partida, mas não decidiu sozinha. Entre riscos empatados, o grupo
+aplicou quatro critérios de desempate.
+
+**Irreversibilidade** pesou mais do que qualquer outro fator. O R03 e o R01 têm a mesma pontuação
+12, mas o R03 ficou à frente porque uma conta invadida pode ser bloqueada e as transações
+estornadas, enquanto dados vazados não podem ser recuperados.
+
+**Alcance** veio em seguida. Riscos que atingem toda a base de clientes de uma vez foram colocados
+antes de riscos que afetam um usuário ou um restaurante por vez.
+
+**Consequência jurídica** foi considerada nos riscos que envolvem dado pessoal, porque a LGPD
+impõe dever de comunicação à ANPD e aos titulares, o que transforma um incidente técnico em
+exposição institucional.
+
+**Dependência entre riscos** definiu a ordem de execução mais do que a ordem de gravidade. A
+verificação de autorização por objeto no servidor trata simultaneamente o R03, o R12, o R29, o R30
+e o R32. Um único controle reduz cinco riscos, o que o coloca no topo da ordem de implementação
+mesmo que nem todos esses riscos sejam críticos.
 
 ### 17.3 Estratégias de tratamento predominantes
-<!-- TODO: qual estratégia predominou e por quê. -->
+
+**Reduzir foi a estratégia adotada em todos os 31 riscos.** Nenhum foi evitado, compartilhado ou
+aceito, e vale explicar por quê.
+
+Evitar exigiria eliminar a atividade que origina o risco, e em todos os casos analisados essa
+atividade é central ao produto. Não há como operar um delivery sem consultar pedidos, sem
+autenticar usuários, sem processar pagamento e sem entregar comida no endereço de alguém.
+
+Compartilhar seria transferir parte da operação ou das consequências a um terceiro. O grupo já usa
+serviços externos para pagamento e mapas, mas isso desloca a superfície de ataque sem transferir a
+responsabilidade perante o cliente e a ANPD. Um seguro contra incidente cibernético seria o
+exemplo mais próximo, e foi considerado fora do escopo desta análise.
+
+Aceitar não foi escolhido para nenhum risco. **Essa uniformidade é, em si, uma limitação da
+análise.** Em um cenário real, com orçamento e prazo definidos, é esperado que alguns riscos de
+menor pontuação sejam conscientemente aceitos, com aprovação registrada e data de revisão. O grupo
+não tinha como estimar custo de implementação, e sem custo não há base para decidir que um
+controle não compensa. O resultado é uma análise que trata todos os riscos como tratáveis, o que é
+mais completo do que realista.
 
 ### 17.4 Funções do NIST mais relevantes para o sistema
-<!-- TODO -->
+
+**Protect** apareceu em todos os 31 riscos. Isso é coerente com um sistema cujas ameaças se
+concentram em API, autenticação e autorização, camadas em que a proteção é implementada
+diretamente no código.
+
+**Detect** veio logo atrás, e foi marcada em praticamente todos os riscos. A razão está explicada
+na Etapa 6: boa parte dos abusos identificados é cometida por usuários legítimos exercendo
+permissões que possuem, e nesses casos não existe barreira preventiva possível. O que separa o uso
+normal do abuso é a frequência e o contexto, que só o registro revela.
+
+**Govern** e **Identify** foram usadas de forma seletiva, e essa contenção foi deliberada. Govern
+entrou apenas onde a decisão exige política formal, como a obrigatoriedade de MFA, a segregação de
+alçadas no backoffice e a classificação de dados nos logs. Identify entrou apenas onde há trabalho
+ativo de descoberta, como a homologação de documentos de entregadores e o inventário de chaves e
+dependências. O enunciado adverte contra marcar todas as funções automaticamente, e evitar isso
+exigiu justificar cada marcação.
+
+**Respond** e **Recover** ficaram restritas aos riscos em que há algo concreto a conter ou a
+restaurar, como sessões a invalidar, notificação à ANPD a emitir e transações a estornar.
 
 ### 17.5 Controles considerados essenciais
-<!-- TODO -->
+
+Cinco controles concentram a maior parte da redução estimada.
+
+**Verificação de autorização por objeto no servidor.** É o controle de maior alcance de todo o
+plano, tratando cinco riscos de uma vez e sendo a base da prática de código da Etapa 4.
+
+**Segundo fator adaptativo com reautenticação para operações sensíveis.** Trata a tomada de contas
+e limita o que um invasor consegue fazer mesmo quando o acesso inicial acontece.
+
+**Validação de assinatura no webhook de pagamento.** Custo de implementação próximo de zero e
+elimina a liberação de pedidos sem lastro financeiro.
+
+**Sanitização dos logs antes da gravação.** Remove da operação diária o dado que o sistema protege
+em todos os outros lugares, e é o que permite tratar o log como evidência sem transformá-lo em
+passivo.
+
+**Evidência de entrega com código e geolocalização.** É o único controle que resolve dois riscos
+opostos com o mesmo registro, servindo tanto para responsabilizar quem não entregou quanto para
+recusar reembolso indevido.
 
 ### 17.6 Principais dificuldades encontradas
-<!-- TODO -->
+
+A maior dificuldade foi **separar ameaça, vulnerabilidade e risco** de forma consistente entre seis
+pessoas. A tendência inicial era escrever o risco repetindo a ameaça com outras palavras. O que
+resolveu foi fixar a estrutura logo no começo do documento, tratando a ameaça como o que pode
+acontecer, a vulnerabilidade como a condição que permite, e o risco como a combinação disso com a
+consequência.
+
+A segunda foi **atribuir probabilidade sem dados**. Os valores de 1 a 4 acabam refletindo a
+percepção de quem escreveu, e diferentes integrantes calibravam de formas diferentes. A revisão
+consolidada ajudou, mas não elimina a subjetividade.
+
+A terceira foi **manter a coerência entre etapas** com seis pessoas escrevendo em paralelo.
+Apareceram divergências reais, como um risco duplicado que precisou ser consolidado, uma tabela de
+rastreabilidade que contradizia o texto dos casos de abuso e contagens que não batiam com as
+próprias listas. Todas foram corrigidas por commits específicos, o que fica registrado no
+histórico.
+
+A quarta foi **resistir à tentação de marcar todas as funções do NIST** em todos os riscos. Marcar
+tudo é mais rápido e parece mais completo, mas esvazia o exercício.
 
 ### 17.7 Limitações da avaliação
-<!-- TODO: por exemplo — estimativas sem dados históricos de incidentes; sistema não
-     implementado, o que impede testes; ausência de custo real dos controles. -->
+
+**O sistema não existe.** Toda a análise recai sobre um projeto descrito em documento, e não sobre
+código em execução. Isso impede medir superfície de ataque real, testar controles e observar
+comportamento de usuário.
+
+**Não há histórico de incidentes.** As probabilidades foram estimadas por raciocínio sobre o
+contexto, e não a partir de frequência observada.
+
+**Não há custo.** Sem estimativa de esforço e de dinheiro, a ordem de implementação foi definida
+por dependência técnica e gravidade, ignorando a restrição que na prática mais influencia a
+decisão. É também o que explica a ausência de riscos aceitos.
+
+**O risco residual é expectativa.** Como registrado na seção 16.4, nenhum controle foi implantado
+ou testado, e a redução só se confirma com evidência.
+
+**A avaliação não foi revisada por terceiros.** Todos os riscos foram levantados pelo próprio grupo
+que projetou o sistema, o que traz o viés de quem só encontra os problemas que já imaginou.
 
 ### 17.8 Pontos a detalhar nas próximas etapas
-<!-- TODO -->
+
+A Etapa 2 encerra deixando três frentes abertas, todas retomadas em seguida.
+
+Os controles propostos aqui são intenções, e precisam virar **requisitos verificáveis**. É o que a
+[Etapa 3](etapa-3-arquitetura-segura.md) faz ao derivar os requisitos RS01 a RS03 dos riscos
+prioritários, mapeá-los a vulnerabilidades catalogadas em CWE e OWASP e registrar as decisões de
+arquitetura correspondentes.
+
+Os requisitos precisam virar **código e teste**, que é o objeto da
+[Etapa 4](etapa-4-codigo-seguro.md), e depois ser confrontados com o comportamento real de uma
+aplicação, o que a [Etapa 5](etapa-5-verificacao-vulnerabilidades.md) faz com o OWASP ZAP.
+
+Por fim, os riscos que não puderam ser prevenidos precisam ser percebidos em operação. As regras
+de detecção da [Etapa 6](../roteiros/etapa-6-deteccao-de-intrusoes.md) nascem justamente da
+priorização feita aqui, e o pipeline da [Etapa 7](../roteiros/etapa-7-devsecops-e-video-final.md)
+fecha o ciclo devolvendo o que a operação detecta para uma nova rodada de modelagem de ameaças.
 
 ---
 
