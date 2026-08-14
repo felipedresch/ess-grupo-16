@@ -104,11 +104,16 @@ o identificador. Tentativas ficam registradas e podem disparar alerta quando rep
 ### 2.3 Implementação, pseudocódigo ou descrição
 
 ```
+se excedeuTentativas(requisicao.ip, requisicao.email):
+           registrarLog("limite de tentativas excedido", requisicao.ip)                   "# mesma resposta nos dois casos: não revela se o e-mail existe (T23)", porque senão parece coincidência.
+           retornar 429
+
 função autenticar(requisicao):
     usuario = localizarUsuario(requisicao.email)
 
-    se usuario não existe:
-        retornar 401
+     se usuario não existe:
+           registrarLog("falha de autenticação", requisicao.email, requisicao.ip)
+           retornar 401
 
     se senhaInvalida(requisicao.senha, usuario):
         registrarLog("falha de autenticação", usuario.id)
