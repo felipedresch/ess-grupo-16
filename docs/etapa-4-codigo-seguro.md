@@ -73,18 +73,6 @@ o identificador. Tentativas ficam registradas e podem disparar alerta quando rep
 
 ## Prática 2 — <!-- TODO(Luis): escolher e preencher -->
 
-<!-- RESPONSÁVEL: Luis Fillipe -->
-<!-- TODO(Luis): escolher UMA prática, diferente da do Gabriel, ligada a um risco que VOCÊ
-     registrou na Etapa 2 (Information Disclosure, DoS ou Elevation of Privilege).
-     Opções listadas pelo enunciado: validação de entrada; consultas parametrizadas; controle
-     de autorização (já usado); armazenamento seguro de senhas; proteção de sessões;
-     tratamento seguro de erros; proteção de segredos; geração de logs sem exposição de dados
-     sensíveis.
-     Sugestões que casam bem com as suas ameaças:
-     - Armazenamento seguro de senhas (hash com Argon2id ou bcrypt + salt) — casa com R01.
-     - Geração de logs sem exposição de dados sensíveis — casa com o vazamento por logs (T18+).
-     - Proteção de segredos (cofre em vez de chave embutida no app) — casa com o ativo A13. -->
-
 ### 2.1 Risco e requisito relacionados
 
 | Campo | Conteúdo |
@@ -129,12 +117,10 @@ função autenticar(requisicao):
 
     retornar 200
 
-<!-- TODO(Luis) -->
 ```
 
 ### 2.4 Resultado esperado
 O sistema deve impedir a criação de uma sessão quando o login for realizado a partir de um dispositivo ou IP não reconhecido e o segundo fator não for validado.
-<!-- TODO(Luis) -->
 
 ---
 
